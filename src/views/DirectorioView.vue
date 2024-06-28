@@ -1,3 +1,3 @@
 <template>
-    <h2> Hola como estas </h2>
+    <h2> Directorio </h2>
 </template>

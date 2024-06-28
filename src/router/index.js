@@ -16,9 +16,21 @@ const routes = [
     meta: {requiresAuth: true}
   },
   {
+    path: '/feedbacksAdmin',
+    name: 'feedbacksAdmin',
+    component: () => import( '../views/FeedbacksAdminView.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
     path: '/directorio',
     name: 'directorio',
     component: () => import( '../views/DirectorioView.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: '/directorioAdmin',
+    name: 'directorioAdmin',
+    component: () => import( '../views/DirectorioAdminView.vue'),
     meta: {requiresAuth: true}
   },
   {
