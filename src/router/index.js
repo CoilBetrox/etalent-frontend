@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
-
 const routes = [
   {
     path: '/',
@@ -13,19 +12,16 @@ const routes = [
     name: 'feedbacks',
     component: () => import( '../views/FeedbacksView.vue')
   },
-
   {
     path: '/directorio',
     name: 'directorio',
     component: () => import( '../views/DirectorioView.vue')
   },
-
   {
     path: '/perfil',
     name: 'perfil',
     component: () => import( '../views/PerfilView.vue')
   },
-
   {
     path: '/nosotros',
     name: 'nosotros',
@@ -41,12 +37,21 @@ const routes = [
     name: 'register',
     component: () => import( '../views/RegisterView.vue')
   }
-
-]
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
+
+router.beforeEach((to, from, next) => {
+  const loggedIn = !!localStorage.getItem('accessToken');
+
+  if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn){
+    next('/login');
+  }else {
+    next();
+  }
+});
 
 export default router

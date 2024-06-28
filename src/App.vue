@@ -38,6 +38,10 @@ export default {
     },
     showFeedback(employeeId) {
       // Lógica para mostrar el feedback del empleado con el ID dado
+    },
+    logout() {
+      localStorage.removeItem('accessToken');
+      this.$router.push('/login');
     }
   },
   setup() {

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from './api';
 
 //Metodos fachada
 const loginAdmin = async(body)=>{
@@ -10,16 +10,26 @@ const registerAdmin = async(body) => {
 };
 
 //Consumo API
-
 const loginAdminAxios = async(body) => {
-    const data = axios.post(`http://localhost:8081/api/admins/r/login`, body).then(r => r.data);
-    return null;
+    try{
+        const response = await api.post('/admins/auth/login', body);
+        return response.data;
+    } catch (error) {
+        console.error('Error en loginAdminAxios:', error)
+        throw error;
+    }
 }
 
 const registerAdminAxios = async(body) => {
-    const data = axios.post(`http://localhost:8081/api/admins/register`, body).then(r => r.data);
-    console.log(data);
-    return data.data;
+    try {
+        const response = api.post('/admins/auth/register', body);
+        console.log(response);
+        return response.data || {message: 'Registro exitoso'};
+    } catch (error) {
+        console.error('Error en registerAdmin:', error);
+        throw error;
+    }
+    
 }
 
 export default {registerAdmin, loginAdmin}
