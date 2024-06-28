@@ -15,15 +15,18 @@
       </button>
       <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
         <ul class="navbar-nav">
-          <router-link to="/" class="nav-link" active-class="active">Inicio</router-link>
-          <router-link to="/feedbacks" class="nav-link" active-class="active">Feedbacks</router-link>
-          <router-link to="/directorio" class="nav-link" active-class="active">Directorio</router-link>
-          <router-link to="/perfil" class="nav-link" active-class="active">Mi perfil</router-link>
-          <router-link to="/nosotros" class="nav-link" active-class="active">Nosotros</router-link>
+          <template v-if="isLoggedIn">
+            <router-link to="/" class="nav-link" active-class="active">Inicio</router-link>
+            <router-link to="/feedbacks" class="nav-link" active-class="active">Feedbacks</router-link>
+            <router-link to="/directorio" class="nav-link" active-class="active">Directorio</router-link>
+            <router-link to="/perfil" class="nav-link" active-class="active">Mi perfil</router-link>
+            <router-link to="/nosotros" class="nav-link" active-class="active">Nosotros</router-link>
+          </template>
         </ul>
         <div class="d-flex align-items-center">
           <span class="nav-link text-light">{{ currentDateTime }}</span> 
-          <button v-if="isLoggedIn" class="btn btn-outline-light">Logout</button> 
+          <button v-if="isLoggedIn" @click="logout" class="btn btn-outline-light">Logout</button>
+          <router-link v-else to="/login" class="btn btn-outline-light">Login</router-link>
         </div>
       </div>
     </div>
@@ -37,22 +40,34 @@ export default {
     return {
       currentDateTime: new Date().toLocaleString(),
       intervalId: null,
-      isLoggedIn: false // Reemplazar con la lógica de inicio de sesión real
+      isLoggedIn: false
     };
   },
-  mounted() {
-  this.intervalId = setInterval(() => {
-    try {
-      this.currentDateTime = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + new Date().toLocaleTimeString('es-ES'); 
-    } catch (error) {
-      console.error('Error al actualizar la fecha y hora:', error);
-      // Manejar el error de alguna manera (por ejemplo, detener el intervalo)
+  methods: {
+    checkAuth() {
+      this.isLoggedIn = !!localStorage.getItem('accessToken');
+    },
+    logout() {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('userRole');
+      this.isLoggedIn = false;
+      this.$router.push('/login');
+    },
+    updateDateTime() {
+      try {
+        this.currentDateTime = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + new Date().toLocaleTimeString('es-ES');
+      } catch (error) {
+        console.error('Error al actualizar la fecha y hora:', error);
+      }
     }
-  }, 1000);
-},
-
-  beforeDestroy() {
-    clearInterval(this.intervalId); // Detener el intervalo al desmontar
+  },
+  mounted() {
+    this.checkAuth();
+    this.updateDateTime();
+    this.intervalId = setInterval(this.updateDateTime, 1000);
+  },
+  beforeUnmount() {
+    clearInterval(this.intervalId);
   }
 };
 </script>

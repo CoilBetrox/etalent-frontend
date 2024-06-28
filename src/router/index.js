@@ -1,31 +1,37 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+//import { metadata } from 'core-js/fn/reflect';
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {requiresAuth: true}
   },
   {
     path: '/feedbacks',
     name: 'feedbacks',
-    component: () => import( '../views/FeedbacksView.vue')
+    component: () => import( '../views/FeedbacksView.vue'),
+    meta: {requiresAuth: true}
   },
   {
     path: '/directorio',
     name: 'directorio',
-    component: () => import( '../views/DirectorioView.vue')
+    component: () => import( '../views/DirectorioView.vue'),
+    meta: {requiresAuth: true}
   },
   {
     path: '/perfil',
     name: 'perfil',
-    component: () => import( '../views/PerfilView.vue')
+    component: () => import( '../views/PerfilView.vue'),
+    meta: {requiresAuth: true}
   },
   {
     path: '/nosotros',
     name: 'nosotros',
-    component: () => import( '../views/NosotrosView.vue')
+    component: () => import( '../views/NosotrosView.vue'),
+    meta: {requiresAuth: true}
   },
   {
     path: '/login',
@@ -45,10 +51,16 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const loggedIn = !!localStorage.getItem('accessToken');
+  const isAuthenticated = !!localStorage.getItem('accessToken');
+  const userRole = localStorage.getItem('userRole');
 
-  if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn){
-    next('/login');
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated){
+      next('/login');
+    } else {
+      //agregar logica adicional para verificar roles
+      next();
+    }
   }else {
     next();
   }

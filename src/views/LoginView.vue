@@ -50,6 +50,7 @@ export default {
         // Guardar el token y redirigir a la página principal
         if (response.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
+          localStorage.setItem('userRole', response.userRole);
           this.$router.push('/');
         } else {
           throw new Error('No se recibió un token de acceso');
