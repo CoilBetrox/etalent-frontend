@@ -9,6 +9,10 @@ const registerAdmin = async(body) => {
     return await registerAdminAxios(body);
 };
 
+const createUsuario = async (body) => {
+    return await createUsuarioAxios(body);
+}
+
 //Consumo API
 const loginAdminAxios = async(body) => {
     try{
@@ -32,4 +36,15 @@ const registerAdminAxios = async(body) => {
     
 }
 
-export default {registerAdmin, loginAdmin}
+const createUsuarioAxios = async(body) => {
+    try { 
+        const response = api.post('/rolusuarios/usrwr', body);
+        console.log(response);
+        return (await response).data || {message: 'Usuario agregado'};
+    } catch (error) {
+        console.error('Error en createUsuario', error);
+        throw error;
+    }
+}
+
+export default {registerAdmin, loginAdmin, createUsuario}

@@ -1,5 +1,5 @@
 <template>
-  <FilterComp v-if="$route.path === '/feedbacks'" @filter="handleFilter" @add-new-employee="showAddEmployeeForm" />
+  <FilterComp v-if="$route.path === '/directorio'" @filter="handleFilter" @add-new-employee="showAddEmployeeForm" />
 </template>
 
 <script>

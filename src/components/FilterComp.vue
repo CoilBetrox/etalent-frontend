@@ -29,14 +29,16 @@
     <div class="filter-buttons">
       <button @click="applyFilters">Buscar</button>
       <button @click="clearFilters">Eliminar filtros</button>
-      <button @click="addNewEmployee">Agregar nuevo</button>
+      <button @click="showModal = true">Agregar nuevo</button>
       <button @click="exportToExcel">Exportar a Excel</button>
       <button @click="exportToPDF">Exportar a PDF</button>
     </div>
+    <AgregarNuevoComp v-if="showModal" @close="showModal = false"/>
   </div>
 </template>
 
 <script>
+import AgregarNuevoComp from './AgregarNuevoComp.vue';
 export default {
   data() {
     return {
@@ -46,8 +48,12 @@ export default {
       startDate: '',
       endDate: '',
       areas: ['Ventas', 'Marketing', 'Desarrollo', 'Recursos Humanos'],
-      categories: ['Enigma', 'Esencial', 'Eminente', 'Ejemplar']
+      categories: ['Enigma', 'Esencial', 'Eminente', 'Ejemplar'],
+      showModal: false //controla la visibilidad del modal
     };
+  },
+  components: {
+    AgregarNuevoComp
   },
   methods: {
     applyFilters() {
@@ -61,9 +67,6 @@ export default {
     },
     clearFilters() {
       // ... (lógica para limpiar filtros)
-    },
-    addNewEmployee() {
-      // ... (lógica para agregar nuevo empleado)
     },
     exportToExcel() {
       // ... (lógica para exportar a Excel)

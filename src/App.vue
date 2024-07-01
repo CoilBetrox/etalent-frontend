@@ -4,19 +4,26 @@
     <RouterView />
   </div>
   <FiltersWrapper @filter="handleFilter" @add-new-employee="showAddEmployeeForm" />
-  
+
+  <footer>
+    <div>
+      <FooterComp />
+    </div>
+  </footer>
 </template>
 
 <script>
 import NavComp from './components/NavComp.vue';
 import FiltersWrapper from './components/FiltersWrapper.vue';
 import { useRoute } from 'vue-router';
+import FooterComp from './components/FooterComp.vue';
 
 export default {
   name: "App",
   components: {
     NavComp,
-    FiltersWrapper
+    FiltersWrapper,
+    FooterComp
   },
   data() {
     return {

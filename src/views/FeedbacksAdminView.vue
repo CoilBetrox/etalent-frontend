@@ -1,120 +1,165 @@
 <template>
-    <div class="container mt-4">
-      <h1>Administración de Feedbacks</h1>
-      <div v-if="loading">Cargando usuarios...</div>
-      <div v-else>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>SAP</th>
-              <th>Estado</th>
-              <th>Rol</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="usuario in usuarios" :key="usuario.idUsuario">
-              <td>{{ usuario.idUsuario }}</td>
-              <td>{{ usuario.nombreUsuario }}</td>
-              <td>{{ usuario.correoUsuario }}</td>
-              <td>{{ usuario.sapUsuario }}</td>
-              <td>{{ usuario.estadoUsuario }}</td>
-              <td>{{ usuario.rolUsuario.nombreRolUsuario }}</td>
-              <td>
-                <button @click="openFeedbackModal(usuario)" class="btn btn-primary btn-sm">
-                  Agregar Feedback
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-  
-      <!-- Modal para agregar feedback -->
-      <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="feedbackModalLabel">Agregar Feedback para {{ selectedUser?.nombreUsuario }}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form @submit.prevent="submitFeedback">
-                <div class="mb-3">
-                  <label for="feedbackComment" class="form-label">Comentario</label>
-                  <textarea v-model="feedbackComment" class="form-control" id="feedbackComment" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Enviar Feedback</button>
-              </form>
-            </div>
+  <div class="feedback-admin">
+    <h2>f</h2>
+    <main>
+      <div v-for="feedback in feedbacks" :key="feedback.id" class="feedback-card">
+        <div class="user-profile">
+          <div class="profile-image">64x64</div>
+          <div class="user-details">
+            <h2>{{ feedback.nombreApellido }}</h2>
+            <p>{{ feedback.detalle }}</p>
           </div>
         </div>
+        
+        <div class="feedback-info">
+          <p>Feedback creado por {{ feedback.creadoPor }}</p>
+          <p>{{ feedback.fechaCreacion }}</p>
+        </div>
+        
+        <div class="feedback-content">
+          <p>{{ feedback.contenido }}</p>
+        </div>
+        
+        <div class="comentarios">
+          <h3>Comentarios</h3>
+          <div v-for="comentario in feedback.comentarios" :key="comentario.id" class="comentario">
+            <h4>{{ comentario.autor }}</h4>
+            <p>{{ comentario.contenido }}</p>
+          </div>
+        </div>
+        
+        <div class="nuevo-comentario">
+          <input v-model="nuevoComentario" placeholder="Escribe un comentario...">
+          <button @click="enviarComentario(feedback.id)">Enviar Comentario</button>
+        </div>
       </div>
-    </div>
-  </template>
-  
-  <script>
-  import { ref, onMounted } from 'vue';
-  import axios from 'axios';
-  
-  export default {
-    name: 'FeedbackAdminView',
-    setup() {
-      const usuarios = ref([]);
-      const loading = ref(true);
-      const selectedUser = ref(null);
-      const feedbackComment = ref('');
-  
-      const fetchUsuarios = async () => {
-        try {
-          const response = await axios.get('/api/usuarios');
-          usuarios.value = response.data;
-          loading.value = false;
-        } catch (error) {
-          console.error('Error al cargar usuarios:', error);
-          loading.value = false;
-        }
-      };
-  
-      const openFeedbackModal = (usuario) => {
-        selectedUser.value = usuario;
-        feedbackComment.value = '';
-        // Asumiendo que estás usando bootstrap para el modal
-        const modal = new bootstrap.Modal(document.getElementById('feedbackModal'));
-        modal.show();
-      };
-  
-      const submitFeedback = async () => {
-        try {
-          await axios.post('/api/feedbacks', {
-            usuarioId: selectedUser.value.idUsuario,
-            comentario: feedbackComment.value
-          });
-          alert('Feedback enviado con éxito');
-          // Cerrar el modal
-          const modal = bootstrap.Modal.getInstance(document.getElementById('feedbackModal'));
-          modal.hide();
-        } catch (error) {
-          console.error('Error al enviar feedback:', error);
-          alert('Error al enviar feedback');
-        }
-      };
-  
-      onMounted(() => {
-        fetchUsuarios();
-      });
-  
-      return {
-        usuarios,
-        loading,
-        selectedUser,
-        feedbackComment,
-        openFeedbackModal,
-        submitFeedback
-      };
+    </main>
+
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'FeedbacksAdminView',
+  data() {
+    return {
+      feedbacks: [],
+      nuevoComentario: '',
+      currentDate: new Date().toLocaleString('es-ES', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    };
+  },
+  mounted() {
+    this.cargarFeedbacks();
+  },
+  methods: {
+    async cargarFeedbacks() {
+      try {
+        const response = await axios.get('http://localhost:8081/api/feedbacks');
+        this.feedbacks = response.data;
+      } catch (error) {
+        console.error('Error al cargar los feedbacks:', error);
+      }
+    },
+    async enviarComentario(feedbackId) {
+      if (!this.nuevoComentario.trim()) return;
+      
+      try {
+        await axios.post(`http:localhost:8081//api/feedbacks/${feedbackId}/comentarios`, {
+          contenido: this.nuevoComentario
+        });
+        this.nuevoComentario = '';
+        await this.cargarFeedbacks(); // Recargar los feedbacks para mostrar el nuevo comentario
+      } catch (error) {
+        console.error('Error al enviar el comentario:', error);
+      }
     }
-  };
-  </script>
+  }
+};
+</script>
+
+<style scoped>
+.feedback-admin {
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background-color: #000;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+nav a.active {
+  font-weight: bold;
+}
+
+.feedback-card {
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile-image {
+  width: 64px;
+  height: 64px;
+  background-color: #ccc;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback-info {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.comentarios {
+  margin-top: 1rem;
+}
+
+.nuevo-comentario {
+  margin-top: 1rem;
+}
+
+.nuevo-comentario input {
+  width: 80%;
+  padding: 0.5rem;
+}
+
+button {
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+footer {
+  background-color: #f1f1f1;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+</style>
