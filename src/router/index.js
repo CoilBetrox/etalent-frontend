@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import NosotrosView from '../views/NosotrosView.vue'
+import PerfilView from '../views/PerfilView.vue';
+
+
 //import { metadata } from 'core-js/fn/reflect';
 
 const routes = [

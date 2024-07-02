@@ -1,16 +1,18 @@
 <template>
-  <div>
+  <div class="app-container"> <div class="content-wrapper">
     <NavComp v-if="!isLoginRoute" />
+    <FiltersWrapper v-if="$route.path === '/feedbacks'" @filter="handleFilter" @add-new-employee="showAddEmployeeForm" />
+    <FiltersWrapper @filter="handleFilter" @add-new-employee="showAddEmployeeForm" />
     <RouterView />
   </div>
-  <FiltersWrapper @filter="handleFilter" @add-new-employee="showAddEmployeeForm" />
-
-  <footer>
+  </div>
+  <footer class="footer">
     <div>
       <FooterComp />
     </div>
   </footer>
 </template>
+
 
 <script>
 import NavComp from './components/NavComp.vue';
@@ -69,4 +71,22 @@ export default {
   color: white !important;
   /* !important para sobrescribir estilos de Bootstrap */
 }
+
+.app-container {
+  display: flex; /* Permite distribuir el contenido y el footer verticalmente */
+  flex-direction: column; /* Apila el contenido y el footer uno encima del otro */
+  min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+}
+
+.content-wrapper {
+  flex: 1; /* Permite que el contenido ocupe el espacio disponible */
+}
+
+.footer {
+  /* Estilos para el footer */
+  background-color: #f8f9fa;
+  padding: 1rem;
+  text-align: center;
+}
+
 </style>
