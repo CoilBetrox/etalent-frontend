@@ -85,7 +85,7 @@
         provinciaAdmin: '',
         zonaAdmin: '',
         estadoAdmin:'',
-        rolAdmin:'',
+        rolAdmins: '',
         showPassword: false,
         zonas: []
       };
@@ -101,8 +101,14 @@
                 empresaAdmin: this.empresaAdmin,
                 provinciaAdmin: this.provinciaAdmin,
                 zonaAdmin: this.zonaAdmin,
-                rolAdmin:'JefeTienda',
-                estadoAdmin: 'Activo'
+                estadoAdmin: 'Activo',
+                rolAdmins: [
+                  {
+                    "idRol": 2,
+                    "nombreRol": "AdminTienda"
+                  }
+                ]
+                
             });
             console.log('Respuesta del registro:', response);
 

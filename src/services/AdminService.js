@@ -38,7 +38,7 @@ const registerAdminAxios = async(body) => {
 
 const createUsuarioAxios = async(body) => {
     try { 
-        const response = api.post('/rolusuarios/usrwr', body);
+        const response = api.post('/usuarios', body);
         console.log(response);
         return (await response).data || {message: 'Usuario agregado'};
     } catch (error) {
