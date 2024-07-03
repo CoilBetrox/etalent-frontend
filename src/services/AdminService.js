@@ -17,6 +17,10 @@ const getUsuarios = async () => {
     return await getUsuariosAdminAxios();
 }
 
+const updateUsuarioRol = async (usuarioId, updatedUsuarioDto) => {
+    return await updateUsuarioRolAxios(usuarioId, updatedUsuarioDto);
+}
+
 //Consumo API
 const loginAdminAxios = async(body) => {
     try{
@@ -62,4 +66,14 @@ const getUsuariosAdminAxios = async() => {
     }
 }
 
-export default {registerAdmin, loginAdmin, createUsuario, getUsuarios}
+const updateUsuarioRolAxios = async(usuarioId, updatedUsuarioDto) => {
+    try {
+        const response = await api.patch(`/usuarios/${usuarioId}/rol`, updatedUsuarioDto);
+        return response.data;
+    } catch (error) {
+        console.error('Error en updateUsuarioRolAxios', error);
+        throw error;
+    }
+}
+
+export default {registerAdmin, loginAdmin, createUsuario, getUsuarios, updateUsuarioRol}

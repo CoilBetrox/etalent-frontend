@@ -61,7 +61,7 @@
   <script>
   import AdminService from '@/services/AdminService';
   export default {
-    name: 'AgregarNuevoEmpleado',
+    name: 'AgregarNuevoComp',
     data() {
       return {
         usuario: {

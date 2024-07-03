@@ -7,17 +7,24 @@
             <div v-for="miembro in miembros" :key="miembro.id" class="miembro-card">
               <div class="miembro-foto">64x64</div>
               <div class="miembro-info">
-                <h3>{{ miembro.nombreUsuario }}</h3>
-                <p>{{ miembro.codigo }}</p>
-                <p>{{ miembro.genero }}</p>
+                <p>{{ miembro.idUsuario }}</p>
+                <p>{{ miembro.nombreUsuario }}</p>
                 <p>{{ miembro.correoUsuario }}</p>
-                <p>{{ miembro.estado }}</p>
-                <p>{{ miembro.categoria }}</p>
+                <p>{{ miembro.sapUsuario }}</p>
+                <p>{{ miembro.genero }}</p>
+                <p>{{ miembro.estadoUsuario }}</p>
+                <p>{{ miembro.nombreRolUsuario }}</p>
               </div>
               <div class="miembro-actions">
                 <select v-model="miembro.nuevaCategoria">
+                  <option value="Enigma">Enigma</option>
+                  <option value="Esencial">Esencial</option>
+                  <option value="Eminente">Eminente</option>
+                  <option value="Dilema">Dilema</option>
                   <option value="Prometedor">Prometedor</option>
+                  <option value="Experto">Experto</option>
                   <option value="Riesgo">Riesgo</option>
+                  <option value="Destacado">Destacado</option>
                   <option value="Sobresaliente">Sobresaliente</option>
                 </select>
                 <button @click="darFeedback(miembro)">Feedback</button>
@@ -33,13 +40,14 @@
         </div>
       </main>
   
-      <AgregarNuevoEmpleado v-if="mostrarFormularioNuevo" @close="cerrarFormularioNuevo" @empleado-agregado="cargarMiembros" />
+      <AgregarNuevoComp v-if="mostrarFormularioNuevo" @close="cerrarFormularioNuevo" @empleado-agregado="cargarMiembros" />
     </div>
   </template>
   
   <script>
   import axios from 'axios';
   import AdminService from '@/services/AdminService';
+  import AgregarNuevoComp from '@/components/AgregarNuevoComp.vue';
   
   export default {
     name: 'Directorio',
@@ -50,9 +58,12 @@
       return {
         miembros: [],
         filters: {
+          idUsuario: '',
           nombreUsuario: '',
           correoUsuario: '',
           sapUsuario: '',
+          estadoUsuario: '',
+          nombreRolUsuario:'',
           fechaInicio: '',
           fechaFin: ''
         },
@@ -75,9 +86,13 @@
           const response = await AdminService.getUsuarios();
           console.log(response)
           this.miembros = response.map(usuario => ({
+            idUsuario: usuario.idUsuario,
             nombreUsuario: usuario.nombreUsuario,
             correoUsuario: usuario.correoUsuario,
-            sapUsuario: usuario.sapUsuario
+            sapUsuario: usuario.sapUsuario,
+            estadoUsuario: usuario.estadoUsuario,
+            nombreRolUsuario: usuario.rolUsuario.nombreRolUsuario,
+            nuevaCategoria: usuario.rolUsuario.nombreRolUsuario
           }));
         } catch (error) {
           console.error('Error al cargar los miembros:', error);
@@ -115,7 +130,39 @@
       },
       async actualizarMiembro(miembro) {
         try {
-          await axios.put(`https://api.etalent.com/directorio/${miembro.id}`, miembro);
+          const categoriaToIdRol = {
+            'Enigma': 1,
+            'Esencial': 2,
+            'Eminente': 3,
+            'Dilema': 4,
+            'Prometedor': 5,
+            'Experto': 6,
+            'Riesgo': 7,
+            'Destacado': 8,
+            'Sobresaliente': 9
+          }
+
+          const updatedUsuarioDto = {
+              rolUsuario: {
+                idRolUsuario: categoriaToIdRol[miembro.nuevaCategoria]
+              }
+          };
+          
+          if (!updatedUsuarioDto.rolUsuario.idRolUsuario) {
+            console.error('Categoría no válida seleccionada');
+            return;
+          }
+
+          console.log('Actualizando usuario con:', updatedUsuarioDto);
+          
+          const response = await AdminService.updateUsuarioRol(miembro.idUsuario, updatedUsuarioDto);
+          console.log('Response: ', response)
+
+          const index = this.miembros.findIndex(m => m.id === miembro.id);
+            if (index !== -1) {
+            this.miembros[index] = { ...this.miembros[index], ...response };
+          }
+          
           this.cargarMiembros(); // Recargar la lista después de actualizar
         } catch (error) {
           console.error('Error al actualizar miembro:', error);
@@ -174,7 +221,7 @@
   }
   
   .miembros-list {
-    flex: 3;
+    flex: 1;
   }
   
   .criterios-categoria {
