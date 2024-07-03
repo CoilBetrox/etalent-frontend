@@ -5,17 +5,17 @@
         <form @submit.prevent="addNewEmployee">
           <div class="form-group">
             <label for="nombreUsuario">Nombre Completo</label>
-            <input id="nombreUsuario" v-model="employee.nombreUsuario" placeholder="Apellido1 Apellido2 Nombre1 Nombre2" required>
+            <input id="nombreUsuario" v-model="usuario.nombreUsuario" placeholder="Apellido1 Apellido2 Nombre1 Nombre2" required>
           </div>
 
           <div class="form-group">
             <label for="correoUsuario">Correo</label>
-            <input id="correoUsuario" v-model="employee.correoUsuario" placeholder="correo@correo.com" required>
+            <input id="correoUsuario" v-model="usuario.correoUsuario" placeholder="correo@correo.com" required>
           </div>
   
           <div class="form-group">
             <label for="sapUsuario">Código Sap</label>
-            <input id="sapUsuario" v-model="employee.sapUsuario" placeholder="20011528" required>
+            <input id="sapUsuario" v-model="usuario.sapUsuario" placeholder="20011528" required>
           </div>
     <!-- 
           <div class="form-group">
@@ -64,7 +64,7 @@
     name: 'AgregarNuevoEmpleado',
     data() {
       return {
-        employee: {
+        usuario: {
           nombreUsuario: '',
           correoUsuario: '',
           sapUsuario: '',
@@ -77,9 +77,9 @@
       async addNewEmployee() {
         try {
           const response = await AdminService.createUsuario({
-            nombreUsuario: this.nombreUsuario,
-            correoUsuario: 'correogenerico@correo.com',
-            sapUsuario: this.sapUsuario,
+            nombreUsuario: this.usuario.nombreUsuario,
+            correoUsuario: this.usuario.correoUsuario,
+            sapUsuario: this.usuario.sapUsuario,
             estadoUsuario: 'Activo',
             rolUsuario: {
               id_rol_usuario: 5,
@@ -87,7 +87,7 @@
             },
             
           });
-          console.log('Empleado agregado:', this.employee);
+          console.log('Empleado agregado:', response);
           this.$emit('close');
         } catch (error) {
           console.error('Error al agregar empleado:', error);

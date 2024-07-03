@@ -13,10 +13,15 @@ const createUsuario = async (body) => {
     return await createUsuarioAxios(body);
 }
 
+const getUsuarios = async () => {
+    return await getUsuariosAdminAxios();
+}
+
 //Consumo API
 const loginAdminAxios = async(body) => {
     try{
         const response = await api.post('/admins/auth/login', body);
+        console.log(response.data)
         return response.data;
     } catch (error) {
         console.error('Error en loginAdminAxios:', error)
@@ -47,4 +52,14 @@ const createUsuarioAxios = async(body) => {
     }
 }
 
-export default {registerAdmin, loginAdmin, createUsuario}
+const getUsuariosAdminAxios = async() => {
+    try {
+        const response = await api.get('/usuarios');
+        return response.data;
+    } catch (error) {
+        console.error('Error en getUsuariosAxios', error);
+        throw error;
+    }
+}
+
+export default {registerAdmin, loginAdmin, createUsuario, getUsuarios}
