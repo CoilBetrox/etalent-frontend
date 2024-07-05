@@ -68,7 +68,7 @@ const getUsuariosAdminAxios = async() => {
 
 const updateUsuarioRolAxios = async(usuarioId, updatedUsuarioDto) => {
     try {
-        const response = await api.patch(`/usuarios/${usuarioId}/rol`, updatedUsuarioDto);
+        const response = await api.put(`/usuarios/${usuarioId}`, updatedUsuarioDto);
         return response.data;
     } catch (error) {
         console.error('Error en updateUsuarioRolAxios', error);

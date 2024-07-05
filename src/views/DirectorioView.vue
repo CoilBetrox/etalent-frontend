@@ -27,8 +27,8 @@
                   <option value="Destacado">Destacado</option>
                   <option value="Sobresaliente">Sobresaliente</option>
                 </select>
-                <button @click="darFeedback(miembro)">Feedback</button>
                 <button @click="actualizarMiembro(miembro)">Actualizar</button>
+                <button @click="darFeedback(miembro)">Feedback</button>
                 <button @click="eliminarMiembro(miembro)">Eliminar</button>
               </div>
             </div>
@@ -39,8 +39,13 @@
           </div>
         </div>
       </main>
-  
       <AgregarNuevoComp v-if="mostrarFormularioNuevo" @close="cerrarFormularioNuevo" @empleado-agregado="cargarMiembros" />
+      <AgregarFeedbackComp 
+        v-if="showFeedbackModal" 
+        :miembro="miembroSeleccionado" 
+        @close="cerrarModalFeedback"
+        @feedback-registrado="procesarFeedback"
+      />
     </div>
   </template>
   
@@ -48,11 +53,13 @@
   import axios from 'axios';
   import AdminService from '@/services/AdminService';
   import AgregarNuevoComp from '@/components/AgregarNuevoComp.vue';
+  import AgregarFeedbackComp from '@/components/AgregarFeedbackComp.vue';
   
   export default {
     name: 'Directorio',
     components: {
-      AdminService
+      AdminService,
+      AgregarFeedbackComp
     },
     data() {
       return {
@@ -67,6 +74,8 @@
           fechaInicio: '',
           fechaFin: ''
         },
+        showFeedbackModal: false,
+        miembroSeleccionado: null,
         mostrarFormularioNuevo: false,
         currentDate: new Date().toLocaleString('es-ES', {
           day: 'numeric',
@@ -126,7 +135,16 @@
         // Implementar lógica para exportar a PDF
       },
       darFeedback(miembro) {
+        this.miembroSeleccionado = miembro;
+        this.showFeedbackModal = true;
         // Implementar lógica para dar feedback
+      },
+      cerrarModalFeedback(){
+        this.showFeedbackModal = false;
+        this.miembroSeleccionado = null;
+      },
+      procesarFeedback(feedbackData){
+        console.log('Feedback Recibido',feedbackData)
       },
       async actualizarMiembro(miembro) {
         try {
@@ -145,25 +163,29 @@
           const updatedUsuarioDto = {
               rolUsuario: {
                 idRolUsuario: categoriaToIdRol[miembro.nuevaCategoria]
-              }
+              },
+              idUsuario: miembro.idUsuario
           };
+          console.log(updatedUsuarioDto.rolUsuario);
+          
           
           if (!updatedUsuarioDto.rolUsuario.idRolUsuario) {
             console.error('Categoría no válida seleccionada');
             return;
           }
+            
 
           console.log('Actualizando usuario con:', updatedUsuarioDto);
           
           const response = await AdminService.updateUsuarioRol(miembro.idUsuario, updatedUsuarioDto);
           console.log('Response: ', response)
 
-          const index = this.miembros.findIndex(m => m.id === miembro.id);
+          const index = this.miembros.findIndex(m => m.idUsuario === miembro.idUsuario);
             if (index !== -1) {
-            this.miembros[index] = { ...this.miembros[index], ...response };
+            this.miembros[index] = { ...this.miembros[index], nombreRolUsuario: miembro.nuevaCategoria, ...response };
           }
           
-          this.cargarMiembros(); // Recargar la lista después de actualizar
+          await this.cargarMiembros(); // Recargar la lista después de actualizar
         } catch (error) {
           console.error('Error al actualizar miembro:', error);
         }
