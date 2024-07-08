@@ -6,12 +6,12 @@
         <div class="user-avatar">64x64</div>
         <div class="user-details">
           <h3>{{ miembro.nombreUsuario }}</h3>
-          <p>{{ miembro.sapUsuario }} | {{ miembro.genero }} | {{ miembro.nombreRolUsuario }} | {{ miembro.estadoUsuario }} | {{ miembro.nombreRolUsuario }}</p>
+          <p>{{ miembro.sapUsuario }} | {{ miembro.genero }} | {{ miembro.nombreRolUsuario }} | {{ miembro.estadoUsuario }}</p>
         </div>
       </div>
       <div class="feedback-input">
         <label>Feedback</label>
-        <input type="date" v-model="fechaFeedback">
+        <!-- <input type="date" v-model="fechaFeedback"> -->
         <textarea v-model="feedbackText" placeholder="Ingrese el feedback aquí"></textarea>
       </div>
       <button @click="registrarFeedback" class="registrar-btn">Registrar Feedback</button>

@@ -9,17 +9,27 @@ const registerAdmin = async(body) => {
     return await registerAdminAxios(body);
 };
 
-const createUsuario = async (body) => {
+const createUsuario = async(body) => {
     return await createUsuarioAxios(body);
 }
 
-const getUsuarios = async () => {
+const getUsuarios = async() => {
     return await getUsuariosAdminAxios();
 }
 
 const updateUsuarioRol = async (usuarioId, updatedUsuarioDto) => {
     return await updateUsuarioRolAxios(usuarioId, updatedUsuarioDto);
 }
+
+const registrarFedback= async(body, idUsuario) => {
+    return await registrarFedbackAxios(body, idUsuario);
+
+}
+
+const getFeedbacks = async() => {
+    return await getFeedbacksAxios();
+}
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -76,4 +86,26 @@ const updateUsuarioRolAxios = async(usuarioId, updatedUsuarioDto) => {
     }
 }
 
-export default {registerAdmin, loginAdmin, createUsuario, getUsuarios, updateUsuarioRol}
+const registrarFedbackAxios = async(body, idUsuario) => {
+    try {
+        const response = api.post(`/feedbacks/${idUsuario}`, body);
+        console.log(response);
+        return (await response).data || {message: 'Registro exitoso'}
+    } catch (error) {
+        console.error('Error en registrarFedbackAxios', error);
+        throw error;
+    }
+}
+
+const getFeedbacksAxios = async() => {
+    try {
+        const response = api.get('/feedbacks');
+        console.log(response);
+        return (await response).data || {message: 'Feedback registrado exitosamente'}
+    } catch (error) {
+        console.error('Error en getFeedbaksAxios', error);
+        throw error;
+    }
+}
+
+export default {registerAdmin, loginAdmin, createUsuario, getUsuarios, updateUsuarioRol, registrarFedback, getFeedbacks}

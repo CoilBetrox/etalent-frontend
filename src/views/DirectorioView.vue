@@ -143,8 +143,20 @@
         this.showFeedbackModal = false;
         this.miembroSeleccionado = null;
       },
-      procesarFeedback(feedbackData){
-        console.log('Feedback Recibido',feedbackData)
+      async procesarFeedback(feedbackData){
+        try {
+          const feedbackDto = {
+            descripcionFeedback: feedbackData.texto,
+            fechaFeedback: new Date().toISOString()
+          };
+          const response = await AdminService.registrarFedback(feedbackDto, this.miembroSeleccionado.idUsuario);
+          console.log('Feedback registrado', response);
+          this.cerrarModalFeedback();
+          await this.cargarMiembros();
+
+        } catch (error) {
+          console.error('Error al procesar feedback:', error);
+        }
       },
       async actualizarMiembro(miembro) {
         try {
