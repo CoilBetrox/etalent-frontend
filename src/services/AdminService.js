@@ -11,23 +11,30 @@ const registerAdmin = async(body) => {
 
 const createUsuario = async(body) => {
     return await createUsuarioAxios(body);
-}
+};
 
 const getUsuarios = async() => {
     return await getUsuariosAdminAxios();
-}
+};
 
 const updateUsuarioRol = async (usuarioId, updatedUsuarioDto) => {
     return await updateUsuarioRolAxios(usuarioId, updatedUsuarioDto);
-}
+};
 
 const registrarFedback= async(body, idUsuario) => {
     return await registrarFedbackAxios(body, idUsuario);
-
-}
+};
 
 const getFeedbacks = async() => {
     return await getFeedbacksAxios();
+};
+
+const createComentario = async(body, idFedback) => {
+    return await createComentarioAxios(body, idFedback);
+}
+
+const getComentarios = async() => {
+    return await getComentariosAxios();
 }
 
 
@@ -101,11 +108,42 @@ const getFeedbacksAxios = async() => {
     try {
         const response = api.get('/feedbacks');
         console.log(response);
-        return (await response).data || {message: 'Feedback registrado exitosamente'}
+        return (await response).data || {message: 'Feedbacks obtenidos'}
     } catch (error) {
         console.error('Error en getFeedbaksAxios', error);
         throw error;
     }
 }
 
-export default {registerAdmin, loginAdmin, createUsuario, getUsuarios, updateUsuarioRol, registrarFedback, getFeedbacks}
+const createComentarioAxios = async(body, idFedback) => {
+    try {
+        const response = api.post(`/comentariosFeedback/${idFedback}`, body);
+        console.log(response);
+        return (await response).data || {message: 'Comentario registrado existosamente'}
+    } catch (error) {
+        console.error('Error en createComentarioAxios', error);
+        throw error;
+    }
+}
+
+const getComentariosAxios = async() => {
+    try {
+        const response = api.get('/comentariosFeedback');
+        console.log(response);
+        return (await response).data || {message: 'Comentarios otenidos'}
+    } catch (error) {
+        console.error('Error en getComentariosAxios', error);
+        throw error;
+    }
+}
+
+export default {
+    registerAdmin, 
+    loginAdmin, 
+    createUsuario,
+    getUsuarios, 
+    updateUsuarioRol, 
+    registrarFedback, 
+    getFeedbacks, 
+    createComentario,
+    getComentarios}

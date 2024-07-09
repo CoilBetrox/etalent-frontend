@@ -1,21 +1,21 @@
 <template>
   <div class="feedbacks-container">
-    <div v-for="feedback in feedbacks" :key="feedback.id" class="feedback-item">
+    <div v-for="feedback in feedbacks" :key="feedback.idFeedback" class="feedback-item">
       <div class="user-info">
         <img :src="feedback.avatarUrl" alt="User avatar" class="avatar">
         <div>
-          <h3>{{ feedback.nombreApellido }}</h3>
+          <h3>{{ feedback.nombreUsuario }}</h3>
           <p>{{ feedback.info }}</p>
         </div>
       </div>
-      <p class="feedback-date">{{ formatDate(feedback.fecha) }}</p>
-      <p class="feedback-content">{{ feedback.contenido }}</p>
+      <p class="feedback-date">{{ formatDate(feedback.fechaCreacionFeedback) }}</p>
+      <p class="feedback-content">{{ feedback.descripcionFeedback }}</p>
       <div v-for="comentario in feedback.comentarios" :key="comentario.id" class="comentario">
-        <h4>{{ comentario.autor }}</h4>
         <p>{{ comentario.contenido }}</p>
+        <h4>{{ comentario.autor }}</h4>
       </div>
-      <input v-model="nuevoComentario[feedback.id]" placeholder="Añadir comentario...">
-      <button @click="enviarComentario(feedback.id)">Enviar Comentario</button>
+      <input v-model="nuevoComentario[feedback.idFeedback]" placeholder="Añadir comentario...">
+      <button @click="enviarComentario(feedback.idFeedback)">Enviar Comentario</button>
     </div>
   </div>
 </template>
@@ -31,30 +31,40 @@ export default {
 
     const obtenerFeedbacks = async () => {
       try {
-        const response = await AdminService.getFeedbacks();
-        console.log(response);
-        feedbacks.value = response.data.map(feedback => ({
-          id: feedback.id,
-          nombreApellido: feedback.nombreApellido,
-          info: `${feedback.numeroEmpleado} | ${feedback.genero} | ${feedback.departamento} | ${feedback.estado} | ${feedback.nivel}`,
-          fecha: feedback.fecha,
-          contenido: feedback.contenido,
-          comentarios: feedback.comentarios.map(comentario => ({
-            id: comentario.id,
-            autor: comentario.autor,
-            contenido: comentario.contenido
-          }))
-        }));
+        const feedbacksResponse = await AdminService.getFeedbacks();
+        const comentariosResponse = await AdminService.getComentarios();
+        
+        console.log('Respuesta de feedbacks:', feedbacksResponse);
+        console.log('Respuesta de comentarios:', comentariosResponse);
+
+        if (Array.isArray(feedbacksResponse) && Array.isArray(comentariosResponse)) {
+          feedbacks.value = feedbacksResponse.map(feedback => ({
+            idFeedback: feedback.idFeedback,
+            nombreUsuario: feedback.nombreUsuario,
+            info: `${feedback.sapUsuario} | ${feedback.estadoUsuario} | ${feedback.rolUsuario}`,
+            fechaCreacionFeedback: feedback.fechaCreacionFeedback,
+            descripcionFeedback: feedback.descripcionFeedback,
+            avatarUrl: 'URL_POR_DEFECTO_AVATAR',
+            comentarios: comentariosResponse.filter(c => c.feedbackId === feedback.idFeedback)
+          }));
+        } else {
+          console.error('La respuesta de feedbacks o comentarios no es un array:', feedbacksResponse, comentariosResponse);
+        }
       } catch (error) {
-        console.error('Error al obtener feedbacks:', error);
+        console.error('Error al obtener feedbacks y comentarios:', error);
       }
     };
 
     const enviarComentario = async (feedbackId) => {
       try {
-        await AdminService.enviarComentario(feedbackId, nuevoComentario.value[feedbackId]);
+        const comentarioFeedbackDto = {
+          contenido: nuevoComentario.value[feedbackId]
+        };
+        
+        const response = await AdminService.createComentario(comentarioFeedbackDto, feedbackId);
+        console.log('Respuesta al crear comentario:', response);
         nuevoComentario.value[feedbackId] = '';
-        await obtenerFeedbacks(); // Recargar feedbacks
+        await obtenerFeedbacks(); // Recargar feedbacks y comentarios
       } catch (error) {
         console.error('Error al enviar comentario:', error);
       }
@@ -64,24 +74,18 @@ export default {
       return new Date(date).toLocaleDateString();
     };
 
-    const agregarNuevoFeedback = () => {
-      // Lógica para agregar nuevo feedback
-      console.log('Agregar nuevo feedback');
-    };
-
     onMounted(obtenerFeedbacks);
 
     return {
       feedbacks,
       nuevoComentario,
       enviarComentario,
-      formatDate,
-      agregarNuevoFeedback
+      formatDate
     };
   }
 }
 </script>
-  
+
 <style scoped>
 .feedbacks-container {
   padding: 20px;
