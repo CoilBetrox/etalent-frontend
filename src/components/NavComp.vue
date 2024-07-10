@@ -13,14 +13,21 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
         <ul class="navbar-nav">
           <template v-if="isLoggedIn">
-            <router-link to="/" class="nav-link" active-class="active">Inicio</router-link>
-            <router-link to="/feedbacks" class="nav-link" active-class="active">Feedbacks</router-link>
-            <router-link to="/directorio" class="nav-link" active-class="active">Directorio</router-link>
-            <router-link to="/perfil" class="nav-link" active-class="active">Mi perfil</router-link>
-            <router-link to="/nosotros" class="nav-link" active-class="active">Nosotros</router-link>
+            <template v-if="userRole === 'AdminTienda'">
+              <router-link to="/" class="nav-link" active-class="active">Inicio</router-link>
+              <router-link to="/feedbacks" class="nav-link" active-class="active">Feedbacks</router-link>
+              <router-link to="/directorio" class="nav-link" active-class="active">Directorio</router-link>
+              <router-link to="/perfil" class="nav-link" active-class="active">Mi perfil</router-link>
+              <router-link to="/nosotros" class="nav-link" active-class="active">Nosotros</router-link>
+            </template>
+            <template v-else-if="userRole === 'AdminDO'">
+              <router-link to="/admin-do-view-1" class="nav-link" active-class="active">Vista DO 1</router-link>
+              <router-link to="/admin-do-view-2" class="nav-link" active-class="active">Vista DO 2</router-link>
+            </template>
           </template>
         </ul>
         <div class="d-flex align-items-center">
@@ -34,16 +41,26 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
   name: "NavComp",
   data() {
     return {
       currentDateTime: new Date().toLocaleString(),
       intervalId: null,
-      isLoggedIn: false
+      //isLoggedIn: false
     };
   },
+  computed: {
+    ...mapState({
+      isLoggedIn: state => state.isLoggedIn,
+      userRole: state => state.userRole,
+    }),
+  },
   methods: {
+    ...mapActions(['logout']),
+    /*
     checkAuth() {
       this.isLoggedIn = !!localStorage.getItem('accessToken');
     },
@@ -53,6 +70,7 @@ export default {
       this.isLoggedIn = false;
       this.$router.push('/login');
     },
+    */
     updateDateTime() {
       try {
         this.currentDateTime = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + new Date().toLocaleTimeString('es-ES');
@@ -62,7 +80,7 @@ export default {
     }
   },
   mounted() {
-    this.checkAuth();
+    //this.checkAuth();
     this.updateDateTime();
     this.intervalId = setInterval(this.updateDateTime, 1000);
   },

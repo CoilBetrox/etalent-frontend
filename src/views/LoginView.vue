@@ -29,6 +29,7 @@
 
 <script>
 import AdminService from '@/services/AdminService';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'LoginView',
@@ -36,21 +37,25 @@ export default {
     return {
       correo: '',
       password: '',
+      rol: '',
       showPassword: false,
     };
   },
   methods: {
+    ...mapActions(['login']),
     async handleLogin() {
       try {
         const response = await AdminService.loginAdmin({
           correoAdmin: this.correo,
           contraAdmin: this.password,
+          rolAdmins: this.rol,
         });
         console.log('Inicio de sesión exitoso:', response);
         // Guardar el token y redirigir a la página principal
         if (response.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
-          localStorage.setItem('userRole', response.userRole);
+          localStorage.setItem('userRole', response.rolAdmins);
+          await this.login();
           this.$router.push('/');
         } else {
           throw new Error('No se recibió un token de acceso');
