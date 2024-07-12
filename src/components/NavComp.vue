@@ -25,8 +25,10 @@
               <router-link to="/nosotros" class="nav-link" active-class="active">Nosotros</router-link>
             </template>
             <template v-else-if="userRole === 'AdminDO'">
-              <router-link to="/admin-do-view-1" class="nav-link" active-class="active">Vista DO 1</router-link>
-              <router-link to="/admin-do-view-2" class="nav-link" active-class="active">Vista DO 2</router-link>
+              <router-link to="/feedbacksAdmin" class="nav-link" active-class="active">Feedbacks General</router-link>
+              <router-link to="/directorioAdmin" class="nav-link" active-class="active">Directorio General</router-link>
+              <router-link to="/perfil" class="nav-link" active-class="active">Mi perfil</router-link>
+              <router-link to="/nosotros" class="nav-link" active-class="active">Nosotros</router-link>
             </template>
           </template>
         </ul>
@@ -73,7 +75,7 @@ export default {
     */
     updateDateTime() {
       try {
-        this.currentDateTime = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + new Date().toLocaleTimeString('es-ES');
+        this.currentDateTime = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' | ' + new Date().toLocaleTimeString('es-ES');
       } catch (error) {
         console.error('Error al actualizar la fecha y hora:', error);
       }

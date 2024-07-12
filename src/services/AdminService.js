@@ -31,11 +31,23 @@ const getFeedbacks = async() => {
 
 const createComentario = async(body, idFedback) => {
     return await createComentarioAxios(body, idFedback);
-}
+};
 
 const getComentarios = async() => {
     return await getComentariosAxios();
-}
+};
+
+const getAdminProfile = async () => {
+    return await getAdminProfileAxios();
+};
+
+const updateAdminProfilePartial= async (updateData) => {
+    return await updateAdminProfilePartialAxios(updateData);
+};
+
+const getAdminsByRol = async () => {
+    return await getAdminsByRolAxios();
+};
 
 
 //Consumo API
@@ -137,6 +149,37 @@ const getComentariosAxios = async() => {
     }
 }
 
+const getAdminProfileAxios = async () => {
+    try {
+        const response = await api.get('/admins/profile');
+        console.log(response)
+        return response.data;
+    } catch (error) {
+        console.error('Error en getAdminProfileAxios', error);
+        throw error;
+    }
+};
+
+const updateAdminProfilePartialAxios = async (updateData) => {
+    try {
+        const response = await api.patch('/admins/profile', updateData);
+        return response.data;
+    } catch (error) {
+        console.log('Error en updateAdminProfilePartialAxios', error);
+        throw error;
+    }
+};
+
+const getAdminsByRolAxios = async () => {
+    try {
+        const response = await api.get('/amdins/byRole');
+        return response.data;
+    } catch (error) {
+        console.log('Error en getAdminsByRolAxios', error);
+        throw error;
+    }
+};
+
 export default {
     registerAdmin, 
     loginAdmin, 
@@ -146,4 +189,8 @@ export default {
     registrarFedback, 
     getFeedbacks, 
     createComentario,
-    getComentarios}
+    getComentarios,
+    getAdminProfile,
+    updateAdminProfilePartial,
+    getAdminsByRol
+}
