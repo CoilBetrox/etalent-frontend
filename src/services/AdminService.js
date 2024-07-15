@@ -54,7 +54,8 @@ const getAdminsByRol = async () => {
 const loginAdminAxios = async(body) => {
     try{
         const response = await api.post('/admins/auth/login', body);
-        console.log(response.data)
+        console.log(response.data);
+        localStorage.setItem('accessToken', response.data.token);
         return response.data;
     } catch (error) {
         console.error('Error en loginAdminAxios:', error)
