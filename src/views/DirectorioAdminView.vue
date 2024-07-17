@@ -14,7 +14,7 @@
                 <p>{{ admin.nombreAdmin }}</p>
                 <p>{{ admin.correoAdmin }}</p>
                 <p>{{ admin.empresaAdmin }}</p>
-                <p>{{ admin.provinciaAdmin }}</p>
+                <p>{{ admin.zonaAdmin }}</p>
               </div>
               <div class="miembro-actions">
                 <button @click="seleccionarAdmin(admin)">Seleccionar</button>
@@ -96,18 +96,16 @@
         try {
           const response = await AdminService.getAdminsByRol();
           console.log(response);
-          this.admins = response.data;
+          this.admins = response;
         } catch (error) {
           console.error('Error al cargar los admins:', error);
         }
       },
       async seleccionarAdmin(admin) {
         try {
-          const response = await AdminService.getUsuariosByAdmin(admin.idAdmin);
-          this.usuarios = response.data.map(usuario => ({
-            ...usuario,
-            nuevaCategoria: usuario.nombreRolUsuario
-          }));
+          const usuarios = await AdminService.getUsuariosByAdmin(admin.idAdmin);
+          console.log(admin.idAdmin);
+          this.usuarios = usuarios;
         } catch (error) {
           console.error('Error al cargar los usuarios:', error);
         }

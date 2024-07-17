@@ -66,13 +66,20 @@ export default {
       });
     },
     clearFilters() {
-      // ... (lógica para limpiar filtros)
+      this.searchQuery = '';
+      this.selectedArea = '';
+      this.selectedCategory = '';
+      this.startDate = '';
+      this.endDate = '';
+      this.applyFilters();
     },
     exportToExcel() {
-      // ... (lógica para exportar a Excel)
+      console.log('Exportar a Excel');
+      this.$emit('export-excel');
     },
     exportToPDF() {
-      // ... (lógica para exportar a PDF)
+      console.log('Exportar a PDF');
+      this.$emit('export-pdf');
     }
   }
 };

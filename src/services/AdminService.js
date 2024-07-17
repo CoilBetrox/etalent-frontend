@@ -49,6 +49,10 @@ const getAdminsByRol = async () => {
     return await getAdminsByRolAxios();
 };
 
+const getUsuariosByAdmin = async (adminId) => {
+    return await getUsuariosByAdminAxios(adminId);
+};
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -173,7 +177,7 @@ const updateAdminProfilePartialAxios = async (updateData) => {
 
 const getAdminsByRolAxios = async () => {
     try {
-        const response = await api.get('/amdins/byRole');
+        const response = await api.get('/admins/byRole');
         return response.data;
     } catch (error) {
         console.log('Error en getAdminsByRolAxios', error);
@@ -181,17 +185,28 @@ const getAdminsByRolAxios = async () => {
     }
 };
 
+const getUsuariosByAdminAxios = async (adminId) => {
+    try {
+        const response = await api.get(`/admins/usersAdmin/${adminId}`);
+        return response.data;
+    } catch (error) {
+        console.log('Error en getUsuariosByAdminAxios', error);
+        throw error;
+    }
+};
+
 export default {
     registerAdmin, 
-    loginAdmin, 
+    loginAdmin,
     createUsuario,
-    getUsuarios, 
-    updateUsuarioRol, 
-    registrarFedback, 
-    getFeedbacks, 
+    getUsuarios,
+    updateUsuarioRol,
+    registrarFedback,
+    getFeedbacks,
     createComentario,
     getComentarios,
     getAdminProfile,
     updateAdminProfilePartial,
-    getAdminsByRol
+    getAdminsByRol,
+    getUsuariosByAdmin
 }

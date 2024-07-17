@@ -1,7 +1,11 @@
 <template>
     <div class="directorio">
+      <FilterComp
+        @filter="aplicarFiltros"
+        @export-excel="exportToExcel"
+        @export-pdf="exportToPDF"
+      />
       <main>
-  
         <div class="directorio-content">
           <div class="miembros-list">
             <div v-for="miembro in miembros" :key="miembro.id" class="miembro-card">
@@ -54,12 +58,17 @@
   import AdminService from '@/services/AdminService';
   import AgregarNuevoComp from '@/components/AgregarNuevoComp.vue';
   import AgregarFeedbackComp from '@/components/AgregarFeedbackComp.vue';
+  import * as XLSX from 'xlsx';
+  import jsPDF from 'jspdf';
+  import 'jspdf-autotable';
+  import FilterComp from '@/components/FilterComp.vue';
   
   export default {
     name: 'Directorio',
     components: {
       AdminService,
-      AgregarFeedbackComp
+      AgregarFeedbackComp,
+      FilterComp
     },
     data() {
       return {
@@ -128,11 +137,63 @@
         };
         this.cargarMiembros();
       },
-      exportarExcel() {
-        // Implementar lógica para exportar a Excel
+      exportToExcel() {
+        console.log('Exportar a Excel');
+        if(!this.miembros || this.miembros.length === 0){
+          console.error('No hay datos para exportar');
+          return;
+        }
+
+        try {
+          const data = this.miembros.map( m => ({
+            ID: m.idUsuario,
+            Nombre: m.nombreUsuario,
+            Correo: m.correoUsuario,
+            SAP: m.sapUsuario,
+            Estado: m.estadoUsuario,
+            Rol: m.nombreRolUsuario
+          }));
+
+          const ws = XLSX.utils.json_to_sheet(data);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "Miembros");
+
+          console.log('Generando archivo Excel...');
+          const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+          const blob = new Blob([wbout], { type: 'application/octet-stream' });
+          
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'miembros_directorio.xlsx';
+          a.click();
+          window.URL.revokeObjectURL(url);
+          console.log('Archivo Excel generado y descarga iniciada');
+        } catch (error) {
+          console.error('Error al exportar a Excel: ', error);
+        }
       },
-      exportarPDF() {
-        // Implementar lógica para exportar a PDF
+      exportToPDF(value) {
+        console.log('Exportar a Excel', value);
+        const doc = new jsPDF();
+        const tableColumn = ["ID", "Nombre", "Correo", "SAP", "Estado", "Rol"];
+        const tableRows = [];
+
+        this.miembros.forEach( m => {
+          const miembroData = [
+            m.idUsuario,
+            m.nombreUsuario,
+            m.correoUsuario,
+            m.sapUsuario,
+            m.estadoUsuario,
+            m.nombreRolUsuario
+          ];
+          tableRows.push(miembroData);
+        });
+
+        doc.autoTable(tableColumn, tableRows, { startY: 20 });
+        doc.text("Directorio de Miembros", 14, 15);
+        doc.save(`directorio_miembros_${new Date().toISOString()}.pdf`);
       },
       darFeedback(miembro) {
         this.miembroSeleccionado = miembro;

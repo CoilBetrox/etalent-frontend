@@ -1,5 +1,9 @@
 <template>
   <div class="feedbacks-container">
+    <div class="feedback-header">
+      <button @click="exportToExcel">Exportar a Excel</button>
+      <button @click="exportToPDF">Exportar a PDF</button>
+    </div>
     <div v-for="feedback in feedbacks" :key="feedback.idFeedback" class="feedback-item">
       <div class="user-info">
         <img :src="feedback.avatarUrl" alt="User avatar" class="avatar">
@@ -23,6 +27,9 @@
 <script>
 import { ref, onMounted } from 'vue';
 import AdminService from '@/services/AdminService';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export default {
   setup() {
@@ -74,13 +81,51 @@ export default {
       return new Date(date).toLocaleDateString();
     };
 
+    const exportToExcel = () => {
+      const worksheetData = feedbacks.value.map(feedback => ({
+        'ID Feedback': feedback.idFeedback,
+        'Nombre Usuario': feedback.nombreUsuario,
+        'Info': feedback.info,
+        'Fecha Creación': formatDate(feedback.fechaCreacionFeedback),
+        'Descripción': feedback.descripcionFeedback,
+        'Comentarios': feedback.comentarios.map(com => `${com.autor}: ${com.contenido}`).join('\n')
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Feedbacks');
+      XLSX.writeFile(workbook, 'feedbacks.xlsx');
+    };
+
+    const exportToPDF = () => {
+      const doc = new jsPDF();
+      const tableData = feedbacks.value.map(feedback => [
+        feedback.idFeedback,
+        feedback.nombreUsuario,
+        feedback.info,
+        formatDate(feedback.fechaCreacionFeedback),
+        feedback.descripcionFeedback,
+        feedback.comentarios.map(com => `${com.autor}: ${com.contenido}`).join('\n')
+      ]);
+
+      autoTable(doc, {
+        head: [['ID Feedback', 'Nombre Usuario', 'Info', 'Fecha Creación', 'Descripción', 'Comentarios']],
+        body: tableData
+      });
+
+      doc.save('feedbacks.pdf');
+    };
+
+
     onMounted(obtenerFeedbacks);
 
     return {
       feedbacks,
       nuevoComentario,
       enviarComentario,
-      formatDate
+      formatDate,
+      exportToExcel,
+      exportToPDF
     };
   }
 }
