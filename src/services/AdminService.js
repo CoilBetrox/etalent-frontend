@@ -187,7 +187,7 @@ const getAdminsByRolAxios = async () => {
 
 const getUsuariosByAdminAxios = async (adminId) => {
     try {
-        const response = await api.get(`/admins/usersAdmin/${adminId}`);
+        const response = await api.get(`/admins/userAdmin/${adminId}`);
         return response.data;
     } catch (error) {
         console.log('Error en getUsuariosByAdminAxios', error);

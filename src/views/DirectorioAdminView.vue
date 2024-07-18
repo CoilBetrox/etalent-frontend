@@ -90,6 +90,12 @@
     },
     mounted() {
       this.cargarAdmins();
+
+      AdminService.getUsuariosByAdmin(1).then(usuarios => {
+        console.log(usuarios);
+      }).catch (error => {
+        console.error('Error al cargar los usuarios:', error);
+      });
     },
     methods: {
       async cargarAdmins() {
