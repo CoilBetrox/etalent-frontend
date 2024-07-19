@@ -11,7 +11,6 @@
             <div v-for="miembro in miembros" :key="miembro.id" class="miembro-card">
               <div class="miembro-foto">64x64</div>
               <div class="miembro-info">
-                <p>{{ miembro.idUsuario }}</p>
                 <p>{{ miembro.nombreUsuario }}</p>
                 <p>{{ miembro.correoUsuario }}</p>
                 <p>{{ miembro.sapUsuario }}</p>
@@ -68,7 +67,8 @@
     components: {
       AdminService,
       AgregarFeedbackComp,
-      FilterComp
+      FilterComp,
+      AgregarNuevoComp
     },
     data() {
       return {
@@ -97,12 +97,19 @@
     },
     mounted() {
       this.cargarMiembros();
+      //
+      //
+      // Aqui me quedé, revisar chatgpt y continuar depurando
+      //
+      //
+      console.log('------')
+      console.log(localStorage)
+      console.log('------')
     },
     methods: {
       async cargarMiembros() {
         try {
           const response = await AdminService.getUsuarios();
-          console.log(response)
           this.miembros = response.map(usuario => ({
             idUsuario: usuario.idUsuario,
             nombreUsuario: usuario.nombreUsuario,
@@ -247,7 +254,6 @@
             return;
           }
             
-
           console.log('Actualizando usuario con:', updatedUsuarioDto);
           
           const response = await AdminService.updateUsuarioRol(miembro.idUsuario, updatedUsuarioDto);

@@ -55,10 +55,13 @@ export default {
     };
   },
   computed: {
+    ...mapState(['isLoggedIn', 'userRole']),
+    /*
     ...mapState({
       isLoggedIn: state => state.isLoggedIn,
       userRole: state => state.userRole,
     }),
+    */
   },
   methods: {
     ...mapActions(['logout']),

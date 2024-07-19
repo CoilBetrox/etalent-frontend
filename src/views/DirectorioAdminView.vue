@@ -30,10 +30,11 @@
               <div class="miembro-foto">64x64</div>
               <div class="miembro-info">
                 <p>{{ usuario.nombreUsuario }}</p>
+                <p>{{ usuario.correoUsuario }}</p>
                 <p>{{ usuario.sapUsuario }}</p>
                 <p>{{ usuario.genero }}</p>
                 <p>{{ usuario.estadoUsuario }}</p>
-                <p>{{ usuario.nombreRolUsuario }}</p>
+                <p>{{ usuario.rolUsuario.nombreRolUsuario }}</p>
               </div>
               <div class="miembro-actions">
                 <select v-model="usuario.nuevaCategoria">
@@ -48,7 +49,7 @@
                   <option value="Sobresaliente">Sobresaliente</option>
                 </select>
                 <button @click="actualizarMiembro(usuario)">Actualizar</button>
-                <button @click="darFeedback(usuario)">Feedback</button>
+                <button @click="darFeedback(miembro)">Feedback</button>
                 <button @click="eliminarMiembro(usuario)">Eliminar</button>
               </div>
             </div>
@@ -111,7 +112,12 @@
         try {
           const usuarios = await AdminService.getUsuariosByAdmin(admin.idAdmin);
           console.log(admin.idAdmin);
-          this.usuarios = usuarios;
+          this.usuarios = usuarios.map(usuario => {
+            return {
+              ...usuario,
+              nuevaCategoria: usuario.rolUsuario.nombreRolUsuario
+            };
+          });
         } catch (error) {
           console.error('Error al cargar los usuarios:', error);
         }
@@ -143,9 +149,11 @@
             descripcionFeedback: feedbackData.texto,
             fechaFeedback: new Date().toISOString()
           };
-          await AdminService.registrarFeedback(feedbackDto, this.miembroSeleccionado.idUsuario);
+
+          const response = await AdminService.registrarFedback(feedbackDto, this.miembroSeleccionado.idUsuario);
+          console.log('Feedback registrado', response);
           this.cerrarModalFeedback();
-          await this.seleccionarAdmin(this.miembroSeleccionado.admin); // Recargar la lista de usuarios
+          await this.seleccionarAdmin(this.miembroSeleccionado.admin); // Recargar la lista de usuarios await this.cargarMiembros()
         } catch (error) {
           console.error('Error al procesar feedback:', error);
         }
@@ -169,14 +177,23 @@
               idRolUsuario: categoriaToIdRol[usuario.nuevaCategoria]
             }
           };
+          console.log(updatedUsuarioDto.rolUsuario);
   
           if (!updatedUsuarioDto.rolUsuario.idRolUsuario) {
             console.error('Categoría no válida seleccionada');
             return;
           }
-  
-          await AdminService.updateUsuarioRol(usuario.idUsuario, updatedUsuarioDto);
-          await this.seleccionarAdmin(this.miembroSeleccionado.admin); // Recargar la lista de usuarios
+
+          console.log('Actualizando usuario con:', updatedUsuarioDto);
+
+          //Actualiza estado local del usuario
+          const index = this.usuarios.findIndex(m => m.idUsuario === usuario.idUsuario);
+          if (index !== -1) {
+            this.usuarios[index].rolUsuario = { idRolUsuario: categoriaToIdRol[usuario.nuevaCategoria], nombreRolUsuario: usuario.nuevaCategoria };
+          }
+
+          console.log('Usuario actualizado en el estado local:', this.usuarios[index])
+
         } catch (error) {
           console.error('Error al actualizar usuario:', error);
         }

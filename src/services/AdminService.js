@@ -1,4 +1,4 @@
-import api from './api';
+import api from '@/services/api';
 
 //Metodos fachada
 const loginAdmin = async(body)=>{
@@ -53,13 +53,18 @@ const getUsuariosByAdmin = async (adminId) => {
     return await getUsuariosByAdminAxios(adminId);
 };
 
+const getAllFeedbacks = async () => {
+    return await getAllFeedbacksAxios();
+};
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
     try{
         const response = await api.post('/admins/auth/login', body);
-        console.log(response.data);
-        localStorage.setItem('accessToken', response.data.token);
+        const { accessToken } = response.data;
+        localStorage.setItem('accessToken', accessToken);
+        
         return response.data;
     } catch (error) {
         console.error('Error en loginAdminAxios:', error)
@@ -69,7 +74,7 @@ const loginAdminAxios = async(body) => {
 
 const registerAdminAxios = async(body) => {
     try {
-        const response = api.post('/admins/auth/register', body);
+        const response = await api.post('/admins/auth/register', body);
         console.log(response);
         return response.data || {message: 'Registro exitoso'};
     } catch (error) {
@@ -81,7 +86,7 @@ const registerAdminAxios = async(body) => {
 
 const createUsuarioAxios = async(body) => {
     try { 
-        const response = api.post('/usuarios', body);
+        const response = await api.post('/usuarios', body);
         console.log(response);
         return (await response).data || {message: 'Usuario agregado'};
     } catch (error) {
@@ -95,6 +100,11 @@ const getUsuariosAdminAxios = async() => {
         const response = await api.get('/usuarios');
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 401){
+            console.error('Error de autenticación: ', error.message);
+            // Redirigir al usuario a la página de inicio de sesión o mostrar un mensaje de error
+            //window.location.href = '/login';
+        }
         console.error('Error en getUsuariosAxios', error);
         throw error;
     }
@@ -112,7 +122,7 @@ const updateUsuarioRolAxios = async(usuarioId, updatedUsuarioDto) => {
 
 const registrarFedbackAxios = async(body, idUsuario) => {
     try {
-        const response = api.post(`/feedbacks/${idUsuario}`, body);
+        const response = await api.post(`/feedbacks/${idUsuario}`, body);
         console.log(response);
         return (await response).data || {message: 'Registro exitoso'}
     } catch (error) {
@@ -123,7 +133,7 @@ const registrarFedbackAxios = async(body, idUsuario) => {
 
 const getFeedbacksAxios = async() => {
     try {
-        const response = api.get('/feedbacks');
+        const response = await api.get('/feedbacks');
         console.log(response);
         return (await response).data || {message: 'Feedbacks obtenidos'}
     } catch (error) {
@@ -134,7 +144,7 @@ const getFeedbacksAxios = async() => {
 
 const createComentarioAxios = async(body, idFedback) => {
     try {
-        const response = api.post(`/comentariosFeedback/${idFedback}`, body);
+        const response = await api.post(`/comentariosFeedback/${idFedback}`, body);
         console.log(response);
         return (await response).data || {message: 'Comentario registrado existosamente'}
     } catch (error) {
@@ -145,7 +155,7 @@ const createComentarioAxios = async(body, idFedback) => {
 
 const getComentariosAxios = async() => {
     try {
-        const response = api.get('/comentariosFeedback');
+        const response = await api.get('/comentariosFeedback');
         console.log(response);
         return (await response).data || {message: 'Comentarios otenidos'}
     } catch (error) {
@@ -195,6 +205,16 @@ const getUsuariosByAdminAxios = async (adminId) => {
     }
 };
 
+const getAllFeedbacksAxios = async () => {
+    try {
+        const response = await api.get('/feedbacks/admin-tienda');
+        return response.data;
+    } catch (error) {
+        console.log('Error en getAllFeedbacksAxios', error);
+        throw error;
+    }
+};
+
 export default {
     registerAdmin, 
     loginAdmin,
@@ -208,5 +228,6 @@ export default {
     getAdminProfile,
     updateAdminProfilePartial,
     getAdminsByRol,
-    getUsuariosByAdmin
+    getUsuariosByAdmin,
+    getAllFeedbacks
 }

@@ -1,165 +1,193 @@
 <template>
-  <div class="feedback-admin">
-    <h2>f</h2>
-    <main>
-      <div v-for="feedback in feedbacks" :key="feedback.id" class="feedback-card">
-        <div class="user-profile">
-          <div class="profile-image">64x64</div>
-          <div class="user-details">
-            <h2>{{ feedback.nombreApellido }}</h2>
-            <p>{{ feedback.detalle }}</p>
-          </div>
-        </div>
-        
-        <div class="feedback-info">
-          <p>Feedback creado por {{ feedback.creadoPor }}</p>
-          <p>{{ feedback.fechaCreacion }}</p>
-        </div>
-        
-        <div class="feedback-content">
-          <p>{{ feedback.contenido }}</p>
-        </div>
-        
-        <div class="comentarios">
-          <h3>Comentarios</h3>
-          <div v-for="comentario in feedback.comentarios" :key="comentario.id" class="comentario">
-            <h4>{{ comentario.autor }}</h4>
-            <p>{{ comentario.contenido }}</p>
-          </div>
-        </div>
-        
-        <div class="nuevo-comentario">
-          <input v-model="nuevoComentario" placeholder="Escribe un comentario...">
-          <button @click="enviarComentario(feedback.id)">Enviar Comentario</button>
+  <div class="feedbacks-container">
+    <div class="feedback-header">
+      <button @click="exportToExcel">Exportar a Excel</button>
+      <button @click="exportToPDF">Exportar a PDF</button>
+    </div>
+    <div v-for="feedback in feedbacks" :key="feedback.idFeedback" class="feedback-item">
+      <div class="user-info">
+        <img :src="feedback.avatarUrl" alt="User avatar" class="avatar">
+        <div>
+          <h3>{{ feedback.nombreUsuario }}</h3>
+          <p>{{ feedback.info }}</p>
         </div>
       </div>
-    </main>
-
+      <p class="feedback-date">{{ formatDate(feedback.fechaCreacionFeedback) }}</p>
+      <p class="feedback-content">{{ feedback.descripcionFeedback }}</p>
+      <div v-for="comentario in feedback.comentarios" :key="comentario.id" class="comentario">
+        <p>{{ comentario.contenido }}</p>
+        <h4>{{ comentario.autor }}</h4>
+      </div>
+      <input v-model="nuevoComentario[feedback.idFeedback]" placeholder="Añadir comentario...">
+      <button @click="enviarComentario(feedback.idFeedback)">Enviar Comentario</button>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import AdminService from '@/services/AdminService';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export default {
-  name: 'FeedbacksAdminView',
-  data() {
-    return {
-      feedbacks: [],
-      nuevoComentario: '',
-      currentDate: new Date().toLocaleString('es-ES', { 
-        day: 'numeric', 
-        month: 'long', 
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      })
+  setup() {
+    const feedbacks = ref([]);
+    const nuevoComentario = ref({});
+
+    const obtenerFeedbacks = async () => {
+      try {
+        const feedbacksResponse = await AdminService.getAllFeedbacks();
+        const comentariosResponse = await AdminService.getComentarios();
+        
+        console.log('Respuesta de feedbacks:', feedbacksResponse);
+        console.log('Respuesta de comentarios:', comentariosResponse);
+
+        if (Array.isArray(feedbacksResponse) && Array.isArray(comentariosResponse)) {
+          feedbacks.value = feedbacksResponse.map(feedback => ({
+            idFeedback: feedback.idFeedback,
+            nombreUsuario: feedback.nombreUsuario,
+            info: `${feedback.sapUsuario} | ${feedback.estadoUsuario} | ${feedback.rolUsuario}`,
+            fechaCreacionFeedback: feedback.fechaCreacionFeedback,
+            descripcionFeedback: feedback.descripcionFeedback,
+            avatarUrl: 'URL_POR_DEFECTO_AVATAR',
+            comentarios: comentariosResponse.filter(c => c.feedbackId === feedback.idFeedback)
+          }));
+        } else {
+          console.error('La respuesta de feedbacks o comentarios no es un array:', feedbacksResponse, comentariosResponse);
+        }
+      } catch (error) {
+        console.error('Error al obtener feedbacks y comentarios:', error);
+      }
     };
-  },
-  mounted() {
-    this.cargarFeedbacks();
-  },
-  methods: {
-    async cargarFeedbacks() {
+
+    const enviarComentario = async (feedbackId) => {
       try {
-        const response = await axios.get('http://localhost:8081/api/feedbacks');
-        this.feedbacks = response.data;
+        const comentarioFeedbackDto = {
+          contenido: nuevoComentario.value[feedbackId]
+        };
+        
+        const response = await AdminService.createComentario(comentarioFeedbackDto, feedbackId);
+        console.log('Respuesta al crear comentario:', response);
+        nuevoComentario.value[feedbackId] = '';
+        await obtenerFeedbacks(); // Recargar feedbacks y comentarios
       } catch (error) {
-        console.error('Error al cargar los feedbacks:', error);
+        console.error('Error al enviar comentario:', error);
       }
-    },
-    async enviarComentario(feedbackId) {
-      if (!this.nuevoComentario.trim()) return;
-      
-      try {
-        await axios.post(`http:localhost:8081//api/feedbacks/${feedbackId}/comentarios`, {
-          contenido: this.nuevoComentario
-        });
-        this.nuevoComentario = '';
-        await this.cargarFeedbacks(); // Recargar los feedbacks para mostrar el nuevo comentario
-      } catch (error) {
-        console.error('Error al enviar el comentario:', error);
-      }
-    }
+    };
+
+    const formatDate = (date) => {
+      return new Date(date).toLocaleDateString();
+    };
+
+    const exportToExcel = () => {
+      const worksheetData = feedbacks.value.map(feedback => ({
+        'ID Feedback': feedback.idFeedback,
+        'Nombre Usuario': feedback.nombreUsuario,
+        'Info': feedback.info,
+        'Fecha Creación': formatDate(feedback.fechaCreacionFeedback),
+        'Descripción': feedback.descripcionFeedback,
+        'Comentarios': feedback.comentarios.map(com => `${com.autor}: ${com.contenido}`).join('\n')
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Feedbacks');
+      XLSX.writeFile(workbook, 'feedbacks.xlsx');
+    };
+
+    const exportToPDF = () => {
+      const doc = new jsPDF();
+      const tableData = feedbacks.value.map(feedback => [
+        feedback.idFeedback,
+        feedback.nombreUsuario,
+        feedback.info,
+        formatDate(feedback.fechaCreacionFeedback),
+        feedback.descripcionFeedback,
+        feedback.comentarios.map(com => `${com.autor}: ${com.contenido}`).join('\n')
+      ]);
+
+      autoTable(doc, {
+        head: [['ID Feedback', 'Nombre Usuario', 'Info', 'Fecha Creación', 'Descripción', 'Comentarios']],
+        body: tableData
+      });
+
+      doc.save('feedbacks.pdf');
+    };
+
+
+    onMounted(obtenerFeedbacks);
+
+    return {
+      feedbacks,
+      nuevoComentario,
+      enviarComentario,
+      formatDate,
+      exportToExcel,
+      exportToPDF
+    };
   }
-};
+}
 </script>
 
 <style scoped>
-.feedback-admin {
-  font-family: Arial, sans-serif;
+.feedbacks-container {
+  padding: 20px;
 }
 
-header {
-  background-color: #000;
-  color: white;
-  padding: 1rem;
+.feedback-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin-right: 1rem;
-}
-
-nav a.active {
-  font-weight: bold;
-}
-
-.feedback-card {
+.feedback-item {
   border: 1px solid #ddd;
-  margin-bottom: 1rem;
-  padding: 1rem;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
 }
 
-.user-profile {
+.user-info {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
-.profile-image {
+.avatar {
   width: 64px;
   height: 64px;
-  background-color: #ccc;
-  margin-right: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 50%;
+  margin-right: 15px;
 }
 
-.feedback-info {
-  font-size: 0.9rem;
-  color: #666;
+.feedback-date {
+  font-size: 0.9em;
+  color: #888;
+  margin-bottom: 10px;
 }
 
-.comentarios {
-  margin-top: 1rem;
+.feedback-content {
+  margin-bottom: 10px;
 }
 
-.nuevo-comentario {
-  margin-top: 1rem;
+.comentario {
+  padding-left: 20px;
+  border-left: 2px solid #eee;
+  margin-bottom: 10px;
 }
 
-.nuevo-comentario input {
-  width: 80%;
-  padding: 0.5rem;
+input {
+  width: calc(100% - 120px);
+  padding: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 
 button {
-  background-color: #000;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
+  padding: 10px 20px;
   cursor: pointer;
-}
-
-footer {
-  background-color: #f1f1f1;
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.8rem;
 }
 </style>

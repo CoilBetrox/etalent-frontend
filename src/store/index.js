@@ -1,10 +1,10 @@
 import router from '@/router';
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
 
 export default createStore({
   state: {
     isLoggedIn: !!localStorage.getItem('accessToken'),
-    userRole: localStorage.getItem('userRole') || '',
+    userRole: JSON.parse(localStorage.getItem('userRole')) || '',
   },
   mutations: {
     SET_LOGGED_IN(state, value) {
@@ -15,14 +15,17 @@ export default createStore({
     },
   },
   actions: {
-    login({commit }){
+    login({ commit }, { accessToken, userRole }) {
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('userRole', JSON.stringify(userRole));
       commit('SET_LOGGED_IN', true);
-      commit('SET_USER_ROLE', localStorage.getItem('userRole'));
-    },logout({ commit }){
-      commit('SET_LOGGED_IN', false);
-      commit('SET_USER_ROLE', '');
+      commit('SET_USER_ROLE', userRole);
+    },
+    logout({ commit }) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('userRole');
+      commit('SET_LOGGED_IN', false);
+      commit('SET_USER_ROLE', '');
       router.push('/login');
     },
   },
@@ -31,4 +34,3 @@ export default createStore({
     userRole: state => state.userRole,
   },
 });
-

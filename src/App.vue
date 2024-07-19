@@ -1,27 +1,29 @@
 <template>
   <div>
-    <NavComp v-if="!isLoginRoute" />
+    <NavComp />
     <!--  <FiltersWrapper v-if="$route.path === '/directorio'" @filter="handleFilter" @add-new-employee="showAddEmployeeForm" /> -->
+  
+    <RouterView />
+    <footer>
+      <div>
+        <FooterComp />
+      </div>
+    </footer>
   </div>
-  <RouterView />
-  <footer>
-    <div>
-      <FooterComp />
-    </div>
-  </footer>
 </template>
 
 <script>
 import NavComp from './components/NavComp.vue';
-import FiltersWrapper from './components/FiltersWrapper.vue';
-import { useRoute } from 'vue-router';
 import FooterComp from './components/FooterComp.vue';
+//import FiltersWrapper from './components/FiltersWrapper.vue';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
   name: "App",
   components: {
     NavComp,
-    FiltersWrapper,
+    //FiltersWrapper,
     FooterComp
   },
   data() {
@@ -51,10 +53,14 @@ export default {
     }
   },
   setup() {
+    const store = useStore();
     const route = useRoute();
     const isLoginRoute = route.path === '/login' || route.path === '/register';
+    const isLoggedIn = store.state.isLoggedIn;
+
     return {
-      isLoginRoute
+      isLoggedIn,
+      isLoginRoute,
     };
   }
 }
