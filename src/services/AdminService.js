@@ -62,9 +62,8 @@ const getAllFeedbacks = async () => {
 const loginAdminAxios = async(body) => {
     try{
         const response = await api.post('/admins/auth/login', body);
-        const { accessToken } = response.data;
-        localStorage.setItem('accessToken', accessToken);
-        
+        //const accessToken = response.data;
+        //localStorage.setItem('accessToken', accessToken);
         return response.data;
     } catch (error) {
         console.error('Error en loginAdminAxios:', error)

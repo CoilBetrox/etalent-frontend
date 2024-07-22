@@ -17,14 +17,14 @@
       <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
         <ul class="navbar-nav">
           <template v-if="isLoggedIn">
-            <template v-if="userRole === 'AdminTienda'">
+            <template v-if="userRole.includes('AdminTienda')">
               <router-link to="/" class="nav-link" active-class="active">Inicio</router-link>
               <router-link to="/feedbacks" class="nav-link" active-class="active">Feedbacks</router-link>
               <router-link to="/directorio" class="nav-link" active-class="active">Directorio</router-link>
               <router-link to="/perfil" class="nav-link" active-class="active">Mi perfil</router-link>
               <router-link to="/nosotros" class="nav-link" active-class="active">Nosotros</router-link>
             </template>
-            <template v-else-if="userRole === 'AdminDO'">
+            <template v-else-if="userRole.includes('AdminDO')">
               <router-link to="/feedbacksAdmin" class="nav-link" active-class="active">Feedbacks General</router-link>
               <router-link to="/directorioAdmin" class="nav-link" active-class="active">Directorio General</router-link>
               <router-link to="/perfil" class="nav-link" active-class="active">Mi perfil</router-link>
@@ -56,41 +56,41 @@ export default {
   },
   computed: {
     ...mapState(['isLoggedIn', 'userRole']),
-    /*
-    ...mapState({
-      isLoggedIn: state => state.isLoggedIn,
-      userRole: state => state.userRole,
-    }),
-    */
   },
   methods: {
     ...mapActions(['logout']),
-    /*
-    checkAuth() {
-      this.isLoggedIn = !!localStorage.getItem('accessToken');
-    },
-    logout() {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('userRole');
-      this.isLoggedIn = false;
-      this.$router.push('/login');
-    },
-    */
     updateDateTime() {
       try {
         this.currentDateTime = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' | ' + new Date().toLocaleTimeString('es-ES');
       } catch (error) {
         console.error('Error al actualizar la fecha y hora:', error);
       }
-    }
+    },
+    
   },
   mounted() {
     //this.checkAuth();
+    console.log('Mounted isLoggedIn:', this.isLoggedIn);
+    console.log('Mounted userRole:', this.userRole);
     this.updateDateTime();
     this.intervalId = setInterval(this.updateDateTime, 1000);
   },
   beforeUnmount() {
     clearInterval(this.intervalId);
+  },
+  watch: {
+    isLoggedIn(newVal) {
+      console.log('watch isLoggedIn:', newVal);
+      if (newVal) {
+        this.$forceUpdate();
+      }
+    },
+    userRole(newVal) {
+      console.log('watch userRole:', newVal);
+      if (newVal) {
+        this.$forceUpdate();
+      }
+    }
   }
 };
 </script>

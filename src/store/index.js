@@ -9,10 +9,14 @@ export default createStore({
   mutations: {
     SET_LOGGED_IN(state, value) {
       state.isLoggedIn = value;
+      console.log('state isLoggedIn', state.isLoggedIn);
     },
     SET_USER_ROLE(state, role) {
       state.userRole = role;
+      console.log('state userRole', role);
+      console.log('state', state);
     },
+    
   },
   actions: {
     login({ commit }, { accessToken, userRole }) {

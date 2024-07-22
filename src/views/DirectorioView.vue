@@ -97,14 +97,19 @@
     },
     mounted() {
       this.cargarMiembros();
-      //
-      //
-      // Aqui me quedé, revisar chatgpt y continuar depurando
-      //
-      //
-      console.log('------')
-      console.log(localStorage)
-      console.log('------')
+      
+      console.log('-------');
+      const accessToken = localStorage.getItem('accessToken');
+      const userRole = JSON.parse(localStorage.getItem('userRole'));
+      console.log('accessToken:', accessToken);
+      console.log('userRole:', userRole);
+      console.log('-------');
+
+      if (!accessToken) {
+        console.error('AccessToken no encontrado');
+        this.$router.push('/login');
+      }
+
     },
     methods: {
       async cargarMiembros() {
