@@ -76,6 +76,7 @@ export default {
         correoAdmin: '',
         provinciaAdmin: '',
         empresaAdmin: '',
+        cargoAdmin: '',
         zonaAdmin: ''
       },
       fotoPerfil: '',

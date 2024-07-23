@@ -6,13 +6,18 @@
         <div class="user-avatar">64x64</div>
         <div class="user-details">
           <h3>{{ miembro.nombreUsuario }}</h3>
-          <p>{{ miembro.sapUsuario }} | {{ miembro.genero }} | {{ miembro.nombreRolUsuario }} | {{ miembro.estadoUsuario }}</p>
+          <p>{{ miembro.sapUsuario }} | {{ miembro.cargoUsuario }} | {{ miembro.zonaUsuario }} | {{ miembro.empresaUsuario }} | {{ miembro.tiendaUsuario }} | {{ miembro.jornadaUsuario }} | {{ miembro.nombreRolUsuario }} | {{ miembro.estadoUsuario }}</p>
         </div>
       </div>
       <div class="feedback-input">
         <label>Feedback</label>
-        <!-- <input type="date" v-model="fechaFeedback"> -->
-        <textarea v-model="feedbackText" placeholder="Ingrese el feedback aquí"></textarea>
+        <div class="feedback-type">
+          <select v-model="feedbackType">
+            <option value="Tipo1">Tipo1</option>
+            <option value="Tipo2">Tipo2</option>
+          </select>
+          <textarea v-model="feedbackText" placeholder="Ingrese el feedback aquí"></textarea>
+        </div>
       </div>
       <button @click="registrarFeedback" class="registrar-btn">Registrar Feedback</button>
       <button @click="cerrarModal" class="cerrar-btn">X</button>
@@ -32,17 +37,21 @@ export default {
   data() {
     return {
       fechaFeedback: new Date().toISOString().substr(0, 10),
-      feedbackText: ''
+      feedbackText: '',
+      feedbackType: 'Tipo1',
     }
   },
   methods: {
     registrarFeedback() {
       // Aquí iría la lógica para enviar el feedback
-      console.log('Feedback registrado:', this.feedbackText);
+      console.log('***************')
+      console.log('Feedback registrado:', this.feedbackText, this.feedbackType);
+      console.log('FeedbackType:', this.feedbackType);
       this.$emit('feedback-registrado', {
         miembroId: this.miembro.idUsuario,
         fecha: this.fechaFeedback,
-        texto: this.feedbackText
+        texto: this.feedbackText,
+        tipo: this.feedbackType
       });
       this.cerrarModal();
     },
@@ -102,9 +111,21 @@ export default {
   flex-direction: column;
 }
 
+.feedback-type {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
 textarea {
   height: 100px;
-  margin-top: 10px;
+  flex: 1;
+}
+
+select {
+  height: 35px;
+  padding: 5px;
 }
 
 .registrar-btn {
@@ -125,4 +146,5 @@ textarea {
   font-size: 20px;
   cursor: pointer;
 }
+
 </style>

@@ -33,7 +33,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="provinciaAdmin" class="form-label">Provincia</label>
-                  <select id="provinciaAdmin" v-model="provinciaAdmin" @change="updateZonas" class="form-select" required>
+                  <select id="provinciaAdmin" v-model="provinciaAdmin" @change="updateTiendas" class="form-select" required>
                     <option value="" disabled>Seleccione una provincia</option>
                     <option value="Azuay">Azuay</option>
                     <option value="Chimborazo">Chimborazo</option>
@@ -52,10 +52,10 @@
                   </select>
                 </div>
                 <div class="mb-3">
-                  <label for="zonaAdmin" class="form-label">Tienda</label>
-                  <select id="zonaAdmin" v-model="zonaAdmin" class="form-select" required>
-                    <option value="" disabled>Seleccione una zona</option>
-                    <option v-for="zona in zonas" :key="zona" :value="zona">{{ zona }}</option>
+                  <label for="tiendaAdmin" class="form-label">Tienda</label>
+                  <select id="tiendaAdmin" v-model="tiendaAdmin" class="form-select" required>
+                    <option value="" disabled>Seleccione una tienda</option>
+                    <option v-for="tienda in tiendas" :key="tienda" :value="tienda">{{ tienda }}</option>
                   </select>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Registrarse</button>
@@ -83,11 +83,13 @@
         contraAdmin: '',
         empresaAdmin: '',
         provinciaAdmin: '',
+        cargoAdmin: '',
         zonaAdmin: '',
+        tiendaAdmin: '',
         estadoAdmin:'',
         rolAdmins: '',
         showPassword: false,
-        zonas: []
+        tiendas: []
       };
     },
     methods: {
@@ -100,7 +102,9 @@
                 contraAdmin: this.contraAdmin,
                 empresaAdmin: this.empresaAdmin,
                 provinciaAdmin: this.provinciaAdmin,
-                zonaAdmin: this.zonaAdmin,
+                cargoAdmin: 'Jefe de Ventas',
+                zonaAdmin: 'Jefaturas',
+                tiendaAdmin: this.tiendaAdmin,
                 estadoAdmin: 'Activo',
                 rolAdmins: [
                   {
@@ -133,43 +137,43 @@
       togglePasswordVisibility() {
         this.showPassword = !this.showPassword;
       },
-      updateZonas() {
-        // Actualizar las zonas según la provincia seleccionada
+      updateTiendas() {
+        // Actualizar las tiendas según la provincia seleccionada
         if (this.provinciaAdmin === 'Azuay') {
-          this.zonas = ['Tienda Mall del Rio', 'R.M. Mall del Río', 'R.M Monay'];
+          this.tiendas = ['Tienda Mall del Rio', 'R.M. Mall del Río', 'R.M Monay'];
         } else if (this.provinciaAdmin === 'Chimborazo') {
-          this.zonas = ['Tienda Riobamba', 'R.M. Riobamba'];
+          this.tiendas = ['Tienda Riobamba', 'R.M. Riobamba'];
         } else if (this.provinciaAdmin === 'Cotopaxi') {
-          this.zonas = ['Tienda Latacunga', 'R.M. Latacunga'];
+          this.tiendas = ['Tienda Latacunga', 'R.M. Latacunga'];
         } else if (this.provinciaAdmin === 'Esmeraldas') {
-            this.zonas = ['R.M. Esmeraldas'];
+            this.tiendas = ['R.M. Esmeraldas'];
         } else if (this.provinciaAdmin === 'Guayaquil') {
-            this.zonas = ['Tienda Citymall', 'Tienda Los Ceibos', 'Tienda Mall del Sur', 
+            this.tiendas = ['Tienda Citymall', 'Tienda Los Ceibos', 'Tienda Mall del Sur', 
             'Tienda Mall del Norte', 'Tienda Guayaquil', 'Tienda Mall del Sol', 
             'Tienda San Marino', 'R.M. City Mall', 'R.M. Terminal Terrestre', 
             'R.M. Gye Centro', 'R.M. Duran', 'R.M. Río Centro Dorado', 
             'R.M Río Centro Norte', 'R.M. Ceibos'];
         } else if (this.provinciaAdmin === 'Imbabura') {
-            this.zonas = ['Tienda Ibarra', 'R.M. Ibarra'];
+            this.tiendas = ['Tienda Ibarra', 'R.M. Ibarra'];
         } else if (this.provinciaAdmin === 'Loja') {
-            this.zonas = ['Tienda Loja', 'R.M. Loja'];
+            this.tiendas = ['Tienda Loja', 'R.M. Loja'];
         } else if (this.provinciaAdmin === 'Los Ríos') {
-            this.zonas = ['Tienda Babahoyo', 'R.M. Babahoyo'];
+            this.tiendas = ['Tienda Babahoyo', 'R.M. Babahoyo'];
         } else if (this.provinciaAdmin === 'Machala') {
-            this.zonas = ['Tienda Machala', 'Tienda Machala Expoceanica', 'R.M. Machala'];
+            this.tiendas = ['Tienda Machala', 'Tienda Machala Expoceanica', 'R.M. Machala'];
         } else if (this.provinciaAdmin === 'Manabi') {
-            this.zonas = ['Tienda Mall Pacífico', 'R.M. Mall Pacífico'];
+            this.tiendas = ['Tienda Mall Pacífico', 'R.M. Mall Pacífico'];
         } else if (this.provinciaAdmin === 'Pichincha') {
-            this.zonas = ['Tienda Quicentro Sur', 'Tienda Recreo', 'Tienda Pananorte',
+            this.tiendas = ['Tienda Quicentro Sur', 'Tienda Recreo', 'Tienda Pananorte',
                 'Tienda San Luis Shopping', 'Tienda CCI', 'Tienda 9 de Octubre', 
                 'Tienda Condado', 'Tienda Scala', 'Tienda Quicentro Norte', 'Tienda Bosque', 
                 'R.M. Río Centro Sur', 'R.M. Recreo', 'R.M. Condado', 'R.M. Portal Shoping', 
                 'R.M. Quicentro Sur', 'R.M. 6 de Diciembre', 'R.M. Batán', 'R.M Venezuela'];
         } else if (this.provinciaAdmin === 'Tungurahua') {
-            this.zonas = ['Tienda Mall de los Andes', 'R.M. Ambato', 'R.M. Ambato Mall Andes',
+            this.tiendas = ['Tienda Mall de los Andes', 'R.M. Ambato', 'R.M. Ambato Mall Andes',
                 'R.M. Paseo Shopping Ambato'];
         } else {
-          this.zonas = [];
+          this.tiendas = [];
         }
       }
     }

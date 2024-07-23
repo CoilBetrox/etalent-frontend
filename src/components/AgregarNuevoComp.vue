@@ -4,8 +4,13 @@
         <h2>Agregar nuevo</h2>
         <form @submit.prevent="addNewEmployee">
           <div class="form-group">
-            <label for="nombreUsuario">Nombre Completo</label>
-            <input id="nombreUsuario" v-model="usuario.nombreUsuario" placeholder="Apellido1 Apellido2 Nombre1 Nombre2" required>
+            <label for="nombreUsuario">Nombre</label>
+            <input id="nombreUsuario" v-model="usuario.nombreUsuario" placeholder="Nombre Apellido" required>
+          </div>
+
+          <div class="form-group">
+            <label for="sapUsuario">Código Sap</label>
+            <input id="sapUsuario" v-model="usuario.sapUsuario" placeholder="Código SAP del usuario" required>
           </div>
 
           <div class="form-group">
@@ -14,43 +19,55 @@
           </div>
   
           <div class="form-group">
-            <label for="sapUsuario">Código Sap</label>
-            <input id="sapUsuario" v-model="usuario.sapUsuario" placeholder="20011528" required>
-          </div>
-    <!-- 
-          <div class="form-group">
-            <label for="genero">Genero</label>
-            <select id="genero" v-model="employee.genero" required>
-              <option value="Femenino">Femenino</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Otro">Otro</option>
+            <label for="cargo">Cargo</label>
+            <select id="cargo" v-model="usuario.cargoUsuario" required>
+              <option value="Cargo1">Cargo 1</option>
+              <option value="Cargo2">Cargo 2</option>
+              <option value="Cargo3">Cargo 3</option>
             </select>
           </div>
           
           <div class="form-group">
-            <label for="area">Área</label>
-            <select id="area" v-model="employee.area" required>
+            <label for="zona">Zona</label>
+            <select id="zona" v-model="usuario.zonaUsuario" required>
               <option value="Tecnologia">Tecnología</option>
-              
+              <option value="Hombre">Hombre</option>
+              <option value="Mujer">Mujer</option>
             </select>
           </div>
     
           <div class="form-group">
-            <label for="cargo">Cargo</label>
-            <select id="cargo" v-model="employee.cargo" required>
-              <option value="Vendedor">Vendedor</option>
-              
+            <label for="empresa">Empresa</label>
+            <select id="empresa" v-model="usuario.empresaUsuario" required>
+              <option value="Etafashion">Etafashion</option>
+              <option value="RM">RM</option> 
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="provincia">Provincia</label>
+            <select id="provincia" v-model="usuario.provinciaUsuario" required>
+              <option value="Pichincha">Pichincha</option>
+              <option value="Guayas">Guayas</option> 
             </select>
           </div>
    
           <div class="form-group">
-            <label for="categoria">Categoria</label>
-            <select id="categoria" v-model="employee.categoria" required>
-              <option value="Prometedor">Prometedor</option>
-              
+            <label for="tienda">Tienda</label>
+            <select id="tienda" v-model="usuario.tiendaUsuario" required>
+              <option value="Tienda1">Tienda 1</option>
+              <option value="Tienda2">Tienda 2</option>
             </select>
           </div>
-    -->
+
+          <div class="form-group">
+            <label for="jornada">Jornada</label>
+            <select id="jornada" v-model="usuario.jornadaUsuario" required>
+              <option value="Jornada1">Jornada 1</option>
+              <option value="Jornada2">Jornada 2</option>
+            </select>
+          </div>
+
           <button type="submit">Agregar Nuevo</button>
           <button type="button" @click="$emit('close')">Cancelar</button>
         </form>
@@ -66,8 +83,14 @@
       return {
         usuario: {
           nombreUsuario: '',
-          correoUsuario: '',
           sapUsuario: '',
+          correoUsuario: '',
+          cargoUsuario: '',
+          zonaUsuario: '',
+          empresaUsuario: '',
+          provinciaUsuario: '',
+          tiendaUsuario: '',
+          jornadaUsuario: '',
           estadoUsuario: '',
           rolUsuario: ''
         }
@@ -78,8 +101,14 @@
         try {
           const response = await AdminService.createUsuario({
             nombreUsuario: this.usuario.nombreUsuario,
-            correoUsuario: this.usuario.correoUsuario,
             sapUsuario: this.usuario.sapUsuario,
+            correoUsuario: this.usuario.correoUsuario,
+            cargoUsuario: this.usuario.cargoUsuario,
+            zonaUsuario: this.usuario.zonaUsuario,
+            empresaUsuario: this.usuario.empresaUsuario,
+            provinciaUsuario: this.usuario.provinciaUsuario,
+            tiendaUsuario: this.usuario.tiendaUsuario,
+            jornadaUsuario: this.usuario.jornadaUsuario,
             estadoUsuario: 'Activo',
             rolUsuario: {
               id_rol_usuario: 5,
@@ -107,7 +136,7 @@
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: baseline;
   }
   
   .modal-content {

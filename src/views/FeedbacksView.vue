@@ -48,7 +48,7 @@ export default {
           feedbacks.value = feedbacksResponse.map(feedback => ({
             idFeedback: feedback.idFeedback,
             nombreUsuario: feedback.nombreUsuario,
-            info: `${feedback.sapUsuario} | ${feedback.estadoUsuario} | ${feedback.rolUsuario}`,
+            info: `${feedback.sapUsuario} | ${feedback.tipoFeedback} | ${feedback.rolUsuario}`,
             fechaCreacionFeedback: feedback.fechaCreacionFeedback,
             descripcionFeedback: feedback.descripcionFeedback,
             avatarUrl: 'URL_POR_DEFECTO_AVATAR',

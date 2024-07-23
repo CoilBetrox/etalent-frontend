@@ -12,10 +12,13 @@
               <div class="miembro-foto">64x64</div>
               <div class="miembro-info">
                 <p>{{ miembro.nombreUsuario }}</p>
-                <p>{{ miembro.correoUsuario }}</p>
                 <p>{{ miembro.sapUsuario }}</p>
-                <p>{{ miembro.genero }}</p>
-                <p>{{ miembro.estadoUsuario }}</p>
+                <p>{{ miembro.correoUsuario }}</p>
+                <p>{{ miembro.cargoUsuario }}</p>
+                <p>{{ miembro.zonaUsuario }}</p>
+                <p>{{ miembro.empresaUsuario }}</p>
+                <p>{{ miembro.tiendaUsuario }}</p>
+                <p>{{ miembro.jornadaUsuario }}</p>
                 <p>{{ miembro.nombreRolUsuario }}</p>
               </div>
               <div class="miembro-actions">
@@ -76,12 +79,14 @@
         filters: {
           idUsuario: '',
           nombreUsuario: '',
-          correoUsuario: '',
           sapUsuario: '',
-          estadoUsuario: '',
-          nombreRolUsuario:'',
-          fechaInicio: '',
-          fechaFin: ''
+          correoUsuario: '',
+          cargoUsuario: '',
+          zonaUsuario: '',
+          empresaUsuario: '',
+          tiendaUsuario: '',
+          jornadaUsuario: '',
+          nombreRolUsuario:''
         },
         showFeedbackModal: false,
         miembroSeleccionado: null,
@@ -118,9 +123,13 @@
           this.miembros = response.map(usuario => ({
             idUsuario: usuario.idUsuario,
             nombreUsuario: usuario.nombreUsuario,
-            correoUsuario: usuario.correoUsuario,
             sapUsuario: usuario.sapUsuario,
-            estadoUsuario: usuario.estadoUsuario,
+            correoUsuario: usuario.correoUsuario,
+            cargoUsuario: usuario.cargoUsuario,
+            zonaUsuario: usuario.zonaUsuario,
+            empresaUsuario: usuario.empresaUsuario,
+            tiendaUsuario: usuario.tiendaUsuario,
+            jornadaUsuario: usuario.jornadaUsuario,
             nombreRolUsuario: usuario.rolUsuario.nombreRolUsuario,
             nuevaCategoria: usuario.rolUsuario.nombreRolUsuario
           }));
@@ -143,9 +152,7 @@
         this.filters = {
           nombreUsuario: '',
           correoUsuario: '',
-          categoria: '',
-          fechaInicio: '',
-          fechaFin: ''
+          categoria: ''
         };
         this.cargarMiembros();
       },
@@ -162,7 +169,7 @@
             Nombre: m.nombreUsuario,
             Correo: m.correoUsuario,
             SAP: m.sapUsuario,
-            Estado: m.estadoUsuario,
+            Estado: '',
             Rol: m.nombreRolUsuario
           }));
 
@@ -197,7 +204,6 @@
             m.nombreUsuario,
             m.correoUsuario,
             m.sapUsuario,
-            m.estadoUsuario,
             m.nombreRolUsuario
           ];
           tableRows.push(miembroData);
@@ -220,6 +226,7 @@
         try {
           const feedbackDto = {
             descripcionFeedback: feedbackData.texto,
+            tipoFeedback: feedbackData.tipo,
             fechaFeedback: new Date().toISOString()
           };
           const response = await AdminService.registrarFedback(feedbackDto, this.miembroSeleccionado.idUsuario);

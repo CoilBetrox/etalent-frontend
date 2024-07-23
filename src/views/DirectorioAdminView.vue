@@ -12,9 +12,12 @@
               <div class="miembro-foto">64x64</div>
               <div class="miembro-info">
                 <p>{{ admin.nombreAdmin }}</p>
+                <p>{{ admin.sapAdmin }}</p>
                 <p>{{ admin.correoAdmin }}</p>
-                <p>{{ admin.empresaAdmin }}</p>
+                <p>{{ admin.cargoAdmin }}</p>
                 <p>{{ admin.zonaAdmin }}</p>
+                <p>{{ admin.empresaAdmin }}</p>
+
               </div>
               <div class="miembro-actions">
                 <button @click="seleccionarAdmin(admin)">Seleccionar</button>
@@ -30,10 +33,13 @@
               <div class="miembro-foto">64x64</div>
               <div class="miembro-info">
                 <p>{{ usuario.nombreUsuario }}</p>
-                <p>{{ usuario.correoUsuario }}</p>
                 <p>{{ usuario.sapUsuario }}</p>
-                <p>{{ usuario.genero }}</p>
-                <p>{{ usuario.estadoUsuario }}</p>
+                <p>{{ usuario.correoUsuario }}</p>
+                <p>{{ usuario.cargoUsuario }}</p>
+                <p>{{ usuario.zonaUsuario }}</p>
+                <p>{{ usuario.empresaUsuario }}</p>
+                <p>{{ usuario.tiendaUsuario }}</p>
+                <p>{{ usuario.jornadaUsuario }}</p>
                 <p>{{ usuario.rolUsuario.nombreRolUsuario }}</p>
               </div>
               <div class="miembro-actions">
