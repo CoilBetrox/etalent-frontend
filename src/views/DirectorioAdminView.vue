@@ -1,15 +1,12 @@
 <template>
     <div class="directorio">
-      <header>
-        <h1>Directorio</h1>
-      </header>
+      
       <main>
-  
         <div class="directorio-content">
           <div class="jefes-tienda">
             <h2>Jefes Tienda</h2>
             <div v-for="admin in admins" :key="admin.idAdmin" class="miembro-card">
-              <div class="miembro-foto">64x64</div>
+              
               <div class="miembro-info">
                 <p>{{ admin.nombreAdmin }}</p>
                 <p>{{ admin.sapAdmin }}</p>
@@ -22,7 +19,9 @@
               <div class="miembro-actions">
                 <button @click="seleccionarAdmin(admin)">Seleccionar</button>
                 <button @click="actualizarAdmin(admin)">Actualizar</button>
+                <!-- 
                 <button @click="eliminarAdmin(admin)">Eliminar</button>
+                -->
               </div>
             </div>
           </div>
@@ -55,8 +54,10 @@
                   <option value="Sobresaliente">Sobresaliente</option>
                 </select>
                 <button @click="actualizarMiembro(usuario)">Actualizar</button>
-                <button @click="darFeedback(miembro)">Feedback</button>
+                <button @click="darFeedback(usuario)">Feedback</button>
+                <!-- 
                 <button @click="eliminarMiembro(usuario)">Eliminar</button>
+                -->
               </div>
             </div>
           </div>
@@ -153,13 +154,13 @@
         try {
           const feedbackDto = {
             descripcionFeedback: feedbackData.texto,
+            tipoFeedback: feedbackData.tipo,
             fechaFeedback: new Date().toISOString()
           };
-
           const response = await AdminService.registrarFedback(feedbackDto, this.miembroSeleccionado.idUsuario);
           console.log('Feedback registrado', response);
           this.cerrarModalFeedback();
-          await this.seleccionarAdmin(this.miembroSeleccionado.admin); // Recargar la lista de usuarios await this.cargarMiembros()
+          await this.cargarAdmins(); // Recargar la lista de usuarios await this.cargarMiembros()
         } catch (error) {
           console.error('Error al procesar feedback:', error);
         }
@@ -204,13 +205,13 @@
           console.error('Error al actualizar usuario:', error);
         }
       },
-      async eliminarMiembro(usuario) {
+      async eliminarMiembro(miembro) {
         if (confirm('¿Está seguro de eliminar este usuario?')) {
           try {
-            await AdminService.deleteUsuario(usuario.idUsuario);
-            await this.seleccionarAdmin(this.miembroSeleccionado.admin); // Recargar la lista de usuarios
+            await AdminService.eliminarUsuario(miembro.idUsuario);
+            await this.cargarAdmins; // Recargar la lista de usuarios
           } catch (error) {
-            console.error('Error al eliminar usuario:', error);
+            console.error('Error al eliminar miembro:', error);
           }
         }
       },

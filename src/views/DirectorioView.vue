@@ -1,7 +1,13 @@
 <template>
     <div class="directorio">
-      <FilterComp
+      <!-- 
+        <FilterComp
+        @export-excel="exportToExcel"
+        @export-pdf="exportToPDF"
         @filter="aplicarFiltros"
+      />
+      -->
+      <FilterComp
         @export-excel="exportToExcel"
         @export-pdf="exportToPDF"
       />
@@ -282,9 +288,9 @@
         }
       },
       async eliminarMiembro(miembro) {
-        if (confirm('¿Está seguro de eliminar este miembro?')) {
+        if (confirm('¿Está seguro de eliminar este usuario?')) {
           try {
-            await axios.delete(`https://api.etalent.com/directorio/${miembro.id}`);
+            await AdminService.eliminarUsuario(miembro.idUsuario);
             this.cargarMiembros(); // Recargar la lista después de eliminar
           } catch (error) {
             console.error('Error al eliminar miembro:', error);

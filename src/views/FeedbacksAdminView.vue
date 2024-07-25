@@ -6,22 +6,24 @@
     </div>
     <div v-for="feedback in feedbacks" :key="feedback.idFeedback" class="feedback-item">
       <div class="user-info">
+        <!-- 
         <img :src="feedback.avatarUrl" alt="User avatar" class="avatar">
+        -->
         <div>
           <h3>{{ feedback.nombreUsuario }}</h3>
           <p>{{ feedback.info }}</p>
-          <p>{{ feedback.nombreAdmin }}</p>
-
+          <p>Creado por: {{ feedback.nombreAdminFeedback }}</p>
+          
         </div>
       </div>
       <p class="feedback-date">{{ formatDate(feedback.fechaCreacionFeedback) }}</p>
       <p class="feedback-content">{{ feedback.descripcionFeedback }}</p>
       <div v-for="comentario in feedback.comentarios" :key="comentario.id" class="comentario">
+        <p><strong>{{ comentario.nombreAdmin }}</strong></p>
         <p>{{ comentario.contenido }}</p>
-        <h4>{{ comentario.autor }}</h4>
       </div>
       <input v-model="nuevoComentario[feedback.idFeedback]" placeholder="Añadir comentario...">
-      <button @click="enviarComentario(feedback.idFeedback)">Enviar Comentario</button>
+      <button @click="enviarComentario(feedback.idFeedback, feedback.usuarioId)">Enviar Comentario</button>
     </div>
   </div>
 </template>
@@ -50,10 +52,12 @@ export default {
           feedbacks.value = feedbacksResponse.map(feedback => ({
             idFeedback: feedback.idFeedback,
             nombreUsuario: feedback.nombreUsuario,
+            nombreAdminFeedback: feedback.nombreAdmin,
             info: `${feedback.sapUsuario} | ${feedback.tipoFeedback} | ${feedback.rolUsuario}`,
             fechaCreacionFeedback: feedback.fechaCreacionFeedback,
             descripcionFeedback: feedback.descripcionFeedback,
-            avatarUrl: 'URL_POR_DEFECTO_AVATAR',
+            usuarioId: feedback.usuarioId,
+            nombreAdminComentario: comentariosResponse.nombreAdmin,
             comentarios: comentariosResponse.filter(c => c.feedbackId === feedback.idFeedback)
           }));
         } else {
@@ -64,10 +68,11 @@ export default {
       }
     };
 
-    const enviarComentario = async (feedbackId) => {
+    const enviarComentario = async (feedbackId, usuarioId) => {
       try {
         const comentarioFeedbackDto = {
-          contenido: nuevoComentario.value[feedbackId]
+          contenido: nuevoComentario.value[feedbackId],
+          usuarioId: usuarioId,
         };
         
         const response = await AdminService.createComentario(comentarioFeedbackDto, feedbackId);
@@ -80,7 +85,13 @@ export default {
     };
 
     const formatDate = (date) => {
-      return new Date(date).toLocaleDateString();
+      return new Date(date).toLocaleDateString('en-GB', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replace(',', '');
     };
 
     const exportToExcel = () => {

@@ -57,6 +57,10 @@ const getAllFeedbacks = async () => {
     return await getAllFeedbacksAxios();
 };
 
+const eliminarUsuario = async (idUsuario) => {
+    return await eliminarUsuarioAxios(idUsuario);
+}
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -214,6 +218,15 @@ const getAllFeedbacksAxios = async () => {
     }
 };
 
+const eliminarUsuarioAxios = async (idUsuario) => {
+    try {
+        return await api.delete(`/usuarios/${idUsuario}`);
+    } catch (error) {
+        console.log('Error en eliminarUsuarioAxios', error);
+        throw error;
+    }
+};
+
 export default {
     registerAdmin, 
     loginAdmin,
@@ -228,5 +241,6 @@ export default {
     updateAdminProfilePartial,
     getAdminsByRol,
     getUsuariosByAdmin,
-    getAllFeedbacks
+    getAllFeedbacks,
+    eliminarUsuario
 }
