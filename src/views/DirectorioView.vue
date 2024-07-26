@@ -41,6 +41,7 @@
                 </select>
                 <button @click="actualizarMiembro(miembro)">Actualizar</button>
                 <button @click="darFeedback(miembro)">Feedback</button>
+                <button @click="eliminarMiembro(miembro)">Cursos</button>
                 <button @click="eliminarMiembro(miembro)">Eliminar</button>
               </div>
             </div>
