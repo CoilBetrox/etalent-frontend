@@ -2,22 +2,23 @@
   <div class="filters-container">
     <div class="filter-item">
       <label for="search">Búsqueda:</label>
-      <input type="text" id="search" v-model="searchQuery">
+      <input type="text" id="search" v-model="searchQuery" placeholder="SAP"
     </div>
     <div class="filter-item">
       <label for="area">Área:</label>
       <select id="area" v-model="selectedArea">
-        <option value="">Todas las áreas</option>
+        <option value="">Todas</option>
         <option v-for="area in areas" :key="area" :value="area">{{ area }}</option>
       </select>
     </div>
     <div class="filter-item">
       <label for="category">Categoría:</label>
       <select id="category" v-model="selectedCategory">
-        <option value="">Todas las categorías</option>
+        <option value="">Todas</option>
         <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
       </select>
     </div>
+    <!-- 
     <div class="filter-item">
       <label for="startDate">Fecha inicio:</label>
       <input type="date" id="startDate" v-model="startDate">
@@ -26,19 +27,23 @@
       <label for="endDate">Fecha fin:</label>
       <input type="date" id="endDate" v-model="endDate">
     </div>
+    -->
     <div class="filter-buttons">
       <button @click="applyFilters">Buscar</button>
       <button @click="clearFilters">Eliminar filtros</button>
+      <button @click="showInfo = true">Información</button>
       <button @click="showModal = true">Agregar nuevo</button>
       <button @click="exportToExcel">Exportar a Excel</button>
       <button @click="exportToPDF">Exportar a PDF</button>
     </div>
     <AgregarNuevoComp v-if="showModal" @close="showModal = false"/>
+    <InfoCategoriaComp v-if="showInfo" @close="showInfo = false"/>
   </div>
 </template>
 
 <script>
-import AgregarNuevoComp from './AgregarNuevoComp.vue';
+import AgregarNuevoComp from '@/components/AgregarNuevoComp.vue';
+import InfoCategoriaComp from '@/components/InfoCategoriaComp.vue';
 export default {
   data() {
     return {
@@ -48,12 +53,14 @@ export default {
       startDate: '',
       endDate: '',
       areas: ['Ventas', 'Marketing', 'Desarrollo', 'Recursos Humanos'],
-      categories: ['Enigma', 'Esencial', 'Eminente', 'Ejemplar'],
-      showModal: false //controla la visibilidad del modal
+      categories: ['Enigma', 'Esencial', 'Eminente', 'Dilema', 'Prometedor', 'Experto', 'Riesgo', 'Destacado', 'Sobresaliente'],
+      showModal: false, //controla la visibilidad del modal
+      showInfo: false,
     };
   },
   components: {
-    AgregarNuevoComp
+    AgregarNuevoComp,
+    InfoCategoriaComp
   },
   methods: {
     applyFilters() {
@@ -61,16 +68,12 @@ export default {
         searchQuery: this.searchQuery,
         area: this.selectedArea,
         category: this.selectedCategory,
-        startDate: this.startDate,
-        endDate: this.endDate
       });
     },
     clearFilters() {
       this.searchQuery = '';
       this.selectedArea = '';
       this.selectedCategory = '';
-      this.startDate = '';
-      this.endDate = '';
       this.applyFilters();
     },
     exportToExcel() {
@@ -86,10 +89,8 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos para la sección de filtros */
 .filters-container {
   display: flex;
-  /* flex-wrap: wrap; */ /* Eliminar esta línea para evitar que se ajusten a varias líneas */
   width: 100%; 
   gap: 1rem;
   padding: 1rem;

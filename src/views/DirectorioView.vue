@@ -41,14 +41,22 @@
                 </select>
                 <button @click="actualizarMiembro(miembro)">Actualizar</button>
                 <button @click="darFeedback(miembro)">Feedback</button>
-                <button @click="eliminarMiembro(miembro)">Cursos</button>
+                <button @click="mostrarCursos(miembro)">Cursos</button>
                 <button @click="eliminarMiembro(miembro)">Eliminar</button>
               </div>
             </div>
           </div>
-          <div class="criterios-categoria">
-            <h2>Criterio para cambiar la categoría</h2>
-            <p>[Agregar infografía para cambiar la categoría]</p>
+          <div class="cursos-usuario">
+            <h2>Cursos</h2>
+            <div v-if="usuarioSeleccionado">
+              <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
+              <ul>
+                <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCurso">
+                  {{ curso.nombreCurso }} - {{ curso.estadoCurso }}
+                </li>
+              </ul>
+              <button @click="agregarCurso(usuarioSeleccionado)">Agregar Curso</button>
+            </div>
           </div>
         </div>
       </main>
@@ -59,6 +67,7 @@
         @close="cerrarModalFeedback"
         @feedback-registrado="procesarFeedback"
       />
+      <InfoCategoriaComp v-if="mostarFormularioInfo" @close="cerrarFormularioInfo"/>
     </div>
   </template>
   
@@ -67,6 +76,7 @@
   import AdminService from '@/services/AdminService';
   import AgregarNuevoComp from '@/components/AgregarNuevoComp.vue';
   import AgregarFeedbackComp from '@/components/AgregarFeedbackComp.vue';
+  import InfoCategoriaComp from '@/components/InfoCategoriaComp.vue';
   import * as XLSX from 'xlsx';
   import jsPDF from 'jspdf';
   import 'jspdf-autotable';
@@ -78,7 +88,8 @@
       AdminService,
       AgregarFeedbackComp,
       FilterComp,
-      AgregarNuevoComp
+      AgregarNuevoComp,
+      InfoCategoriaComp
     },
     data() {
       return {
@@ -98,6 +109,7 @@
         showFeedbackModal: false,
         miembroSeleccionado: null,
         mostrarFormularioNuevo: false,
+        mostarFormularioInfo: false,
         currentDate: new Date().toLocaleString('es-ES', {
           day: 'numeric',
           month: 'long',
@@ -298,10 +310,16 @@
           }
         }
       },
-      cerrarFormularioNuevo() {
+      async mostrarCursos(miembro) {
+
+      },
+      async cerrarFormularioNuevo() {
         this.mostrarFormularioNuevo = false;
         this.cargarMiembros(); // Recargar la lista después de agregar un nuevo miembro
-      }
+      },
+      cerrarFormularioInfo() {
+        this.mostarFormularioInfo = false;
+      },
     }
   };
   </script>
@@ -344,7 +362,7 @@
     flex: 1;
   }
   
-  .criterios-categoria {
+  .cursos-usuario {
     flex: 1;
     background-color: #f0f0f0;
     padding: 20px;

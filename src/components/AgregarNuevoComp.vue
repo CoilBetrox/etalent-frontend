@@ -7,17 +7,17 @@
             <label for="nombreUsuario">Nombre</label>
             <input id="nombreUsuario" v-model="usuario.nombreUsuario" placeholder="Nombre Apellido" required>
           </div>
-
+          
           <div class="form-group">
             <label for="sapUsuario">Código Sap</label>
             <input id="sapUsuario" v-model="usuario.sapUsuario" placeholder="Código SAP del usuario" required>
           </div>
-
+          
           <div class="form-group">
             <label for="correoUsuario">Correo</label>
             <input id="correoUsuario" v-model="usuario.correoUsuario" placeholder="correo@correo.com" required>
           </div>
-  
+          
           <div class="form-group">
             <label for="cargo">Cargo</label>
             <select id="cargo" v-model="usuario.cargoUsuario" required>
