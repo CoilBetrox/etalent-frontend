@@ -50,12 +50,24 @@
             <h2>Cursos</h2>
             <div v-if="usuarioSeleccionado">
               <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
+              <button @click="agregarCurso(usuarioSeleccionado)">Agregar Curso</button>
               <ul>
-                <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCurso">
-                  {{ curso.nombreCurso }} - {{ curso.estadoCurso }}
+                <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
+                  <p>{{ curso.nombreCursoUsuario }}</p>
+                  <p>{{ formatDate(curso.fechaInicio) }}</p>
+                  <p>{{ curso.avanceCurso }}</p>
+                  <p>{{ curso.estadoCurso }}</p>
+                  <select v-model="curso.nuevoAvance">
+                    <option value="10">10%</option>
+                  </select>
+                  <select v-model="curso.nuevoEstado">
+                    <option value="Iniciado">Iniciado</option>
+                    <option value="Cursando">Cursando</option>
+                    <option value="Completo">Completo</option>
+                  </select>
+                  <button @click="actualizaCurso(usuarioSeleccionado)">Actualizar</button>
                 </li>
               </ul>
-              <button @click="agregarCurso(usuarioSeleccionado)">Agregar Curso</button>
             </div>
           </div>
         </div>
@@ -110,6 +122,7 @@
         miembroSeleccionado: null,
         mostrarFormularioNuevo: false,
         mostarFormularioInfo: false,
+        usuarioSeleccionado: null,
         currentDate: new Date().toLocaleString('es-ES', {
           day: 'numeric',
           month: 'long',
@@ -311,7 +324,16 @@
         }
       },
       async mostrarCursos(miembro) {
-
+        try {
+          const response = await AdminService.getCursosDeUsuario(miembro.idUsuario);
+          console.log(response.data)
+          this.usuarioSeleccionado = {
+            ...miembro,
+            cursos: response.data
+          };
+        } catch (error) {
+          console.error('Error al obtener los cursos:', error);
+        }
       },
       async cerrarFormularioNuevo() {
         this.mostrarFormularioNuevo = false;
@@ -320,7 +342,17 @@
       cerrarFormularioInfo() {
         this.mostarFormularioInfo = false;
       },
+      formatDate (date) {
+      return new Date(date).toLocaleDateString('en-GB', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+        }).replace(',', '');
+      }
     }
+
   };
   </script>
   

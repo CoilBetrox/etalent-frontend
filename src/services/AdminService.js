@@ -61,6 +61,10 @@ const eliminarUsuario = async (idUsuario) => {
     return await eliminarUsuarioAxios(idUsuario);
 }
 
+const getCursosDeUsuario = async (idUsuario) => {
+    return await getCursosDeUsuarioAxios(idUsuario);
+}
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -227,6 +231,15 @@ const eliminarUsuarioAxios = async (idUsuario) => {
     }
 };
 
+const getCursosDeUsuarioAxios = async (idUsuario) => {
+    try {
+        return await api.get(`/cursosUsuario/${idUsuario}`);
+    } catch (error) {
+        console.log('Error en getCursosDeUsuarioAxios', error);
+        throw error;
+    }
+}
+
 export default {
     registerAdmin, 
     loginAdmin,
@@ -242,5 +255,6 @@ export default {
     getAdminsByRol,
     getUsuariosByAdmin,
     getAllFeedbacks,
-    eliminarUsuario
+    eliminarUsuario,
+    getCursosDeUsuario
 }
