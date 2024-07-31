@@ -65,6 +65,10 @@ const getCursosDeUsuario = async (idUsuario) => {
     return await getCursosDeUsuarioAxios(idUsuario);
 }
 
+const updateCursoUsuario = async (idCursoUsuario, updatedCursoUsuarioDto) => {
+    return await updateCursoUsuarioAxios(idCursoUsuario, updatedCursoUsuarioDto);
+}
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -238,7 +242,17 @@ const getCursosDeUsuarioAxios = async (idUsuario) => {
         console.log('Error en getCursosDeUsuarioAxios', error);
         throw error;
     }
-}
+};
+
+const updateCursoUsuarioAxios = async (idCursoUsuario, updatedCursoUsuarioDto) => {
+    try {
+        const response = await api.put(`/cursosUsuario/${idCursoUsuario}`, updatedCursoUsuarioDto);
+        return response.data;
+    } catch (error) {
+        console.log('Error en updateCursoUsuarioAxios', error);
+        throw error;
+    }
+};
 
 export default {
     registerAdmin, 
@@ -256,5 +270,6 @@ export default {
     getUsuariosByAdmin,
     getAllFeedbacks,
     eliminarUsuario,
-    getCursosDeUsuario
+    getCursosDeUsuario,
+    updateCursoUsuario
 }

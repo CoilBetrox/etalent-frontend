@@ -2,7 +2,7 @@
   <div class="filters-container">
     <div class="filter-item">
       <label for="search">Búsqueda:</label>
-      <input type="text" id="search" v-model="searchQuery" placeholder="SAP"
+      <input type="text" id="search" v-model="searchQuery" placeholder="SAP">
     </div>
     <div class="filter-item">
       <label for="area">Área:</label>
@@ -18,16 +18,6 @@
         <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
       </select>
     </div>
-    <!-- 
-    <div class="filter-item">
-      <label for="startDate">Fecha inicio:</label>
-      <input type="date" id="startDate" v-model="startDate">
-    </div>
-    <div class="filter-item">
-      <label for="endDate">Fecha fin:</label>
-      <input type="date" id="endDate" v-model="endDate">
-    </div>
-    -->
     <div class="filter-buttons">
       <button @click="applyFilters">Buscar</button>
       <button @click="clearFilters">Eliminar filtros</button>

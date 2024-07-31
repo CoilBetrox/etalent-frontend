@@ -8,6 +8,7 @@
       />
       -->
       <FilterComp
+        @filter="buscar"
         @export-excel="exportToExcel"
         @export-pdf="exportToPDF"
       />
@@ -15,7 +16,7 @@
         <div class="directorio-content">
           <div class="miembros-list">
             <div v-for="miembro in miembros" :key="miembro.id" class="miembro-card">
-              <div class="miembro-foto">64x64</div>
+              
               <div class="miembro-info">
                 <p>{{ miembro.nombreUsuario }}</p>
                 <p>{{ miembro.sapUsuario }}</p>
@@ -55,17 +56,21 @@
                 <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
                   <p>{{ curso.nombreCursoUsuario }}</p>
                   <p>{{ formatDate(curso.fechaInicio) }}</p>
-                  <p>{{ curso.avanceCurso }}</p>
+                  <p>{{ curso.avanceCurso }} %</p>
                   <p>{{ curso.estadoCurso }}</p>
                   <select v-model="curso.nuevoAvance">
-                    <option value="10">10%</option>
+                    <option value="20">20</option>
+                    <option value="40">40</option>
+                    <option value="60">60</option>
+                    <option value="80">80</option>
+                    <option value="100">100</option>
                   </select>
                   <select v-model="curso.nuevoEstado">
                     <option value="Iniciado">Iniciado</option>
                     <option value="Cursando">Cursando</option>
                     <option value="Completo">Completo</option>
                   </select>
-                  <button @click="actualizaCurso(usuarioSeleccionado)">Actualizar</button>
+                  <button @click="actualizaCurso(curso)">Actualizar</button>
                 </li>
               </ul>
             </div>
@@ -74,8 +79,8 @@
       </main>
       <AgregarNuevoComp v-if="mostrarFormularioNuevo" @close="cerrarFormularioNuevo" @empleado-agregado="cargarMiembros" />
       <AgregarFeedbackComp 
-        v-if="showFeedbackModal" 
-        :miembro="miembroSeleccionado" 
+        v-if="showFeedbackModal"
+        :miembro="miembroSeleccionado"
         @close="cerrarModalFeedback"
         @feedback-registrado="procesarFeedback"
       />
@@ -333,6 +338,21 @@
           };
         } catch (error) {
           console.error('Error al obtener los cursos:', error);
+        }
+      },
+      async actualizaCurso(curso){
+        try {
+        //const curso = usuario.cursos.find(c => c.idCursoUsuario === usuario.selectedCursoId);
+        const updatedCursoUsuarioDto = {
+          avanceCurso: curso.nuevoAvance,
+          estadoCurso: curso.nuevoEstado
+        };
+        await AdminService.updateCursoUsuario(curso.idCursoUsuario, updatedCursoUsuarioDto);
+        const response = await AdminService.getCursosDeUsuario(this.usuarioSeleccionado.idUsuario);
+        this.usuarioSeleccionado.cursos = response.data;
+        console.log('Cuso acualizado con éxito');
+        } catch (error) {
+          console.error('Error al actualizar curso:', error);
         }
       },
       async cerrarFormularioNuevo() {
