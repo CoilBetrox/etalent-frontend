@@ -59,7 +59,7 @@ export default {
           localStorage.setItem('accessToken', response.accessToken);
           localStorage.setItem('userRole', JSON.stringify(response.rolAdmins));
           //await this.login( { token: response.accessToken , roles: response.rolAdmins} );
-          this.login({ accessToken: response.accessToken, userRole: response.rolAdmins });
+          this.login({ accessToken: response.accessToken, userRole: response.rolAdmins , expiresIn: response.expiresIn});
           this.$router.push('/');
         } else {
           throw new Error('No se recibió un token de acceso');

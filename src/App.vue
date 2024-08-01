@@ -1,5 +1,6 @@
 <template>
   <div>
+    <AlertComp />
     <NavComp />
     <!--  <FiltersWrapper v-if="$route.path === '/directorio'" @filter="handleFilter" @add-new-employee="showAddEmployeeForm" /> -->
   
@@ -13,18 +14,21 @@
 </template>
 
 <script>
-import NavComp from './components/NavComp.vue';
-import FooterComp from './components/FooterComp.vue';
+import NavComp from '@/components/NavComp.vue';
+import FooterComp from '@/components/FooterComp.vue';
+import AlertComp from '@/components/AlertComp.vue';
 //import FiltersWrapper from './components/FiltersWrapper.vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
+import { onMounted } from 'vue';
 
 export default {
   name: "App",
   components: {
     NavComp,
     //FiltersWrapper,
-    FooterComp
+    FooterComp,
+    AlertComp
   },
   data() {
     return {
@@ -57,6 +61,10 @@ export default {
     const route = useRoute();
     const isLoginRoute = route.path === '/login' || route.path === '/register';
     const isLoggedIn = store.state.isLoggedIn;
+
+    onMounted(() => {
+      store.dispatch('checkAuth');
+    });
 
     return {
       isLoggedIn,

@@ -8,6 +8,7 @@
           <div v-for="admin in admins" :key="admin.idAdmin" class="miembro-card">
             
             <div class="miembro-info">
+              <p>{{ admin.idAdmin }}</p>
               <p>{{ admin.nombreAdmin }}</p>
               <p>{{ admin.sapAdmin }}</p>
               <p>{{ admin.correoAdmin }}</p>
@@ -18,7 +19,7 @@
             </div>
             <div class="miembro-actions">
               <button @click="seleccionarAdmin(admin)">Seleccionar</button>
-              <button @click="actualizarAdmin(admin)">Actualizar</button>
+              <button @click="actualizarAdmin(admin)">Actualizar Jefe</button>
               <!-- 
               <button @click="eliminarAdmin(admin)">Eliminar</button>
               -->
@@ -95,13 +96,9 @@
       </div>
     </main>
     <AgregarNuevoComp v-if="mostrarFormularioNuevo" @close="cerrarFormularioNuevo" @empleado-agregado="cargarAdmins" />
-    <AgregarFeedbackComp
-      v-if="showFeedbackModal"
-      :miembro="miembroSeleccionado"
-      @close="cerrarModalFeedback"
-      @feedback-registrado="procesarFeedback"
-    />
-    <ActualizarJefeTiendaComp />
+    <AgregarFeedbackComp v-if="showFeedbackModal" :miembro="miembroSeleccionado" @close="cerrarModalFeedback" @feedback-registrado="procesarFeedback"/>
+    <ActualizarJefeTiendaComp v-if="mostrarAcualizarJefeTienda" @close="cerrarActualizarJefeTienda" @success="handleSuccess"/>
+    <p v-if="mensajeExito" class="success-message">{{ mensajeExito }}</p>
   </div>
 </template>
 
@@ -129,6 +126,8 @@ export default {
       miembroSeleccionado: null,
       mostrarFormularioNuevo: false,
       usuarioSeleccionado: null,
+      mostrarAcualizarJefeTienda: false,
+      mensajeExito: ''
     };
   },
   mounted() {
@@ -141,6 +140,14 @@ export default {
     });
   },
   methods: {
+    handleSuccess(mensaje) {
+      this.mensajeExito = mensaje;
+      this.mostrarAcualizarJefeTienda = false;
+      // Ocultar el mensaje después de 3 segundos
+      setTimeout(() => {
+        this.mensajeExito = '';
+      }, 3000);
+    },
     async cargarAdmins() {
       try {
         const response = await AdminService.getAdminsByRol();
@@ -289,7 +296,13 @@ export default {
         hour: '2-digit',
         minute: '2-digit'
         }).replace(',', '');
-      }
+    },
+    actualizarAdmin(admin){
+      this.mostrarAcualizarJefeTienda = true;
+    },
+    cerrarActualizarJefeTienda() {
+      this.mostrarAcualizarJefeTienda = false;
+    } 
   }
 };
 </script>

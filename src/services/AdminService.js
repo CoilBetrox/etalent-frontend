@@ -69,6 +69,10 @@ const updateCursoUsuario = async (idCursoUsuario, updatedCursoUsuarioDto) => {
     return await updateCursoUsuarioAxios(idCursoUsuario, updatedCursoUsuarioDto);
 }
 
+const cambiaJefeTienda = async (oldAdminId, newAdminId) => {
+    return await cambiaJefeTiendaAxios(oldAdminId, newAdminId);
+}
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -254,6 +258,20 @@ const updateCursoUsuarioAxios = async (idCursoUsuario, updatedCursoUsuarioDto) =
     }
 };
 
+const cambiaJefeTiendaAxios = async (oldAdminId, newAdminId) => {
+    try {
+        if (!oldAdminId || !newAdminId) {
+            throw new Error("IDs inválidos");
+        }
+
+        const response = await api.put(`/admins/${oldAdminId}/reassign/${newAdminId}`);
+        return response.data;
+    } catch (error) {
+        console.log('Error en cambiaJefeTiendaAxios', error);
+        throw error;
+    }
+};
+
 export default {
     registerAdmin, 
     loginAdmin,
@@ -271,5 +289,6 @@ export default {
     getAllFeedbacks,
     eliminarUsuario,
     getCursosDeUsuario,
-    updateCursoUsuario
+    updateCursoUsuario,
+    cambiaJefeTienda
 }

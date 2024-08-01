@@ -2,16 +2,16 @@
     <div class="modal" @click.self="$emit('close')">
       <div class="modal-content">
         <h2>Actualizar Jefe de Tienda</h2>
-        <p>Cambia de jefe de tienda a partir de los código SAP, es encesario que el Jefe de Tienda entrante tenga una cuenta vacía creada</p>
+        <p>Cambia de jefe de tienda a partir del ID, es encesario que el Jefe de Tienda entrante tenga una cuenta vacía recién creada</p>
         <form @submit.prevent="cambiaJefeTienda">
           <div class="form-group">
-            <label for="sapAntiguo">SAP Antiguo (Saliente)</label>
-            <input id="sapAntiguo" v-model="jefesTienda.sapJefeSaliente" placeholder="SAP del Jefe de Tienda saliente" required>
+            <label for="idAntiguo">ID Antiguo (Saliente)</label>
+            <input id="idAntiguo" v-model="jefesTienda.idJefeSaliente" placeholder="ID del Jefe de Tienda saliente" required>
           </div>
           
           <div class="form-group">
-            <label for="sapNuevo">SAP Nuevo (Entrante)</label>
-            <input id="sapNuevo" v-model="jefesTienda.sapJefeEntrante" placeholder="SAP del Jefe de Tienda entrante" required>
+            <label for="idNuevo">ID Nuevo (Entrante)</label>
+            <input id="idNuevo" v-model="jefesTienda.idJefeEntrante" placeholder="ID del Jefe de Tienda entrante" required>
           </div>
 
           <button type="submit">Aceptar</button>
@@ -23,20 +23,24 @@
   
   <script>
   import AdminService from '@/services/AdminService';
+
   export default {
     name: 'ActualizarJefeTiendaComp',
     data() {
       return {
         jefesTienda: {
-            sapJefeSaliente: '',
-            sapJefeEntrante: ''
+            idJefeSaliente: '',
+            idJefeEntrante: ''
         }
       };
     },
     methods: {
       async cambiaJefeTienda() {
         try {
-          
+          const response = await AdminService.cambiaJefeTienda(this.jefesTienda.idJefeSaliente, this.jefesTienda.idJefeEntrante);
+          console.log(response)
+          alert('Cambio realizado correctamente')
+          this.$emit('success', 'El cambio de jefe de ienda se realizó correctamente');
         } catch (error) {
           console.error('Error al cambiar e jefe de tienda:', error);
         }
