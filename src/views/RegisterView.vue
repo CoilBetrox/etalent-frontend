@@ -115,23 +115,14 @@
                 
             });
             console.log('Respuesta del registro:', response);
-
-            alert('Registro exitoso. Ahora puede iniciar sesión');
-            this.$router.push('/login');
+            alert('Registro exitoso. Se envió un correo de verificación al correo electrónico proporcionado. Verifique en correo no deseado.');
+            //this.$router.push('/login');
+            this.$router.push(`/login`);
             
         } catch (error) {
             console.error('Error al registrarse:', error);
             
-            if (error.response) {
-              console.error('Respuesta del sevidor:', error.response.data);
-              alert(`Error al registrarse: ${error.response.data.message || 'Verifique los datos y vuelva a intentar'}`);
-            } else if (error.request) {
-              console.error('No se recibió respuesta del servidor');
-              alert('Error de conexion. Verifique la conexion');
-            } else {
-              console.error('Error de la configuracion de la solicitud:', error.message);
-              alert('Error al registrarse, intente nuevamente');
-            }
+            alert(`Error al registrarse: ${error.message || 'Verifique los datos y vuelva a intentar'}`);
         }
       },
       togglePasswordVisibility() {

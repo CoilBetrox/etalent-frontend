@@ -73,6 +73,18 @@ const cambiaJefeTienda = async (oldAdminId, newAdminId) => {
     return await cambiaJefeTiendaAxios(oldAdminId, newAdminId);
 }
 
+const verifyEmail = async (token) => {
+    return await verifyEmailAxios(token);
+}
+
+const forgotPassword = async (email) => {
+    return await forgotPasswordAxios(email);
+}
+
+const resetPassword = async (token, newPassword) => {
+    return await resetPasswordAxios(token, newPassword);
+}
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -91,12 +103,18 @@ const registerAdminAxios = async(body) => {
     try {
         const response = await api.post('/admins/auth/register', body);
         console.log(response);
-        return response.data || {message: 'Registro exitoso'};
+        //await verifyEmail(body.token);
+        //return response.data || {message: 'Registro exitoso'};
+        return response.data;
     } catch (error) {
-        console.error('Error en registerAdmin:', error);
-        throw error;
+        if (error.response) {
+            throw new Error(error.response.data.message || 'Error en el registro');
+        } else if (error.request) {
+            throw new Error('No se pudo conectar con el servidor');
+        } else {
+            throw new Error('Error al procesar la solicitud');
+        }
     }
-    
 }
 
 const createUsuarioAxios = async(body) => {
@@ -272,6 +290,37 @@ const cambiaJefeTiendaAxios = async (oldAdminId, newAdminId) => {
     }
 };
 
+const verifyEmailAxios = async (token) => {
+    try {
+        const response = await api.post(`/admins/auth/verify-email?token=${token}`);
+        return response.data;
+    } catch (error) {
+        console.log('Error en verifyEmailAxios', error);
+        throw error;
+    }
+};
+
+const forgotPasswordAxios = async (email) => {
+    try {
+        const response = await api.post(`/admins/auth/forgot-password`, { email });
+        return response.data;
+    } catch (error) {
+        console.log('Error en forgotPasswordAxios', error);
+        throw error;
+    }
+};
+
+const resetPasswordAxios = async (token, newPassword) => {
+    try {
+        const response = await api.post(`/admins/auth/reset-password`, { token, newPassword });
+        return response.data;
+    } catch (error) {
+        console.log('Error en resetPasswordAxios', error);
+        throw error;
+    }
+}
+
+
 export default {
     registerAdmin, 
     loginAdmin,
@@ -290,5 +339,8 @@ export default {
     eliminarUsuario,
     getCursosDeUsuario,
     updateCursoUsuario,
-    cambiaJefeTienda
+    cambiaJefeTienda,
+    verifyEmail,
+    forgotPassword,
+    resetPassword
 }

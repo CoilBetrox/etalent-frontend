@@ -37,7 +37,7 @@ export default createStore({
       localStorage.removeItem('tokenExpiration');
       commit('SET_LOGGED_IN', false);
       commit('SET_USER_ROLE', '');
-      router.push('/login');
+      //router.push('/');
     },
     checkAuth({ commit, dispatch }) {
       const token = localStorage.getItem('accessToken');

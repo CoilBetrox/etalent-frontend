@@ -20,6 +20,9 @@
             <div class="text-center mt-3">
               <router-link to="/register" class="btn btn-link">Registrarse</router-link>
             </div>
+            <div class="text-center mt-3">
+              <router-link to="/register" class="btn btn-link">Registrarse</router-link>
+            </div>
           </div>
         </div>
       </div>
