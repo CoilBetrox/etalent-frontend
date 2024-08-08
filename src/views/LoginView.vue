@@ -21,7 +21,7 @@
               <router-link to="/register" class="btn btn-link">Registrarse</router-link>
             </div>
             <div class="text-center mt-3">
-              <router-link to="/register" class="btn btn-link">Registrarse</router-link>
+              <router-link to="/forgot-password" class="btn btn-link">Olvidó su contraseña?</router-link>
             </div>
           </div>
         </div>

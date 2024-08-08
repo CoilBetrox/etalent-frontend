@@ -73,10 +73,6 @@ const cambiaJefeTienda = async (oldAdminId, newAdminId) => {
     return await cambiaJefeTiendaAxios(oldAdminId, newAdminId);
 }
 
-const verifyEmail = async (token) => {
-    return await verifyEmailAxios(token);
-}
-
 const forgotPassword = async (email) => {
     return await forgotPasswordAxios(email);
 }
@@ -290,16 +286,6 @@ const cambiaJefeTiendaAxios = async (oldAdminId, newAdminId) => {
     }
 };
 
-const verifyEmailAxios = async (token) => {
-    try {
-        const response = await api.post(`/admins/auth/verify-email?token=${token}`);
-        return response.data;
-    } catch (error) {
-        console.log('Error en verifyEmailAxios', error);
-        throw error;
-    }
-};
-
 const forgotPasswordAxios = async (email) => {
     try {
         const response = await api.post(`/admins/auth/forgot-password`, { email });
@@ -340,7 +326,6 @@ export default {
     getCursosDeUsuario,
     updateCursoUsuario,
     cambiaJefeTienda,
-    verifyEmail,
     forgotPassword,
     resetPassword
 }
