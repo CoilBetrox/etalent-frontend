@@ -27,6 +27,7 @@
             <template v-else-if="userRole.includes('AdminDO')">
               <router-link to="/feedbacksAdmin" class="nav-link" active-class="active">Feedbacks General</router-link>
               <router-link to="/directorioAdmin" class="nav-link" active-class="active">Directorio General</router-link>
+              <router-link to="/cursosAdmin" class="nav-link" active-class="active">Cursos General</router-link>
               <router-link to="/perfil" class="nav-link" active-class="active">Mi perfil</router-link>
               <router-link to="/nosotros" class="nav-link" active-class="active">Nosotros</router-link>
             </template>

@@ -81,6 +81,14 @@ const resetPassword = async (token, newPassword) => {
     return await resetPasswordAxios(token, newPassword);
 }
 
+const agregarCurso = async (cursoUsuarioDto) => {
+    return await agregarCursoAxios(cursoUsuarioDto);
+}
+
+const mostrarCursosAll = async () => {
+    return await mostrarCursosAllAxios();
+}
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -206,7 +214,7 @@ const getAdminProfileAxios = async () => {
 
 const updateAdminProfilePartialAxios = async (updateData) => {
     try {
-        const response = await api.patch('/admins/profile', updateData);
+        const response = await api.patch('/admins/profile-update', updateData);
         return response.data;
     } catch (error) {
         console.log('Error en updateAdminProfilePartialAxios', error);
@@ -304,6 +312,26 @@ const resetPasswordAxios = async (token, newPassword) => {
         console.log('Error en resetPasswordAxios', error);
         throw error;
     }
+};
+
+const agregarCursoAxios = async (cursoUsuarioDto) => {
+    try {
+        const response = await api.post('/cursosUsuario', cursoUsuarioDto);
+        return response.data;
+    } catch (error) {
+        console.log('Error en agregarCursoAxios', error);
+        throw error;
+    }
+}
+
+const mostrarCursosAllAxios = async () => {
+    try {
+        const response = await api.get('/cursosUsuario');
+        return response.data;
+    } catch (error) {
+        console.log('Error en mostrarCursosAllAxios', error);
+        throw error;
+    }
 }
 
 
@@ -327,5 +355,7 @@ export default {
     updateCursoUsuario,
     cambiaJefeTienda,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    agregarCurso,
+    mostrarCursosAll,
 }

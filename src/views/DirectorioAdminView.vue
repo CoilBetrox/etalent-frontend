@@ -271,7 +271,6 @@ export default {
     },
     async actualizaCurso(curso){
         try {
-        //const curso = usuario.cursos.find(c => c.idCursoUsuario === usuario.selectedCursoId);
         const updatedCursoUsuarioDto = {
           avanceCurso: curso.nuevoAvance,
           estadoCurso: curso.nuevoEstado
