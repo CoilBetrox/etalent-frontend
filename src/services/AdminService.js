@@ -89,6 +89,10 @@ const mostrarCursosAll = async () => {
     return await mostrarCursosAllAxios();
 }
 
+const mostrarIntegrantesCurso = async (idCursoUsuario) => {
+    return await mostrarIntegrantesCursoAxios(idCursoUsuario);
+}
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -322,7 +326,7 @@ const agregarCursoAxios = async (cursoUsuarioDto) => {
         console.log('Error en agregarCursoAxios', error);
         throw error;
     }
-}
+};
 
 const mostrarCursosAllAxios = async () => {
     try {
@@ -332,7 +336,17 @@ const mostrarCursosAllAxios = async () => {
         console.log('Error en mostrarCursosAllAxios', error);
         throw error;
     }
-}
+};
+
+const mostrarIntegrantesCursoAxios = async (idCursoUsuario) => {
+    try {
+        const response = await api.get(`/cursosUsuario/usuarios/${idCursoUsuario}`);
+        return response.data;
+    } catch (error) {
+        console.log('Error en mostrarIntegrantesCursoAxios', error);
+        throw error;
+    }
+};
 
 
 export default {
@@ -358,4 +372,5 @@ export default {
     resetPassword,
     agregarCurso,
     mostrarCursosAll,
+    mostrarIntegrantesCurso,
 }
