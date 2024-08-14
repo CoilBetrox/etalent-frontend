@@ -1,5 +1,6 @@
 <template>
   <div class="mi-cuenta-container">
+    <img src="@/assets/logo eta-rm.jpeg" alt="Imagen izquierda" class="imagen-lateral izquierda">
     <div class="mi-cuenta">
       <h2>Mi Cuenta</h2>
       <div class="perfil-container">
@@ -15,11 +16,11 @@
             <p v-if="errores.sap" class="error-msg">El campo SAP es obligatorio.</p>
           </div>
 
-            <div class="campo">
-              <label>Correo</label>
-              <input v-model="perfil.correoAdmin" @input="validateCorreo" :class="{ 'input-error': errores.correo }" type="email">
-              <p v-if="errores.correo" class="error-msg">El campo Correo es obligatorio y debe ser un correo electrónico válido.</p>
-            </div>
+          <div class="campo">
+            <label>Correo</label>
+            <input v-model="perfil.correoAdmin" @input="validateCorreo" :class="{ 'input-error': errores.correo }" type="email" disabled>
+            <p v-if="errores.correo" class="error-msg">El campo Correo es obligatorio y debe ser un correo electrónico válido.</p>
+          </div>
 
           <div class="campo">
             <label>Provincia</label>
@@ -40,6 +41,7 @@
         {{ mensaje }}
       </div>
     </div>
+    <img src="@/assets/logo eta-rm.jpeg" alt="Imagen derecha" class="imagen-lateral derecha">
   </div>
 </template>
 
@@ -90,16 +92,11 @@ export default {
         this.errores.sap = true;
         return;
       }
-      if (!this.perfil.correoAdmin || !this.isValidEmail(this.perfil.correoAdmin)) {
-        this.errores.correo = true;
-        return;
-      }
-      
+     
       try {
         await AdminService.updateAdminProfilePartial({
           nombreAdmin: this.perfil.nombreAdmin,
-          sapAdminAdmin: this.perfil.sapAdmin,
-          correoAdmin: this.perfil.correoAdmin
+          sapAdmin: this.perfil.sapAdmin,
         });
         this.mensaje = 'Información actualizada correctamente';
         this.error = false;
@@ -145,18 +142,33 @@ export default {
 }
 </script>
 
-
-
-
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  background-color: #000; /* Fondo negro para toda la hoja */
+}
 
 .mi-cuenta-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Esto asegura que el contenedor ocupe al menos la altura completa de la pantalla */
-  padding-top: 50px; /* Ajusta este valor según el espacio que desees desde la parte superior */
+  min-height: 95vh;
+  padding-top: 0px;
+  background-color: #ffffff; /* Fondo negro */
+}
+.imagen-lateral {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.imagen-lateral.izquierda {
+  left: 150px; /* Ajusta según sea necesario */
+}
+
+.imagen-lateral.derecha {
+  right: 150px; /* Ajusta según sea necesario */
 }
 
 .mi-cuenta {
@@ -164,15 +176,17 @@ export default {
   max-width: 800px;
   width: 100%;
   padding: 20px;
-  border: 1px solid #ddd; /* Añade un borde para el recuadro */
-  border-radius: 8px; /* Opcional: bordes redondeados */
-  background-color: #fff; /* Fondo blanco para el recuadro */
+  border: 4px solid #000000; /* Borde más grueso */
+  border-radius: 8px;
+  background-color: #ffffff; /* Fondo blanco para el recuadro */
 }
+
+
 
 h2 {
   text-align: center;
   margin-bottom: 20px;
-  font-weight: 700; /* Hacer el texto más fuerte */
+  font-weight: 700;
 }
 
 .perfil-container {
@@ -191,7 +205,7 @@ h2 {
 label {
   display: block;
   margin-bottom: 5px;
-  font-weight: 700; /* Hacer el texto más fuerte */
+  font-weight: 700;
 }
 
 input {
@@ -202,11 +216,11 @@ input {
 }
 
 .input-error {
-  border-color: #f00; /* Borde rojo para indicar error */
+  border-color: #f00;
 }
 
 .error-msg {
-  color: #f00; /* Texto rojo para el mensaje de error */
+  color: #f00;
   font-size: 0.9em;
   margin-top: 5px;
 }

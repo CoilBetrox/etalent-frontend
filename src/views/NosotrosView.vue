@@ -10,7 +10,6 @@ NOSOTROS
           </p>
           <br>
           <div class="image-box">
-            <img src="ruta/a/imagen1.jpg" alt="Imagen 1">
           </div>
         </div>
       </div>
@@ -22,7 +21,6 @@ NOSOTROS
           </p>
           <br>
           <div class="image-box">
-            <img src="ruta/a/imagen2.jpg" alt="Imagen 2">
           </div>
         </div>
       </div>
@@ -51,7 +49,7 @@ NOSOTROS
   width: 60%;
   text-align: justify;
   padding: 2rem;
-  background-color: #343a40; /* Nuevo color de fondo: gris oscuro */
+  background-color: #3d4144; /* Nuevo color de fondo: gris oscuro */
   color: white; /* Cambiamos el color del texto a blanco para que sea legible */
   border-radius: 8px;
 }
@@ -72,19 +70,6 @@ NOSOTROS
     margin-top: 1rem;
   }
   
-  .image-box {
-    width: 200px; /* Ancho fijo para la imagen */
-    height: 100px; /* Alto fijo para la imagen */
-    background-color: #f0f0f0;
-    margin-left: 2rem; /* Espacio entre el texto y la imagen */
-    display: flex; /* Para centrar la imagen verticalmente */
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .image-box img {
-    max-width: 100%; /* La imagen se ajusta al ancho del contenedor */
-    height: auto;
-  }
+
   </style>
   
