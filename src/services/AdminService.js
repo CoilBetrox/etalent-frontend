@@ -37,6 +37,10 @@ const getComentarios = async() => {
     return await getComentariosAxios();
 };
 
+const getComentariosPorFeedback = async(feedbackId) => {
+    return await getComentariosPorFeedbackAxios(feedbackId);
+};
+
 const getAdminProfile = async () => {
     return await getAdminProfileAxios();
 };
@@ -59,39 +63,48 @@ const getAllFeedbacks = async () => {
 
 const eliminarUsuario = async (idUsuario) => {
     return await eliminarUsuarioAxios(idUsuario);
-}
+};
 
 const getCursosDeUsuario = async (idUsuario) => {
     return await getCursosDeUsuarioAxios(idUsuario);
-}
+};
 
 const updateCursoUsuario = async (idCursoUsuario, updatedCursoUsuarioDto) => {
     return await updateCursoUsuarioAxios(idCursoUsuario, updatedCursoUsuarioDto);
-}
+};
 
 const cambiaJefeTienda = async (oldAdminId, newAdminId) => {
     return await cambiaJefeTiendaAxios(oldAdminId, newAdminId);
-}
+};
 
 const forgotPassword = async (email) => {
     return await forgotPasswordAxios(email);
-}
+};
 
 const resetPassword = async (token, newPassword) => {
     return await resetPasswordAxios(token, newPassword);
-}
+};
 
 const agregarCurso = async (cursoUsuarioDto) => {
     return await agregarCursoAxios(cursoUsuarioDto);
-}
+};
 
 const mostrarCursosAll = async () => {
     return await mostrarCursosAllAxios();
-}
+};
 
 const mostrarIntegrantesCurso = async (idCursoUsuario) => {
     return await mostrarIntegrantesCursoAxios(idCursoUsuario);
-}
+};
+
+const asignarCursoToUsuario = async (idCursoUsuario, idUsuario) => {
+return await asignarCursoToUsuarioAxios(idCursoUsuario, idUsuario);
+};
+
+const mostrarCursosSimple = async () => {
+    return await mostrarCursosSimpleAxios();
+};
+
 
 
 //Consumo API
@@ -201,6 +214,17 @@ const getComentariosAxios = async() => {
         return (await response).data || {message: 'Comentarios otenidos'}
     } catch (error) {
         console.error('Error en getComentariosAxios', error);
+        throw error;
+    }
+}
+
+const getComentariosPorFeedbackAxios = async(idFedback) => {
+    try {
+        const response = await api.get(`/comentariosFeedback/comentarios/${idFedback}`);
+        console.log(response);
+        return (await response).data || {message: 'Comentarios otenidos'}
+    } catch (error) {
+        console.error('Error en getComentariosPorFeedbackAxios', error);
         throw error;
     }
 }
@@ -348,6 +372,26 @@ const mostrarIntegrantesCursoAxios = async (idCursoUsuario) => {
     }
 };
 
+const asignarCursoToUsuarioAxios = async (idCursoUsuario, idUsuario) => {
+    try {
+        const response = await api.post(`/cursosUsuario/assign/${idCursoUsuario}/${idUsuario}`);
+        return response.data;
+    } catch (error) {
+        console.log('Error en asignarCursoAxios', error);
+        throw error;
+    }
+};
+
+const mostrarCursosSimpleAxios = async () => {
+    try {
+        const response = await api.get('/cursosUsuario/simple');
+        return response.data;
+    } catch (error) {
+        console.log('Error en mostrarCursosSimpleAxios', error);
+        throw error;
+    }
+}
+
 
 export default {
     registerAdmin, 
@@ -373,4 +417,7 @@ export default {
     agregarCurso,
     mostrarCursosAll,
     mostrarIntegrantesCurso,
+    asignarCursoToUsuario,
+    mostrarCursosSimple,
+    getComentariosPorFeedback
 }

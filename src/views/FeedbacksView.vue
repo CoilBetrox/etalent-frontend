@@ -1,28 +1,34 @@
 <template>
   <div class="feedbacks-container">
     <div class="feedback-header">
+      <button @click="cargarFeedbacks">Cargar Feedbacks</button>
       <button @click="exportToExcel">Exportar a Excel</button>
       <button @click="exportToPDF">Exportar a PDF</button>
     </div>
-    <div v-for="feedback in feedbacks" :key="feedback.idFeedback" class="feedback-item">
-      <div class="user-info">
-        <!-- 
-        <img :src="feedback.avatarUrl" alt="User avatar" class="avatar">
-        -->
-        <div>
-          <h3>{{ feedback.nombreUsuario }}</h3>
-          <p>{{ feedback.info }}</p>
-          <p>{{ feedback.nombreAdmin }}</p>
+    <div v-if="feedbacks.length === 0">
+      <p>No hay feedbacks disponibles.</p>
+    </div>
+    <div v-else>
+      <div v-for="feedback in feedbacks" :key="feedback.idFeedback" class="feedback-item">
+        <div class="user-info">
+          <!-- 
+          <img :src="feedback.avatarUrl" alt="User avatar" class="avatar">
+          -->
+          <div>
+            <h3>{{ feedback.nombreUsuario }}</h3>
+            <p>{{ feedback.info }}</p>
+            <p>{{ feedback.nombreAdmin }}</p>
+          </div>
         </div>
+        <p class="feedback-date">{{ formatDate(feedback.fechaCreacionFeedback) }}</p>
+        <p class="feedback-content">{{ feedback.descripcionFeedback }}</p>
+        <div v-for="comentario in feedback.comentarios" :key="comentario.id" class="comentario">
+          <h4>{{ comentario.autor }}</h4>
+          <p>{{ comentario.contenido }}</p>
+        </div>
+        <input v-model="nuevoComentario[feedback.idFeedback]" placeholder="Añadir comentario...">
+        <button @click="enviarComentario(feedback.idFeedback, feedback.usuarioId)">Enviar Comentario</button>
       </div>
-      <p class="feedback-date">{{ formatDate(feedback.fechaCreacionFeedback) }}</p>
-      <p class="feedback-content">{{ feedback.descripcionFeedback }}</p>
-      <div v-for="comentario in feedback.comentarios" :key="comentario.id" class="comentario">
-        <h4>{{ comentario.autor }}</h4>
-        <p>{{ comentario.contenido }}</p>
-      </div>
-      <input v-model="nuevoComentario[feedback.idFeedback]" placeholder="Añadir comentario...">
-      <button @click="enviarComentario(feedback.idFeedback, feedback.usuarioId)">Enviar Comentario</button>
     </div>
   </div>
 </template>
@@ -42,25 +48,48 @@ export default {
     const obtenerFeedbacks = async () => {
       try {
         const feedbacksResponse = await AdminService.getFeedbacks();
+
+        if (!Array.isArray(feedbacksResponse) || feedbacksResponse.length === 0) {
+          feedbacks.value = [];
+          return;
+        }
+
+        feedbacks.value = await Promise.all(feedbacksResponse.map(async (feedback) => {
+          const comentarios = await AdminService.getComentariosPorFeedback(feedback.idFeedback);
+          return {
+            ...feedback,
+            info: `${feedback.sapUsuario} | ${feedback.tipoFeedback} | ${feedback.rolUsuario}`,
+            comentarios: comentarios
+          };
+        }));
+
+        console.log('Feedbacks con comentarios:', feedbacks.value);
+
+
+        /*
         const comentariosResponse = await AdminService.getComentarios();
         
         console.log('Respuesta de feedbacks:', feedbacksResponse);
         console.log('Respuesta de comentarios:', comentariosResponse);
 
-        if (Array.isArray(feedbacksResponse) && Array.isArray(comentariosResponse)) {
-          feedbacks.value = feedbacksResponse.map(feedback => ({
-            idFeedback: feedback.idFeedback,
-            nombreUsuario: feedback.nombreUsuario,
-            info: `${feedback.sapUsuario} | ${feedback.tipoFeedback} | ${feedback.rolUsuario}`,
-            nombreAdmin: feedback.nombreAdmin,
-            fechaCreacionFeedback: feedback.fechaCreacionFeedback,
-            descripcionFeedback: feedback.descripcionFeedback,
-            usuarioId: feedback.usuarioId,
-            comentarios: comentariosResponse.filter(c => c.feedbackId === feedback.idFeedback)
-          }));
+        if (Array.isArray(comentariosResponse)) {
+          feedbacks.value = feedbacksResponse.map(feedback => {
+            const comentariosFiltrados = comentariosResponse.filter(c => c.feedbackId === feedback.idFeedback);
+            return {
+              idFeedback: feedback.idFeedback,
+              nombreUsuario: feedback.nombreUsuario,
+              info: `${feedback.sapUsuario} | ${feedback.tipoFeedback} | ${feedback.rolUsuario}`,
+              nombreAdmin: feedback.nombreAdmin,
+              fechaCreacionFeedback: feedback.fechaCreacionFeedback,
+              descripcionFeedback: feedback.descripcionFeedback,
+              usuarioId: feedback.usuarioId,
+              comentarios: comentariosFiltrados
+            };
+          });
         } else {
           console.error('La respuesta de feedbacks o comentarios no es un array:', feedbacksResponse, comentariosResponse);
         }
+        */
       } catch (error) {
         console.error('Error al obtener feedbacks y comentarios:', error);
       }
@@ -127,13 +156,15 @@ export default {
       doc.save('feedbacks.pdf');
     };
 
-
-    onMounted(obtenerFeedbacks);
+    const cargarFeedbacks = () => {
+      obtenerFeedbacks();
+    };
 
     return {
       feedbacks,
       nuevoComentario,
       enviarComentario,
+      cargarFeedbacks,
       formatDate,
       exportToExcel,
       exportToPDF

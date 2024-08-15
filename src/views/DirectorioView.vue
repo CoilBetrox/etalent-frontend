@@ -51,26 +51,13 @@
             <h2>Cursos</h2>
             <div v-if="usuarioSeleccionado">
               <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
-              <button @click="agregarCurso(usuarioSeleccionado)">Agregar Curso</button>
+              
               <ul>
                 <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
                   <p>{{ curso.nombreCursoUsuario }}</p>
                   <p>{{ formatDate(curso.fechaInicio) }}</p>
                   <p>{{ curso.avanceCurso }} %</p>
                   <p>{{ curso.estadoCurso }}</p>
-                  <select v-model="curso.nuevoAvance">
-                    <option value="20">20</option>
-                    <option value="40">40</option>
-                    <option value="60">60</option>
-                    <option value="80">80</option>
-                    <option value="100">100</option>
-                  </select>
-                  <select v-model="curso.nuevoEstado">
-                    <option value="Iniciado">Iniciado</option>
-                    <option value="Cursando">Cursando</option>
-                    <option value="Completo">Completo</option>
-                  </select>
-                  <button @click="actualizaCurso(curso)">Actualizar</button>
                 </li>
               </ul>
             </div>
@@ -157,18 +144,22 @@
       async cargarMiembros() {
         try {
           const response = await AdminService.getUsuarios();
-          this.miembros = response.map(usuario => ({
-            idUsuario: usuario.idUsuario,
-            nombreUsuario: usuario.nombreUsuario,
-            sapUsuario: usuario.sapUsuario,
-            correoUsuario: usuario.correoUsuario,
-            cargoUsuario: usuario.cargoUsuario,
-            zonaUsuario: usuario.zonaUsuario,
-            empresaUsuario: usuario.empresaUsuario,
-            tiendaUsuario: usuario.tiendaUsuario,
-            jornadaUsuario: usuario.jornadaUsuario,
-            nombreRolUsuario: usuario.rolUsuario.nombreRolUsuario,
-            nuevaCategoria: usuario.rolUsuario.nombreRolUsuario
+          this.miembros = await Promise.all(response.map(async usuario => {
+            const cursos = await AdminService.getCursosDeUsuario(usuario.idUsuario);
+            return {
+              idUsuario: usuario.idUsuario,
+              nombreUsuario: usuario.nombreUsuario,
+              sapUsuario: usuario.sapUsuario,
+              correoUsuario: usuario.correoUsuario,
+              cargoUsuario: usuario.cargoUsuario,
+              zonaUsuario: usuario.zonaUsuario,
+              empresaUsuario: usuario.empresaUsuario,
+              tiendaUsuario: usuario.tiendaUsuario,
+              jornadaUsuario: usuario.jornadaUsuario,
+              nombreRolUsuario: usuario.rolUsuario.nombreRolUsuario,
+              nuevaCategoria: usuario.rolUsuario.nombreRolUsuario,
+              cursos: cursos.data
+            };
           }));
         } catch (error) {
           console.error('Error al cargar los miembros:', error);
@@ -201,14 +192,17 @@
         }
 
         try {
-          const data = this.miembros.map( m => ({
-            ID: m.idUsuario,
-            Nombre: m.nombreUsuario,
-            Correo: m.correoUsuario,
-            SAP: m.sapUsuario,
-            Estado: '',
-            Rol: m.nombreRolUsuario
-          }));
+          const data = this.miembros.map( m => {
+            const cursos = m.cursos ? m.cursos.map(curso =>  `${curso.nombreCursoUsuario} (${curso.estadoCurso})`).join(', ') : 'Sin cursos';
+            return {
+              ID: m.idUsuario,
+              Nombre: m.nombreUsuario,
+              Correo: m.correoUsuario,
+              SAP: m.sapUsuario,
+              Rol: m.nombreRolUsuario,
+              Cursos: cursos
+            }
+          });
 
           const ws = XLSX.utils.json_to_sheet(data);
           const wb = XLSX.utils.book_new();
@@ -232,16 +226,19 @@
       exportToPDF(value) {
         console.log('Exportar a Excel', value);
         const doc = new jsPDF();
-        const tableColumn = ["ID", "Nombre", "Correo", "SAP", "Estado", "Rol"];
+        const tableColumn = ["ID", "Nombre", "Correo", "SAP", "Rol", "Cursos"];
         const tableRows = [];
 
         this.miembros.forEach( m => {
+          const cursos = m.cursos ? m.cursos.map(curso => `${curso.nombreCursoUsuario} (${curso.estadoCurso})`).join(', ') : 'Sin cursos';
+
           const miembroData = [
             m.idUsuario,
             m.nombreUsuario,
             m.correoUsuario,
             m.sapUsuario,
-            m.nombreRolUsuario
+            m.nombreRolUsuario,
+            cursos
           ];
           tableRows.push(miembroData);
         });
@@ -338,21 +335,6 @@
           };
         } catch (error) {
           console.error('Error al obtener los cursos:', error);
-        }
-      },
-      async actualizaCurso(curso){
-        try {
-        //const curso = usuario.cursos.find(c => c.idCursoUsuario === usuario.selectedCursoId);
-        const updatedCursoUsuarioDto = {
-          avanceCurso: curso.nuevoAvance,
-          estadoCurso: curso.nuevoEstado
-        };
-        await AdminService.updateCursoUsuario(curso.idCursoUsuario, updatedCursoUsuarioDto);
-        const response = await AdminService.getCursosDeUsuario(this.usuarioSeleccionado.idUsuario);
-        this.usuarioSeleccionado.cursos = response.data;
-        console.log('Cuso acualizado con éxito');
-        } catch (error) {
-          console.error('Error al actualizar curso:', error);
         }
       },
       async cerrarFormularioNuevo() {

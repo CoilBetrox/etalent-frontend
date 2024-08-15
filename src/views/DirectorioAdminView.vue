@@ -1,12 +1,12 @@
 <template>
   <div class="directorio">
-    
+    <FilterComp @filter="buscar" @export-excel="exportToExcel" @export-pdf="exportToPDF" />
     <main>
       <div class="directorio-content">
         <div class="jefes-tienda">
           <h2>Jefes Tienda</h2>
           <div v-for="admin in admins" :key="admin.idAdmin" class="miembro-card">
-            
+
             <div class="miembro-info">
               <p>{{ admin.idAdmin }}</p>
               <p>{{ admin.nombreAdmin }}</p>
@@ -30,7 +30,7 @@
         <div class="personal-tienda" v-if="usuarios.length > 0">
           <h2>Personal Tienda</h2>
           <div v-for="usuario in usuarios" :key="usuario.idUsuario" class="miembro-card">
-            
+
             <div class="miembro-info">
               <p>{{ usuario.nombreUsuario }}</p>
               <p>{{ usuario.sapUsuario }}</p>
@@ -64,40 +64,34 @@
           </div>
         </div>
 
-        <div class="cursos-usuario">
-            <h2>Cursos</h2>
-            <div v-if="usuarioSeleccionado">
-              <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
-              <button @click="agregarCurso(usuarioSeleccionado)">Agregar Curso</button>
-              <ul>
-                <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
-                  <p>{{ curso.nombreCursoUsuario }}</p>
-                  <p>{{ formatDate(curso.fechaInicio) }}</p>
-                  <p>{{ curso.avanceCurso }} %</p>
-                  <p>{{ curso.estadoCurso }}</p>
-                  <select v-model="curso.nuevoAvance">
-                    <option value="20">20</option>
-                    <option value="40">40</option>
-                    <option value="60">60</option>
-                    <option value="80">80</option>
-                    <option value="100">100</option>
-                  </select>
-                  <select v-model="curso.nuevoEstado">
-                    <option value="Iniciado">Iniciado</option>
-                    <option value="Cursando">Cursando</option>
-                    <option value="Completo">Completo</option>
-                  </select>
-                  <button @click="actualizaCurso(curso)">Actualizar</button>
-                </li>
-              </ul>
-            </div>
+        <div class="cursos-usuario" v-if="usuarioSeleccionado">
+          <h2>Cursos</h2>
+          <div v-if="usuarioSeleccionado">
+            <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
+            <button @click="asignarCurso(usuarioSeleccionado)">Asignar Curso</button>
+            <ul>
+              <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
+                <p>{{ curso.nombreCursoUsuario }}</p>
+                <p>{{ formatDate(curso.fechaInicio) }}</p>
+                <p>{{ curso.avanceCurso }} %</p>
+                <p>{{ curso.estadoCurso }}</p>
+              </li>
+            </ul>
           </div>
+          <div v-else>
+            <p>Seleccione un usuario para ver los cursos asignados.</p>
+          </div>
+        </div>
 
       </div>
     </main>
     <AgregarNuevoComp v-if="mostrarFormularioNuevo" @close="cerrarFormularioNuevo" @empleado-agregado="cargarAdmins" />
-    <AgregarFeedbackComp v-if="showFeedbackModal" :miembro="miembroSeleccionado" @close="cerrarModalFeedback" @feedback-registrado="procesarFeedback"/>
-    <ActualizarJefeTiendaComp v-if="mostrarAcualizarJefeTienda" @close="cerrarActualizarJefeTienda" @success="handleSuccess"/>
+    <AgregarFeedbackComp v-if="showFeedbackModal" :miembro="miembroSeleccionado" @close="cerrarModalFeedback"
+      @feedback-registrado="procesarFeedback" />
+    <ActualizarJefeTiendaComp v-if="mostrarAcualizarJefeTienda" @close="cerrarActualizarJefeTienda"
+      @success="handleSuccess" />
+    <AsignarCursoComp v-if="showAsignarCursoModal" :usuario="usuarioSeleccionado" @close="cerrarModalAsignarCurso"
+      @curso-asignado="handleCursoAsignado" />
     <p v-if="mensajeExito" class="success-message">{{ mensajeExito }}</p>
   </div>
 </template>
@@ -107,13 +101,20 @@ import AdminService from '@/services/AdminService';
 import AgregarNuevoComp from '@/components/AgregarNuevoComp.vue';
 import AgregarFeedbackComp from '@/components/AgregarFeedbackComp.vue';
 import ActualizarJefeTiendaComp from '@/components/ActualizarJefeTiendaComp.vue';
+import AsignarCursoComp from '@/components/AsignarCursoComp.vue';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import FilterComp from '@/components/FilterComp.vue';
 
 export default {
   name: 'DirectorioAdminView',
   components: {
     AgregarNuevoComp,
     AgregarFeedbackComp,
-    ActualizarJefeTiendaComp
+    ActualizarJefeTiendaComp,
+    AsignarCursoComp,
+    FilterComp
   },
   data() {
     return {
@@ -127,7 +128,8 @@ export default {
       mostrarFormularioNuevo: false,
       usuarioSeleccionado: null,
       mostrarAcualizarJefeTienda: false,
-      mensajeExito: ''
+      mensajeExito: '',
+      showAsignarCursoModal: false,
     };
   },
   mounted() {
@@ -151,8 +153,20 @@ export default {
     async cargarAdmins() {
       try {
         const response = await AdminService.getAdminsByRol();
-        console.log(response);
-        this.admins = response;
+        this.admins = await Promise.all(response.map(async admin => {
+          const usuarios = await AdminService.getUsuariosByAdmin(admin.idAdmin);
+          const usuariosConCursos = await Promise.all(usuarios.map(async usuario => {
+            const cursos = await AdminService.getCursosDeUsuario(usuario.idUsuario);
+            return {
+              ...usuario,
+              cursos: cursos.data
+            };
+          }));
+          return {
+            ...admin,
+            usuarios: usuariosConCursos
+          };
+        }));
       } catch (error) {
         console.error('Error al cargar los admins:', error);
       }
@@ -178,11 +192,94 @@ export default {
       this.filters.nombre = '';
       this.cargarAdmins();
     },
-    exportarExcel() {
-      // Implementar lógica para exportar a Excel
+    exportToExcel() {
+      const adminsData = this.admins.map(admin => {
+        const usuariosData = admin.usuarios.map(usuario => {
+          const cursosData = usuario.cursos ? usuario.cursos.map(curso => `${curso.nombreCursoUsuario} (${curso.estadoCurso})`).join(', ') : 'Sin cursos';
+
+          return {
+            Usuario: usuario.nombreUsuario,
+            SAP: usuario.sapUsuario,
+            Correo: usuario.correoUsuario,
+            Cargo: usuario.cargoUsuario,
+            Zona: usuario.zonaUsuario,
+            Empresa: usuario.empresaUsuario,
+            Tienda: usuario.tiendaUsuario,
+            Jornada: usuario.jornadaUsuario,
+            Rol: usuario.rolUsuario.nombreRolUsuario,
+            Cursos: cursosData
+          };
+        });
+
+        return {
+          Admin: admin.nombreAdmin,
+          SAP: admin.sapAdmin,
+          Correo: admin.correoAdmin,
+          Cargo: admin.cargoAdmin,
+          Zona: admin.zonaAdmin,
+          Empresa: admin.empresaAdmin,
+          Usuarios: usuariosData
+        };
+      });
+
+      const wb = XLSX.utils.book_new();
+
+      adminsData.forEach(admin => {
+        const ws = XLSX.utils.json_to_sheet(admin.Usuarios);
+        XLSX.utils.book_append_sheet(wb, ws, admin.Admin);
+      });
+
+      XLSX.writeFile(wb, 'directorio_admins.xlsx');
     },
-    exportarPDF() {
-      // Implementar lógica para exportar a PDF
+    exportToPDF() {
+      const doc = new jsPDF();
+
+      this.admins.forEach(admin => {
+        doc.setFontSize(18);
+        doc.text(`Admin: ${admin.nombreAdmin}`, 10, 10);
+
+        const usuariosData = admin.usuarios.map(usuario => [
+          usuario.nombreUsuario,
+          usuario.sapUsuario,
+          usuario.correoUsuario,
+          usuario.cargoUsuario,
+          usuario.zonaUsuario,
+          usuario.empresaUsuario,
+          usuario.tiendaUsuario,
+          usuario.jornadaUsuario,
+          usuario.rolUsuario.nombreRolUsuario
+        ]);
+
+        doc.autoTable({
+          head: [['Nombre', 'SAP', 'Correo', 'Cargo', 'Zona', 'Empresa', 'Tienda', 'Jornada', 'Rol']],
+          body: usuariosData,
+          startY: doc.previousAutoTable ? doc.previousAutoTable.finalY + 10 : 20
+        });
+
+        admin.usuarios.forEach(usuario => {
+          doc.setFontSize(14);
+          doc.text(`Cursos de ${usuario.nombreUsuario}`, 10, doc.previousAutoTable.finalY + 10);
+
+          const cursosData = usuario.cursos.map(curso => [
+            curso.nombreCursoUsuario,
+            this.formatDate(curso.fechaInicio),
+            `${curso.avanceCurso} %`,
+            curso.estadoCurso
+          ]);
+
+          doc.autoTable({
+            head: [['Curso', 'Fecha Inicio', 'Avance (%)', 'Estado']],
+            body: cursosData,
+            startY: doc.previousAutoTable ? doc.previousAutoTable.finalY + 10 : 10
+          });
+        });
+
+        if (this.admins.indexOf(admin) !== this.admins.length - 1) {
+          doc.addPage();
+        }
+      });
+
+      doc.save('directorio_admins.pdf');
     },
     darFeedback(miembro) {
       this.miembroSeleccionado = miembro;
@@ -258,50 +355,48 @@ export default {
       }
     },
     async mostrarCursos(miembro) {
-        try {
-          const response = await AdminService.getCursosDeUsuario(miembro.idUsuario);
-          console.log(response.data)
-          this.usuarioSeleccionado = {
-            ...miembro,
-            cursos: response.data
-          };
-        } catch (error) {
-          console.error('Error al obtener los cursos:', error);
-        }
-    },
-    async actualizaCurso(curso){
-        try {
-        const updatedCursoUsuarioDto = {
-          avanceCurso: curso.nuevoAvance,
-          estadoCurso: curso.nuevoEstado
+      try {
+        const response = await AdminService.getCursosDeUsuario(miembro.idUsuario);
+        console.log(response.data)
+        this.usuarioSeleccionado = {
+          ...miembro,
+          cursos: response.data
         };
-        await AdminService.updateCursoUsuario(curso.idCursoUsuario, updatedCursoUsuarioDto);
-        const response = await AdminService.getCursosDeUsuario(this.usuarioSeleccionado.idUsuario);
-        this.usuarioSeleccionado.cursos = response.data;
-        console.log('Cuso acualizado con éxito');
-        } catch (error) {
-          console.error('Error al actualizar curso:', error);
-        }
-      },
+      } catch (error) {
+        console.error('Error al obtener los cursos:', error);
+      }
+    },
     cerrarFormularioNuevo() {
       this.mostrarFormularioNuevo = false;
       this.cargarAdmins();
     },
-    formatDate (date) {
+    formatDate(date) {
       return new Date(date).toLocaleDateString('en-GB', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit'
-        }).replace(',', '');
+      }).replace(',', '');
     },
-    actualizarAdmin(admin){
+    actualizarAdmin(admin) {
       this.mostrarAcualizarJefeTienda = true;
     },
     cerrarActualizarJefeTienda() {
       this.mostrarAcualizarJefeTienda = false;
-    } 
+    },
+    asignarCurso(usuario) {
+      this.usuarioSeleccionado = usuario;
+      this.showAsignarCursoModal = true;
+    },
+    cerrarModalAsignarCurso() {
+      this.showAsignarCursoModal = false;
+      this.usuarioSeleccionado = null;
+    },
+    handleCursoAsignado() {
+      this.cerrarModalAsignarCurso();
+      this.mostrarCursos(this.usuarioSeleccionado);
+    },
   }
 };
 </script>
