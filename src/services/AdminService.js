@@ -17,6 +17,10 @@ const getUsuarios = async() => {
     return await getUsuariosAdminAxios();
 };
 
+const getUsuarioBySap = async(sapUsuario) => {
+    return await getUsuarioBySapAxios(sapUsuario);
+};
+
 const updateUsuarioRol = async (usuarioId, updatedUsuarioDto) => {
     return await updateUsuarioRolAxios(usuarioId, updatedUsuarioDto);
 };
@@ -105,6 +109,9 @@ const mostrarCursosSimple = async () => {
     return await mostrarCursosSimpleAxios();
 };
 
+const addUsersBulk = async (users) => {
+    return await addUsersBulkAxios(users);
+};
 
 
 //Consumo API
@@ -160,6 +167,19 @@ const getUsuariosAdminAxios = async() => {
             //window.location.href = '/login';
         }
         console.error('Error en getUsuariosAxios', error);
+        throw error;
+    }
+}
+
+const getUsuarioBySapAxios = async(sapUsuario) => {
+    try {
+        const response = await api.get(`/usuarios/buscarPorSap/${sapUsuario}`);
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401){
+            console.error('Error de autenticación: ', error.message);
+        }
+        console.error('Error en getUsuarioBySapAxios', error);
         throw error;
     }
 }
@@ -390,7 +410,17 @@ const mostrarCursosSimpleAxios = async () => {
         console.log('Error en mostrarCursosSimpleAxios', error);
         throw error;
     }
-}
+};
+
+const addUsersBulkAxios = async (usuarios) => {
+    try {
+        const response = await api.post('/usuarios/bulk', usuarios);
+        return response.data;
+    } catch (error) {
+        console.log('Error en addUsersBulkAxios', error);
+        throw error;
+    }
+};
 
 
 export default {
@@ -398,6 +428,7 @@ export default {
     loginAdmin,
     createUsuario,
     getUsuarios,
+    getUsuarioBySap,
     updateUsuarioRol,
     registrarFedback,
     getFeedbacks,
@@ -419,5 +450,6 @@ export default {
     mostrarIntegrantesCurso,
     asignarCursoToUsuario,
     mostrarCursosSimple,
-    getComentariosPorFeedback
+    getComentariosPorFeedback,
+    addUsersBulk
 }

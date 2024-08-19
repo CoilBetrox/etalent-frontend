@@ -3,7 +3,6 @@
     <div class="modal-content">
       <h2>Agregar Feedback</h2>
       <div class="user-info">
-        <div class="user-avatar">64x64</div>
         <div class="user-details">
           <h3>{{ miembro.nombreUsuario }}</h3>
           <p>{{ miembro.sapUsuario }} | {{ miembro.cargoUsuario }} | {{ miembro.zonaUsuario }} | {{ miembro.empresaUsuario }} | {{ miembro.tiendaUsuario }} | {{ miembro.jornadaUsuario }} | {{ miembro.nombreRolUsuario }} | {{ miembro.estadoUsuario }}</p>

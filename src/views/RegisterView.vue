@@ -12,11 +12,11 @@
                 </div>
                 <div class="mb-3">
                   <label for="sapAdmin" class="form-label">SAP</label>
-                  <input type="text" id="sapAdmin" v-model="sapAdmin" class="form-control" title="Debe contener 8 dígitos" placeholder="Ingrese su número SAP">
+                  <input type="text" id="sapAdmin" v-model="sapAdmin" class="form-control" title="Debe contener 8 dígitos" placeholder="Ingrese su código SAP">
                 </div>
                 <div class="mb-3">
                   <label for="correoAdmin" class="form-label">Correo Electrónico</label>
-                  <input type="email" id="correoAdmin" v-model="correoAdmin" class="form-control" required placeholder="Ingrese su correo electrónico">
+                  <input type="email" id="correoAdmin" v-model="correoAdmin" class="form-control" required placeholder="Correo electrónico (se verificará)">
                 </div>
                 <div class="mb-3 position-relative">
                   <label for="contraAdmin" class="form-label">Contraseña</label>
@@ -27,8 +27,8 @@
                   <label for="empresaAdmin" class="form-label">Empresa</label>
                   <select id="empresaAdmin" v-model="empresaAdmin" class="form-select" required>
                     <option value="" disabled>Seleccione una empresa</option>
-                    <option value="Etafashion">Etafashion</option>
-                    <option value="RM">RM</option>
+                    <option value="Comercial Etatex C. A.">Comercial Etatex C. A.</option>
+                    <option value="Tiendec S. A">Tiendec S. A</option>
                   </select>
                 </div>
                 <div class="mb-3">
@@ -138,12 +138,12 @@
           this.tiendas = ['Tienda Latacunga', 'R.M. Latacunga'];
         } else if (this.provinciaAdmin === 'Esmeraldas') {
             this.tiendas = ['R.M. Esmeraldas'];
-        } else if (this.provinciaAdmin === 'Guayaquil') {
+        } else if (this.provinciaAdmin === 'Guayas') {
             this.tiendas = ['Tienda Citymall', 'Tienda Los Ceibos', 'Tienda Mall del Sur', 
             'Tienda Mall del Norte', 'Tienda Guayaquil', 'Tienda Mall del Sol', 
             'Tienda San Marino', 'R.M. City Mall', 'R.M. Terminal Terrestre', 
             'R.M. Gye Centro', 'R.M. Duran', 'R.M. Río Centro Dorado', 
-            'R.M Río Centro Norte', 'R.M. Ceibos'];
+            'R.M Río Centro Norte', 'R.M. Los Ceibos'];
         } else if (this.provinciaAdmin === 'Imbabura') {
             this.tiendas = ['Tienda Ibarra', 'R.M. Ibarra'];
         } else if (this.provinciaAdmin === 'Loja') {
@@ -152,14 +152,15 @@
             this.tiendas = ['Tienda Babahoyo', 'R.M. Babahoyo'];
         } else if (this.provinciaAdmin === 'Machala') {
             this.tiendas = ['Tienda Machala', 'Tienda Machala Expoceanica', 'R.M. Machala'];
-        } else if (this.provinciaAdmin === 'Manabi') {
+        } else if (this.provinciaAdmin === 'Manabí') {
             this.tiendas = ['Tienda Mall Pacífico', 'R.M. Mall Pacífico'];
         } else if (this.provinciaAdmin === 'Pichincha') {
             this.tiendas = ['Tienda Quicentro Sur', 'Tienda Recreo', 'Tienda Pananorte',
-                'Tienda San Luis Shopping', 'Tienda CCI', 'Tienda 9 de Octubre', 
+                'Tienda San Luis Shopping', 'Tienda CCI', 'Tienda 9 de Octubre', 'Tienda Carapungo', 
                 'Tienda Condado', 'Tienda Scala', 'Tienda Quicentro Norte', 'Tienda Bosque', 
                 'R.M. Río Centro Sur', 'R.M. Recreo', 'R.M. Condado', 'R.M. Portal Shoping', 
-                'R.M. Quicentro Sur', 'R.M. 6 de Diciembre', 'R.M. Batán', 'R.M Venezuela'];
+                'R.M. Quicentro Sur', 'R.M. 6 de Diciembre', 'R.M. Batán', 'R.M Venezuela', 
+                'R.M. Granados'];
         } else if (this.provinciaAdmin === 'Tungurahua') {
             this.tiendas = ['Tienda Mall de los Andes', 'R.M. Ambato', 'R.M. Ambato Mall Andes',
                 'R.M. Paseo Shopping Ambato'];
