@@ -166,31 +166,36 @@ export default {
 .imagen-lateral.izquierda {
   left: 150px;
   animation: slideInLeft 1s ease-in-out;
+  animation-fill-mode: forwards; /* Cambiar 'none' a 'forwards' */
+
+
 }
 
 .imagen-lateral.derecha {
   right: 150px;
   animation: slideInRight 1s ease-in-out;
+  animation-fill-mode: forwards; /* Cambiar 'none' a 'forwards' */
+
 }
 
 @keyframes slideInLeft {
   from {
-    transform: translateX(-150px);
-    opacity: 0;
+    transform: translate(-150px, 0);
+    opacity: 1;
   }
   to {
-    transform: translateX(0);
+    transform: translate(0, -20px); /* Subir la imagen 20px hacia arriba */
     opacity: 1;
   }
 }
 
 @keyframes slideInRight {
   from {
-    transform: translateX(150px);
-    opacity: 0;
+    transform: translate(150px, 0);
+    opacity: 1;
   }
   to {
-    transform: translateX(0);
+    transform: translate(0, -20px); /* Subir la imagen 20px hacia arriba */
     opacity: 1;
   }
 }
