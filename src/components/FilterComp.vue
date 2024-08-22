@@ -1,26 +1,7 @@
 <template>
   <div class="filters-container">
-    <div class="filter-item">
-      <label for="search">Búsqueda:</label>
-      <input type="text" id="search" v-model="searchQuery" placeholder="SAP">
-    </div>
-    <div class="filter-item">
-      <label for="area">Área:</label>
-      <select id="area" v-model="selectedArea">
-        <option value="">Todas</option>
-        <option v-for="area in areas" :key="area" :value="area">{{ area }}</option>
-      </select>
-    </div>
-    <div class="filter-item">
-      <label for="category">Categoría:</label>
-      <select id="category" v-model="selectedCategory">
-        <option value="">Todas</option>
-        <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
-      </select>
-    </div>
+    
     <div class="filter-buttons">
-      <button @click="applyFilters">Buscar</button>
-      <button @click="clearFilters">Eliminar filtros</button>
       <button @click="showInfo = true">Información</button>
       <button @click="showModal = true">Agregar nuevo</button>
       <button @click="exportToExcel">Exportar a Excel</button>

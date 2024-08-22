@@ -186,7 +186,7 @@ export default {
       }
     },
     buscar() {
-      // Implementar lógica de búsqueda con los filtros
+      
     },
     eliminarFiltros() {
       this.filters.nombre = '';

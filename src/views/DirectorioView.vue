@@ -166,38 +166,7 @@ export default {
       }
     },
     async buscar() {
-      try {
-        // Si hay un valor de sapUsuario en los filtros, realizar la búsqueda
-        if (this.filters.sapUsuario) {
-          const response = await AdminService.buscarPorSap(this.filters.sapUsuario);
-          // Limpiar la lista actual de miembros antes de asignar los resultados de la búsqueda
-          this.miembros = [];
-          this.miembros = await Promise.all(response.map(async usuario => {
-            const cursos = await AdminService.getCursosDeUsuario(usuario.idUsuario);
-            return {
-              idUsuario: usuario.idUsuario,
-              nombreUsuario: usuario.nombreUsuario,
-              sapUsuario: usuario.sapUsuario,
-              correoUsuario: usuario.correoUsuario,
-              cargoUsuario: usuario.cargoUsuario,
-              zonaUsuario: usuario.zonaUsuario,
-              empresaUsuario: usuario.empresaUsuario,
-              tiendaUsuario: usuario.tiendaUsuario,
-              jornadaUsuario: usuario.jornadaUsuario,
-              nombreRolUsuario: usuario.rolUsuario.nombreRolUsuario,
-              nuevaCategoria: usuario.rolUsuario.nombreRolUsuario,
-              cursos: cursos.data
-            };
-          }));
-          console.log(response.data);
-        } else {
-          // Si no hay filtro por sapUsuario, cargar todos los miembros
-          await this.cargarMiembros();
-        }
-      } catch (error) {
-        console.error('Error al buscar usuarios:', error);
-      }
-
+      
     },
     eliminarFiltros() {
       this.filters = {

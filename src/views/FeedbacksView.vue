@@ -1,9 +1,9 @@
 <template>
   <div class="feedbacks-container">
     <div class="feedback-header">
-      <button @click="cargarFeedbacks">Cargar Feedbacks</button>
-      <button @click="exportToExcel">Exportar a Excel</button>
-      <button @click="exportToPDF">Exportar a PDF</button>
+      <button @click="cargarFeedbacks" class="styled-button">Cargar Feedbacks</button>
+      <button @click="exportToExcel" class="styled-button">Exportar a Excel</button>
+      <button @click="exportToPDF" class="styled-button">Exportar a PDF</button>
     </div>
     <div v-if="feedbacks.length === 0">
       <p>No hay feedbacks disponibles.</p>
@@ -11,9 +11,6 @@
     <div v-else>
       <div v-for="feedback in feedbacks" :key="feedback.idFeedback" class="feedback-item">
         <div class="user-info">
-          <!-- 
-          <img :src="feedback.avatarUrl" alt="User avatar" class="avatar">
-          -->
           <div>
             <h3>{{ feedback.nombreUsuario }}</h3>
             <p>{{ feedback.info }}</p>
@@ -26,15 +23,17 @@
           <h4>{{ comentario.autor }}</h4>
           <p>{{ comentario.contenido }}</p>
         </div>
-        <input v-model="nuevoComentario[feedback.idFeedback]" placeholder="Añadir comentario...">
-        <button @click="enviarComentario(feedback.idFeedback, feedback.usuarioId)">Enviar Comentario</button>
+        <div class="input-comment-section">
+          <input v-model="nuevoComentario[feedback.idFeedback]" placeholder="Añadir comentario...">
+          <button @click="enviarComentario(feedback.idFeedback, feedback.usuarioId)">Enviar Comentario</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import AdminService from '@/services/AdminService';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
@@ -65,31 +64,6 @@ export default {
 
         console.log('Feedbacks con comentarios:', feedbacks.value);
 
-
-        /*
-        const comentariosResponse = await AdminService.getComentarios();
-        
-        console.log('Respuesta de feedbacks:', feedbacksResponse);
-        console.log('Respuesta de comentarios:', comentariosResponse);
-
-        if (Array.isArray(comentariosResponse)) {
-          feedbacks.value = feedbacksResponse.map(feedback => {
-            const comentariosFiltrados = comentariosResponse.filter(c => c.feedbackId === feedback.idFeedback);
-            return {
-              idFeedback: feedback.idFeedback,
-              nombreUsuario: feedback.nombreUsuario,
-              info: `${feedback.sapUsuario} | ${feedback.tipoFeedback} | ${feedback.rolUsuario}`,
-              nombreAdmin: feedback.nombreAdmin,
-              fechaCreacionFeedback: feedback.fechaCreacionFeedback,
-              descripcionFeedback: feedback.descripcionFeedback,
-              usuarioId: feedback.usuarioId,
-              comentarios: comentariosFiltrados
-            };
-          });
-        } else {
-          console.error('La respuesta de feedbacks o comentarios no es un array:', feedbacksResponse, comentariosResponse);
-        }
-        */
       } catch (error) {
         console.error('Error al obtener feedbacks y comentarios:', error);
       }
@@ -175,7 +149,9 @@ export default {
 
 <style scoped>
 .feedbacks-container {
+  background-color: #F1F1F2;
   padding: 20px;
+  min-height: 100vh;
 }
 
 .feedback-header {
@@ -183,26 +159,51 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.feedback-header button {
+  margin: 5px;
+  flex: 1 1 100%;
+}
+
+button {
+  display: block;
+  width: 60%;
+  padding: 10px;
+  background-color: #e62e2e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background-color: #c1272d;
+  transform: scale(1.05);
 }
 
 .feedback-item {
-  border: 1px solid #ddd;
+  border: 4px solid #525151;
   padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 5px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 1250px;
+  margin: 20px auto;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-.avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  margin-right: 15px;
+.user-info div {
+  flex-grow: 1;
 }
 
 .feedback-date {
@@ -221,15 +222,53 @@ export default {
   margin-bottom: 10px;
 }
 
-input {
-  width: calc(100% - 120px);
-  padding: 10px;
-  margin-top: 10px;
-  margin-right: 10px;
+.input-comment-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-button {
-  padding: 10px 20px;
+.input-comment-section input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.input-comment-section button {
+  padding: 10px;
+  background-color: #1e201e;
+  color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+  .feedback-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .feedback-header button {
+    flex: 1;
+    margin: 0 5px; /* Espaciado entre los botones */
+    width: auto; /* Asegura que no tome el 100% del ancho */
+  }
+
+  .input-comment-section {
+    flex-direction: row;
+  }
+
+  .input-comment-section input {
+    width: calc(100% - 120px);
+    margin-right: 10px;
+    margin-top: 0;
+  }
+
+  .input-comment-section button {
+    margin-top: 0;
+  }
 }
 </style>

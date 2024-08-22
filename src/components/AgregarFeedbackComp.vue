@@ -1,5 +1,5 @@
 <template>
-  <div class="agregar-feedback-modal">
+  <div class="agregar-feedback-modal" @click.self="$emit('close')">
     <div class="modal-content">
       <h2>Agregar Feedback</h2>
       <div class="user-info">
@@ -12,14 +12,20 @@
         <label>Feedback</label>
         <div class="feedback-type">
           <select v-model="feedbackType">
-            <option value="Tipo1">Tipo1</option>
-            <option value="Tipo2">Tipo2</option>
+            <option value="" disabled selected hidden>Seleccione un tipo</option>
+            <option value="KPIs">KPIs</option>
+            <option value="Role Play">Role Play</option>
+            <option value="One to One">One to One</option>
+            <option value="Mentoring">Mentoring</option>
+            <option value="Compromiso Plazo">Compromiso Plazo</option>
+            <option value="Asignación Capacitación">Asignación Capacitación</option>
           </select>
-          <textarea v-model="feedbackText" placeholder="Ingrese el feedback aquí"></textarea>
+          <textarea v-model="feedbackText" placeholder="Agregue una descripción si considera necesario"></textarea>
         </div>
       </div>
-      <button @click="registrarFeedback" class="registrar-btn">Registrar Feedback</button>
-      <button @click="cerrarModal" class="cerrar-btn">X</button>
+      <button @click="registrarFeedback" class="registrar-btn" :disabled="!feedbackType">Registrar Feedback</button>
+      <p v-if="feedbackError" class="error-message">{{ feedbackError }}</p>
+      <button type="button" class="registrar-btn" @click="$emit('close')">Cerrar</button>
     </div>
   </div>
 </template>
@@ -37,12 +43,16 @@ export default {
     return {
       fechaFeedback: new Date().toISOString().substr(0, 10),
       feedbackText: '',
-      feedbackType: 'Tipo1',
+      feedbackType: '',
+      feedbackError: ''
     }
   },
   methods: {
     registrarFeedback() {
-      // Aquí iría la lógica para enviar el feedback
+      if (!this.feedbackType) {
+        this.feedbackError = 'Debe seleccionar un tipo de feedback antes de registrar.';
+        return;
+      }
       console.log('***************')
       console.log('Feedback registrado:', this.feedbackText, this.feedbackType);
       console.log('FeedbackType:', this.feedbackType);
@@ -53,6 +63,7 @@ export default {
         tipo: this.feedbackType
       });
       this.cerrarModal();
+      alert("Feedback registrado correctamente");
     },
     cerrarModal() {
       this.showFeedbackModal = false;
@@ -63,7 +74,15 @@ export default {
 }
 </script>
 
+
+
 <style scoped>
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
 .agregar-feedback-modal {
   position: fixed;
   top: 0;
