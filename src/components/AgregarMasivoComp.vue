@@ -119,20 +119,19 @@ input[type="file"] {
 }
 
 button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-button[type="button"] {
-    background-color: #f44336;
+  background-color: #333;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 10px;
 }
 
 button:hover {
-    opacity: 0.8;
+  background-color: #555;
+  transform: scale(1.05);
 }
 </style>

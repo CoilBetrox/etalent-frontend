@@ -1,20 +1,16 @@
 <template>
   <div class="directorio">
-    <!-- 
-        <FilterComp
-        @export-excel="exportToExcel"
-        @export-pdf="exportToPDF"
-        @filter="aplicarFiltros"
-      />
-      -->
     <FilterComp @filter="buscar" @export-excel="exportToExcel" @export-pdf="exportToPDF" />
     <main>
-      <button @click="abrirAgregarMasivo">Agregar Masivo</button> 
+      <div class="btn-agregar-container">
+        <button class="btn-agregar-masivo" @click="abrirAgregarMasivo">Agregar Masivo</button> 
+      </div>
       <div class="directorio-content">
         <div class="miembros-list">
-
+          <div class="h2-titulo">
+            <h2>Personal</h2>
+          </div>
           <div v-for="miembro in miembros" :key="miembro.id" class="miembro-card">
-
             <div class="miembro-info">
               <p>{{ miembro.nombreUsuario }}</p>
               <p>{{ miembro.sapUsuario }}</p>
@@ -46,12 +42,16 @@
           </div>
         </div>
         <div class="cursos-usuario">
-          <h2>Cursos</h2>
-          <div v-if="usuarioSeleccionado">
-            <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
+          <div class="h2-titulo">
+            <h2>Cursos</h2>
+          </div>
 
-            <ul>
-              <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
+          <div class="usuario-seleccionado" v-if="usuarioSeleccionado">
+            <div class="h3-titulo">
+              <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
+            </div>
+            <ul class="usuario-cursos-container">
+              <li class="usuario-curso" v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
                 <p>{{ curso.nombreCursoUsuario }}</p>
                 <p>{{ formatDate(curso.fechaInicio) }}</p>
                 <p>{{ curso.avanceCurso }} %</p>
@@ -363,6 +363,22 @@ export default {
 </script>
 
 <style scoped>
+.h2-titulo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0%;
+}
+
+.h3-titulo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0%;
+}
+
+.miembro-info p {
+  margin-bottom: 0.4rem;
+}
+
 .directorio {
   font-family: Arial, sans-serif;
 }
@@ -403,13 +419,18 @@ nav a.active {
 .cursos-usuario {
   flex: 1;
   background-color: #f0f0f0;
-  padding: 20px;
+}
+
+.usuario-curso {
+  border-bottom: 5px solid #525151;
+  padding-top: 1rem;
 }
 
 .miembro-card {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-bottom: 10px;
+  border: 4px solid #525151;
+  border-radius: 10px;
+  padding: 1rem 3rem;
+  margin: 1rem 1rem;
   display: flex;
   align-items: center;
 }
@@ -442,10 +463,32 @@ button {
   cursor: pointer;
 }
 
+.btn-agregar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
 footer {
   background-color: #f1f1f1;
   padding: 1rem;
   text-align: center;
   font-size: 0.8rem;
+}
+
+.usuario-seleccionado {
+  border: 4px solid #525151;
+  border-radius: 10px;
+  padding: 1rem 3rem;
+  margin: 1rem 1rem;
+  display: grid;
+}
+
+@media (max-width: 767px) {
+
+  button {
+    background-color: #000;
+  }
 }
 </style>
