@@ -1,5 +1,9 @@
 <template>
     <div class="page-background">
+      <div class="image-container">
+      <img src="@/assets/imagen excel(1).png" alt="Excel Icon" class="imagen1" />
+      <img src="@/assets/imagen pdf.png" alt="PDF Icon" class="imagen2"/>
+      </div>
   <div class="feedbacks-container">
     <div class="feedback-header">
       <div class="title-section">
@@ -8,10 +12,8 @@
       </div>
       <div class="export-buttons">
         <button @click="exportToExcel">
-          <img src="@/assets/imagen excel(1).png" alt="Excel Icon" />
         </button>
         <button @click="exportToPDF">
-          <img src="@/assets/imagen pdf.png" alt="PDF Icon" />
         </button>
       </div>
     </div>
@@ -173,19 +175,37 @@ export default {
 .page-background {
   background-color: #F1F1F2; /* Color de fondo claro para toda la página */
   min-height: 100vh; /* Asegura que el contenedor abarque toda la altura de la ventana */
-  padding: -100%; /* Espaciado alrededor del contenido */
+  padding: 0%; /* Espaciado alrededor del contenido */
 }
+
+.image-container {
+  display: flex; /* Utilizamos flexbox para alinear las imágenes */
+  justify-content: center; /* Centra las imágenes horizontalmente */
+  margin-bottom: 20px; /* Espacio debajo del contenedor de imágenes */
+}
+
+.imagen1{
+width: 115px;
+margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
+}
+
+.imagen2{
+width: 115px;
+margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
+}
+
 
 .feedback-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-top: -120px;
 }
+
 .feedback-item {
-  border: 4px solid #525151; /* Add a border */ 
+  background-color: #d4d0d0; /* Cambia este valor por el color que desees para el fondo del cuadro de feedback */
+  border: 4px solid #222020; /* Add a border */ 
   padding: 15px; 
-  margin-bottom: 19px;
   border-radius: 10px;
   width: 80%; /* Ajusta el ancho según tus necesidades */
   max-width: 1250px; /* Limita el ancho máximo para pantallas grandes */

@@ -156,6 +156,7 @@ export default {
   min-height: 95vh;
   padding-top: 0px;
   background-color: #F1F1F2; /* Fondo negro */
+
 }
 .imagen-lateral {
   position: absolute;
@@ -307,5 +308,74 @@ input {
     opacity: 1;
   }
 }
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+  .mi-cuenta-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    
+  }
+
+  .imagen-lateral {
+    position: relative;
+    width: 60%; /* Reduce el tamaño de la imagen */
+    margin-bottom: 1rem;
+  }
+
+  .imagen-lateral.izquierda {
+    left: auto;
+    right: auto;
+    display: none; /* Oculta la imagen de la izquierda en pantallas pequeñas */
+  }
+
+  .imagen-lateral.derecha {
+    left: auto;
+    right: auto;
+    
+  }
+
+  .mi-cuenta {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 2px solid #000000; /* Ajustar grosor del borde */
+    background-color: #4b4646;
+    font-size: 0.9em; /* Ajustar tamaño de fuente */
+    margin-top: 5rem; /* Añadir margen superior para bajar el cuadro */
+  }
+
+  .perfil-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .campo {
+    margin-bottom: 10px;
+  }
+
+  .actualizar-btn {
+    font-size: 0.9em;
+    padding: 8px;
+    margin-top: 15px;
+  }
+
+  .mensaje {
+    font-size: 0.9em;
+    margin-top: 15px;
+    padding: 8px;
+  }
+}
+
+/* Media query para pantallas medianas (768px a 1024px) */
+@media (min-width: 768px) and (max-width: 1300px) {
+  .imagen-lateral {
+    display: none; /* Oculta las imágenes en pantallas medianas */
+  }
+}
+
+
+
 
 </style>

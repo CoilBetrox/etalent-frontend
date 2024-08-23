@@ -2,25 +2,33 @@
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section">
+          <div class="acerca">
           <h3>Acerca de nosotros</h3>
           <p>Somos una empresa dedicada a proporcionar soluciones innovadoras.</p>
         </div>
+        </div>
         <div class="footer-section">
+          <div class="enlaces">
           <h3>Enlaces rápidos</h3>
           <ul>
             <li><a href="/">Inicio</a></li>
-            <li><a href="/servicios">Servicios</a></li>
-            <li><a href="/contacto">Contacto</a></li>
+            <li><a href="/directorioAdmin">Directorio </a></li>
+            <li><a href="/feedbacksAdmin">Feedback</a></li>
           </ul>
+          </div>
         </div>
         <div class="footer-section">
+          <div class="contacto">
           <h3>Contacto</h3>
-          <p>Email: info@ejemplo.com</p>
-          <p>Teléfono: (123) 456-7890</p>
+          <h5>Equipo de Desarrollo:</h5>
+          <p> roberthdanielt@gmail.com </p>
+          <p> andychiquin01@gmail.com </p>
+          </div>
         </div>
+        
       </div>
       <div class="footer-bottom">
-        <p>&copy; {{ currentYear }} Tu Empresa. Todos los derechos reservados.</p>
+        <p>&copy; {{ currentYear }} Etafashion | RM. Todos los derechos reservados.</p>
       </div>
     </footer>
   </template>
@@ -37,6 +45,19 @@
   </script>
   
   <style scoped>
+  .contacto {
+    text-align: center;
+  }
+
+  .acerca {
+    text-align: center;
+
+  }
+
+  .enlaces{
+    text-align: center;
+  }
+
   .footer {
     background-color: #333;
     color: white;

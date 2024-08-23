@@ -4,7 +4,6 @@
       <section class="hero">
         <div class="hero-content">
           <img src="@/assets/Recurso 5.png" alt="Imagen derecha" class="imagen1 izquierda">
-          <!--<h1>ETAFASHION|RM</h1> -->
           <p>
             Transforma tu experiencia en Etafashion y RM con feedbacks
             personalizados según los rangos de los empleados, mejorando
@@ -28,7 +27,9 @@
       <section class="features">
         <div class="feature">
           <img src="@/assets/feedbacks.png" alt="Feedback Personalizado" class="feature-image" />
+        <div class="titulos">
           <h3>Feedback Personalizado</h3>
+        </div>
           <p>
             Proporcionamos feedbacks adaptados a los diferentes rangos de
             empleados, ayudando a identificar áreas de mejora y reconocer el
@@ -37,7 +38,9 @@
         </div>
         <div class="feature">
           <img src="@/assets/comunicacion.png" alt="Comunicación Efectiva" class="feature-image" />
+          <div class="titulos">
           <h3>Comunicación Efectiva</h3>
+          </div>
           <p>
             Facilitamos la retroalimentación constante entre empleados y
             supervisores, promoviendo un ambiente de transparencia y mejora
@@ -46,7 +49,9 @@
         </div>
         <div class="feature">
           <img src="@/assets/desarroollo_profesional.png" alt="Desarrollo Profesional" class="feature-image" />
+          <div class="titulos">
           <h3>Desarrollo Profesional</h3>
+          </div>
           <p>
             Ayudamos a los empleados a crecer profesionalmente mediante
             feedbacks constructivos y objetivos claros.
@@ -67,13 +72,17 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 
 .page-background {
-  background-color: #fcfcff; /* Color de fondo claro para toda la página */
-  min-height: 100vh; /* Asegura que el contenedor abarque toda la altura de la ventana */
-  padding: -100%; /* Espaciado alrededor del contenido */
+  font-family: 'Poppins', sans-serif; /* Aplica la nueva fuente a toda la vista */
+  background-color: #fcfcff;
+  min-height: 100vh;
+  padding: -100%;
   animation: backgroundShift 10s ease-in-out infinite;
 }
+
 .feature-image {
   width: 100%; /* Se ajusta automáticamente al tamaño del contenedor */
   max-width: 150px; /* Tamaño máximo de la imagen */
@@ -87,12 +96,11 @@ export default {
   position: relative;
   top: -120px; /* Ajusta este valor para subir la imagen */
   left: 25px; /* Ajusta este valor para mover la imagen a la derecha */
-  transition: transform 0.5s ease-in-out; /* Transición suave para el zoom */
 
 }
 
-.imagen1:hover {
-  transform: scale(1.1); /* Efecto de zoom al pasar el cursor */
+.titulos h3{
+  font-weight: bold;
 }
 
 .etalent-page {
@@ -116,6 +124,7 @@ header {
   margin-left: 1rem;
 }
 
+/* Estilos generales que se aplican a todas las resoluciones */
 .hero {
   display: flex;
   background-color: #000;
@@ -123,6 +132,7 @@ header {
   padding: 2rem;
   height: 500px;
 }
+
 
 .hero-content {
   flex: 1;
@@ -138,6 +148,46 @@ header {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/* Estilos para dispositivos móviles */
+@media only screen and (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+  }
+
+  .hero-content {
+    padding-right: 0;
+    text-align: center;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 200px; /* Ajusta la altura según sea necesario */
+  }
+
+  .imagen1 {
+    width: 100%;
+    top: 0;
+    left: 0;
+    margin-bottom: 20px; /* Añade un margen inferior para separar la imagen del texto */
+
+  }
+
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature {
+    margin-bottom: 2rem;
+  }
+
+  .feature-image {
+    max-width: 100px; /* Tamaño más pequeño para dispositivos móviles */
+  }
 }
 
 .about {

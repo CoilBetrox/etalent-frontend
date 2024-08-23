@@ -52,7 +52,7 @@
           <h1 v-else class="titulo-integrantes">Integrantes</h1>
 
           <div v-if="usuarios && usuarios.length > 0">
-            <div v-for="usuario in usuarios" :key="usuario.idUsuario" class="curso-item">
+            <div v-for="usuario in usuarios" :key="usuario.idUsuario" class="curso-item1">
               <div class="curso-info">
                 <p><strong>Nombre:</strong> {{ usuario.nombreUsuario }}</p>
                 <p><strong>SAP:</strong> {{ usuario.sapUsuario }}</p>
@@ -177,13 +177,13 @@ export default {
 .page-background {
   background-color: #F1F1F2; /* Color de fondo claro para toda la página */
   min-height: 100vh; /* Asegura que el contenedor abarque toda la altura de la ventana */
-  padding: -100%; /* Espaciado alrededor del contenido */
+  padding: 0%; /* Espaciado alrededor del contenido */
   animation: backgroundShift 10s ease-in-out infinite;
 }
 
 
 .d-flex {
-  margin-top: -100px; /* Ajusta el valor según necesites */
+  margin-top: -90px; /* Ajusta el valor según necesites */
   margin-left: auto;
   margin-right: auto;
   width: fit-content; /* O ajusta el ancho según lo necesites */
@@ -209,12 +209,14 @@ export default {
 .icon-image2 {
   width: 120px; /* Ajusta el tamaño según sea necesario */
   height: auto; /* Mantiene la relación de aspecto */
-  margin: 10px;
+  margin-left: -5px;
+  margin: 1px;
+  margin-top: -18px;
   
 } 
 
 .titulo-curso {
-  margin-left: 100px; /* Ajusta este valor según el desplazamiento que desees */
+  margin-left: 120px; /* Ajusta este valor según el desplazamiento que desees */
   font-family: 'Roboto', sans-serif; /* Fuente moderna */
   font-size: 2.5rem; /* Tamaño del texto */
   font-weight: bold; /* Peso de la fuente */
@@ -222,8 +224,8 @@ export default {
 }
 
 .titulo-integrantes0 {
-  margin-left: 10%; /* Empuja el texto hacia la derecha */
-  margin-right: 0%; /* Ajusta este valor según la separación deseada desde el borde derecho */
+  margin-left: -10%; /* Empuja el texto hacia la derecha */
+  margin-right: 10px; /* Ajusta este valor según la separación deseada desde el borde derecho */
   text-align: right; /* Alinea el texto a la derecha */
   width: auto; /* Ajusta el ancho automáticamente para adaptarse al contenido */
   display: block; /* Usa bloque para asegurar que el texto se comporte como un bloque */
@@ -237,14 +239,13 @@ export default {
 }
 
 .cursos-integrantes {
-  margin-left: 700px;
+  margin-left: 250px;
   width: 25%; /* Ajusta el ancho del cuadro según sea necesario */
   max-width: 1000px; /* Limita el ancho máximo del cuadro */
   height: 80%; /* Permite que la altura se ajuste automáticamente al contenido */
   min-height: 200px; /* Establece una altura mínima si es necesario */
   transition: all 0.3s ease; /* Transición suave para cualquier cambio */
   /* Otros estilos existentes */
-
 }
 
 @keyframes fadeIn {
@@ -264,13 +265,14 @@ export default {
 
 
 .titulo-integrantes {
-  margin-left: 160px; /* Ajusta este valor según lo necesites */
-  margin-bottom: 50px; /* Ajusta este valor para aumentar el espacio entre el texto y el cuadro de información */
-  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-  overflow: hidden; /* Esconde el texto que se salga del contenedor */
-  text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
+  margin-left: 100px; /* Ajusta este valor según lo necesites */
+  margin-bottom: 300px; /* Ajusta este valor para aumentar el espacio entre el texto y el cuadro de información */
+ /* white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+ /* overflow: hidden; /* Esconde el texto que se salga del contenedor */
+  /*text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
   text-align: center; /* Centra el texto horizontalmente */
   width: 100%; /* Asegura que el ancho ocupe todo el contenedor */
+
 
     /* DISEÑO LETRAS*/
   font-family: 'Arial', sans-serif; /* Cambia la fuente según tus preferencias */
@@ -282,10 +284,9 @@ export default {
 .titulo-seleccione {
   display: flex;
   justify-content: flex-start; /* Alinea el texto hacia la derecha */
-  margin-left: 160px; /* Puedes ajustar este valor según la alineación que desees */
+  margin-left: 100px; /* Puedes ajustar este valor según la alineación que desees */
   width: 250%; /* Asegura que el contenedor ocupe todo el ancho disponible */
   white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-  overflow: hidden; /* Esconde el texto que se salga del contenedor */
   text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
    
   /* DISEÑO LETRAS*/
@@ -296,7 +297,7 @@ export default {
 }
 
 .no-usuarios {
-  margin-left: 30px;
+  margin-left: 175px;
   text-align: center; /* Centra el texto horizontalmente */
   width: 250%; /* Asegura que el ancho ocupe todo el contenedor */
   display: flex;
@@ -314,7 +315,7 @@ export default {
   font-weight: bold; /* Peso de la fuente */
   color: #d81111; /* Color del texto */
   background-color: #f8d7da; /* Fondo suave rojo */
-  border: 1px solid #f5c6cb; /* Borde rojo */
+  border: 4px solid #db1226; /* Borde rojo */
   border-radius: 10px; /* Bordes redondeados */
   padding: 20px; /* Espaciado interno */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
@@ -332,11 +333,14 @@ export default {
   }
 }
 
+
  
 .cursos-admin-view {
   padding: 20px;
   width: 90%; /* Ajusta el ancho según lo necesites */
   margin: 0 auto; /* Centra el contenedor horizontalmente */
+  max-width: 1200px; /* Establece un ancho máximo para pantallas grandes */
+
 
 }
 @keyframes fadeIn {
@@ -350,22 +354,50 @@ export default {
   }
 }
 
-.curso-item {
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.curso-item, .curso-item1 {
   animation: fadeIn 0.5s ease-in-out;
 }
 
 .curso-item {
   background: #cccac9; /* Fondo blanco para el cuadro */
-  border-radius: 100px; /* Bordes redondeados */
+  border-radius: 10px; /* Bordes redondeados */
+  border: 4px solid #525151;
   box-shadow: 0 10px 10px rgba(231, 20, 20, 0.1); /* Sombra sutil */
   padding: 35px; /* Espaciado interno */
   margin-bottom: 25px; /* Espaciado inferior */
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: calc(350% - 50px); /* Ajusta el ancho */
+  width: 200%; /* Ancho completo en pantallas grandes */
+  max-width: 500px; /* Ajusta el ancho máximo del item del curso */  
   text-align: center; /* Centra el texto horizontalmente */
-  animation: fadeIn 0.5s ease-in-out;
+  margin-left: -70px;
+}
+
+.curso-item1 {
+  background: #cccac9; /* Fondo blanco para el cuadro */
+  border-radius: 10px; /* Bordes redondeados */
+  border: 4px solid #525151;
+  box-shadow: 0 10px 10px rgba(231, 20, 20, 0.1); /* Sombra sutil */
+  padding: 35px; /* Espaciado interno */
+  margin: 0 auto; /* Centra horizontalmente dentro del contenedor */
+  margin-bottom: 25px; /* Espaciado inferior */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300%; /* Ajusta el ancho al 100% del contenedor padre */
+  max-width: 400px; /* Ajusta el ancho máximo del item del curso */
+  text-align: center; /* Centra el texto horizontalmente */
+  margin-left: 150px;
 }
 
 
@@ -381,6 +413,8 @@ export default {
 .cursos-admin-content {
   display: flex;
   width: 50%;
+  gap: 20px; /* Espacio entre los elementos */
+  width: 50%; /* Asegura que ocupe todo el ancho disponible */
 }
 
 .curso-info, .usuario-info {
@@ -388,7 +422,7 @@ export default {
   font-family: 'Verdana', sans-serif;
   font-size: 1rem;
   color: #000000;
-  text-align: left;
+  text-align: center;
 }
 
 .curso-actions {
@@ -408,7 +442,6 @@ export default {
 .btn-gris1 {
   background-color: #C20E1A; /* Ajusta el tono de gris según tus preferencias */
   color: #fffafa;
-
 }
 
 .btn {
@@ -431,5 +464,105 @@ strong {
   font-weight: bold; /* Aplica negrilla al texto */
 }
 
+@media only screen and (max-width: 768px) {
+  /* Desactiva el desplazamiento horizontal en todo el body */
+  body, .page-background, .cursos-integrantes, .curso-item, .curso-item1, .cursos-admin-content {
+    overflow-x: hidden; 
+  }
+  
+  /* Asegura que los elementos no excedan el ancho de la pantalla */
+  .titulo-curso, .titulo-integrantes, .titulo-integrantes0, .titulo-seleccione, .btn {
+    max-width: 100%;
+  }
+
+  /* Otros ajustes ya existentes en tu CSS */
+  .page-background {
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .icon-image2 {
+    width: 100px;
+    margin-left: 0;
+    box-sizing: border-box;
+  }
+
+  .titulo-curso {
+    margin-left: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #161515;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .cursos-integrantes {
+    margin-left: 0;
+    width: 100%;
+    padding: 0px;
+    box-sizing: border-box;
+  }
+
+  .titulo-integrantes {
+    font-size: 1.6rem;
+    margin-left: 0;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .titulo-integrantes0 {
+    margin-left: -5%;
+    margin-right: 10px;
+    text-align: right;
+    width: auto;
+    display: block;
+    white-space: nowrap;
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #111010;
+    box-sizing: border-box;
+  }
+
+  .titulo-seleccione {
+    margin-left: 0;
+    font-size: 1rem;
+    padding-top: 0px;
+    box-sizing: border-box;
+  }
+
+  .curso-item, .curso-item1 {
+    width: 100%;
+    margin-left: 0;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .cursos-admin-content {
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .curso-actions {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  .no-usuarios {
+    margin-left: 20px; /* Ajusta el margen a la izquierda */
+    text-align: center; /* Centra el texto horizontalmente */
+    width: 90%; /* Asegura que ocupe todo el ancho disponible */
+    box-sizing: border-box; /* Incluye el padding y el borde en el tamaño total */
+    font-size: 1rem;
+
+  }
+}
 
 </style>

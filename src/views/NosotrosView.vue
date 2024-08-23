@@ -53,7 +53,8 @@
   </script>
   
   <style scoped>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap');
 
 
   .titulo {
@@ -64,7 +65,7 @@
   text-align: center; /* Alinea el texto en el centro */
   font-family: 'Arial', sans-serif; /* Fuente para el título */
   margin-left: 60px; /* Ajusta este valor para mover el título 1 más a la derecha */
-  margin-top: 10px;
+  margin-top: 0px;
   }
   .titulo h2 {
   font-size: 2rem; /* Tamaño del texto para el título */
@@ -161,7 +162,8 @@ height: auto; /* Mantiene la proporción original de la imagen */
   }
 }
   .text-box-title {
-  font-size: 2.5rem; /* Tamaño del texto para el título */
+    font-family: 'Roboto', sans-serif; /* Fuente más elegante para los párrafos */
+    font-size: 2.5rem; /* Tamaño del texto para el título */
   color: #a72525; /* Color del texto del título */
   text-align: center; /* Centra el título horizontalmente */
   position: absolute; /* Posiciona el título absolutamente en relación con el contenedor */
@@ -175,7 +177,6 @@ height: auto; /* Mantiene la proporción original de la imagen */
   letter-spacing: 0.05em; /* Añade espacio entre letras */
 
 
-
 }
 
 
@@ -187,6 +188,7 @@ height: auto; /* Mantiene la proporción original de la imagen */
   }
   
   .paragraph {
+  font-family: 'Playfair Display', serif; /* Cambia la fuente del texto a una más elegante */
   display: inline-block; /* Asegura que el contenedor ajuste al texto */
   overflow: hidden; /* Oculta el texto que aún no ha sido animado */
   white-space: normal; /* Permite el salto de línea en el texto */
@@ -194,6 +196,7 @@ height: auto; /* Mantiene la proporción original de la imagen */
   font-size: 1.1rem; /* Tamaño del texto del párrafo */
   line-height: 1.6; /* Espaciado entre líneas */
   text-align: justify;
+
   }
   
 /* Estilos de animaciones */
@@ -247,7 +250,67 @@ height: auto; /* Mantiene la proporción original de la imagen */
   transform: scale(1.2); /* Aplica un zoom cuando se pasa el cursor */
 }
 
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+  .titulo h2 {
+    font-size: 1.5rem; /* Reduce el tamaño del título en pantallas pequeñas */
+  }
 
+  .titulo1 h6 {
+    font-size: 0.9rem; /* Reduce el tamaño del subtítulo en pantallas pequeñas */
+  }
+
+  .content {
+    flex-direction: column; /* Coloca la imagen y el texto en una columna en lugar de una fila */
+    margin-top: 1rem;
+  }
+
+  .text-box, .text-box0 {
+    width: 90%; /* Ocupa casi todo el ancho disponible en pantallas pequeñas */
+    padding: 1.5rem; /* Reduce el padding para ahorrar espacio */
+    margin-top: 2rem; /* Ajusta el margen superior */
+    margin-bottom: 3rem; /* Añade margen inferior para separar del pie de página */
+  }
+
+  .imagen1 {
+    width: 60%; /* Reduce el tamaño de las imágenes en pantallas pequeñas */
+    margin: 0 auto; /* Centra las imágenes */
+    margin-top: 1rem; /* Añade margen superior para separarlas del texto */
+  }
+
+  .imagen2 {
+    width: 80%; /* Reduce el tamaño de las imágenes en pantallas pequeñas */
+    margin: 0 auto; /* Centra las imágenes */
+    margin-top: 1rem; /* Añade margen superior para separarlas del texto */
+  }
+
+  /* Ajusta el orden de los elementos en dispositivos móviles */
+  .imagen1 {
+    order: 1; /* Coloca la imagen primero en dispositivos móviles */
+  }
+
+  .text-box {
+    order: 2; /* Coloca el texto después de la imagen */
+  }
+
+  .imagen2 {
+    order: 1; /* Coloca la imagen primero en dispositivos móviles */
+  }
+
+  .text-box0 {
+    order: 2; /* Coloca el texto después de la imagen */
+  }
+
+  .text-box-title {
+    font-size: 1.8rem; /* Reduce el tamaño del título dentro de las cajas */
+    top: -3rem; /* Ajusta la posición del título */
+  }
+
+  .paragraph {
+    font-size: 1rem; /* Ajusta el tamaño del texto del párrafo */
+    line-height: 1.4; /* Reduce el espaciado entre líneas para mejorar la legibilidad */
+  }
+}
 
   </style>
   
