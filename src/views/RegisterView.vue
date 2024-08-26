@@ -174,7 +174,7 @@
   
   <style scoped>
   .card {
-    padding: 2rem;
+    padding: 1rem;
   }
   .position-relative {
     position: relative;

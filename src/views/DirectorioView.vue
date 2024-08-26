@@ -12,15 +12,15 @@
           </div>
           <div v-for="miembro in miembros" :key="miembro.id" class="miembro-card">
             <div class="miembro-info">
-              <p>{{ miembro.nombreUsuario }}</p>
-              <p>{{ miembro.sapUsuario }}</p>
-              <p>{{ miembro.correoUsuario }}</p>
-              <p>{{ miembro.cargoUsuario }}</p>
-              <p>{{ miembro.zonaUsuario }}</p>
-              <p>{{ miembro.empresaUsuario }}</p>
-              <p>{{ miembro.tiendaUsuario }}</p>
-              <p>{{ miembro.jornadaUsuario }}</p>
-              <p>{{ miembro.nombreRolUsuario }}</p>
+              <p><strong>Nombre:</strong> {{ miembro.nombreUsuario }}</p>
+              <p><strong>SAP:</strong> {{ miembro.sapUsuario }}</p>
+              <p><strong>Email:</strong> {{ miembro.correoUsuario }}</p>
+              <p><strong>Cargo:</strong> {{ miembro.cargoUsuario }}</p>
+              <p><strong>Zona:</strong> {{ miembro.zonaUsuario }}</p>
+              <p><strong>Empresa:</strong> {{ miembro.empresaUsuario }}</p>
+              <p><strong>Tienda:</strong> {{ miembro.tiendaUsuario }}</p>
+              <p><strong>Jornada:</strong> {{ miembro.jornadaUsuario }}</p>
+              <p><strong>Categoría:</strong> {{ miembro.nombreRolUsuario }}</p>
             </div>
             <div class="miembro-actions">
               <select v-model="miembro.nuevaCategoria">
@@ -36,12 +36,12 @@
               </select>
               <button @click="actualizarMiembro(miembro)">Actualizar</button>
               <button @click="darFeedback(miembro)">Feedback</button>
-              <button @click="mostrarCursos(miembro)">Cursos</button>
+              <button @click="() => { mostrarCursos(miembro) }">Cursos</button>
               <button @click="eliminarMiembro(miembro)">Eliminar</button>
             </div>
           </div>
         </div>
-        <div class="cursos-usuario">
+        <div class="cursos-usuario" ref="cursosUsuario">
           <div class="h2-titulo">
             <h2>Cursos</h2>
           </div>
@@ -52,10 +52,10 @@
             </div>
             <ul class="usuario-cursos-container">
               <li class="usuario-curso" v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
-                <p>{{ curso.nombreCursoUsuario }}</p>
-                <p>{{ formatDate(curso.fechaInicio) }}</p>
-                <p>{{ curso.avanceCurso }} %</p>
-                <p>{{ curso.estadoCurso }}</p>
+                <p><strong>Curso:</strong> {{ curso.nombreCursoUsuario }}</p>
+                <p><strong>Fecha Creación:</strong> {{ formatDate(curso.fechaInicio) }}</p>
+                <p><strong>Avance:</strong> {{ curso.avanceCurso }} %</p>
+                <p><strong>Estado:</strong> {{ curso.estadoCurso }}</p>
               </li>
             </ul>
           </div>
@@ -141,6 +141,12 @@ export default {
 
   },
   methods: {
+    scrollToTopButton() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    },
     async cargarMiembros() {
       try {
         const response = await AdminService.getUsuarios();
@@ -326,6 +332,9 @@ export default {
           ...miembro,
           cursos: response.data
         };
+        this.$nextTick(() => {
+          this.$refs.cursosUsuario.scrollIntoView({ behavior: 'smooth' });
+        });
       } catch (error) {
         console.error('Error al obtener los cursos:', error);
       }
@@ -417,12 +426,13 @@ nav a.active {
 }
 
 .cursos-usuario {
+  display: block;
   flex: 1;
   background-color: #f0f0f0;
 }
 
 .usuario-curso {
-  border-bottom: 5px solid #525151;
+  border-bottom: 1px solid #525151;
   padding-top: 1rem;
 }
 
@@ -485,10 +495,17 @@ footer {
   display: grid;
 }
 
-@media (max-width: 767px) {
+@media(max-width: 768px) {
+  .directorio-content {
+    display: flex;
+    flex-direction: column;
 
-  button {
-    background-color: #000;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .cursos-usuario {
+    display: block;
   }
 }
 </style>
