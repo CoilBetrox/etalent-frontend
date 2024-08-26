@@ -1,8 +1,14 @@
 <template>
     <div class="page-background">
       <div class="image-container">
+        <div class="export-buttons">
+          <button @click="exportToExcel">
       <img src="@/assets/imagen excel(1).png" alt="Excel Icon" class="imagen1" />
+          </button>
+          <button @click="exportToPDF">
       <img src="@/assets/imagen pdf.png" alt="PDF Icon" class="imagen2"/>
+          </button>
+        </div>
       </div>
   <div class="feedbacks-container">
     <div class="feedback-header">
@@ -10,18 +16,13 @@
         <div class="filters">   
         </div>
       </div>
-      <div class="export-buttons">
-        <button @click="exportToExcel">
-        </button>
-        <button @click="exportToPDF">
-        </button>
-      </div>
     </div>
 
     <div v-for="feedback in feedbacks" :key="feedback.idFeedback" class="feedback-item">
       <div class="user-info">
         <div class="user-details">
-          <h3>{{ feedback.nombreUsuario }}</h3>
+          <h3> <img src="@/assets/Recurso 5.png" alt="User Icon" class="user-icon" />
+            {{ feedback.nombreUsuario }}</h3>
           <p>{{ feedback.info }}</p>
           <p>
             Feedback creado por: {{ feedback.nombreAdmin }} -
@@ -172,6 +173,22 @@ export default {
 
 <style scoped>
 
+.user-icon {
+  width: 200px; /* Ajusta el tamaño según tus necesidades */
+  height: auto;
+  margin-right: 10px; /* Espacio entre la imagen y el nombre */
+  margin-left: 10px;
+}
+
+
+.feedbacks-container{
+margin-top: -50px;
+opacity: 0;
+  animation: fadeInUp 1s ease-out forwards;
+  animation-delay: 0.2s;
+
+}
+
 .page-background {
   background-color: #F1F1F2; /* Color de fondo claro para toda la página */
   min-height: 100vh; /* Asegura que el contenedor abarque toda la altura de la ventana */
@@ -185,12 +202,14 @@ export default {
 }
 
 .imagen1{
-width: 115px;
+width: 200px;
+height: auto; /* Mantiene la proporción original */
 margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
 }
 
 .imagen2{
-width: 115px;
+width: 0px;
+height: auto; /* Mantiene la proporción original */
 margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
 }
 
@@ -199,19 +218,74 @@ margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: -120px;
+  margin-top: -20px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Comienza 20px más abajo */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Llega a su posición final */
+  }
 }
 
 .feedback-item {
-  background-color: #d4d0d0; /* Cambia este valor por el color que desees para el fondo del cuadro de feedback */
-  border: 4px solid #222020; /* Add a border */ 
-  padding: 15px; 
-  border-radius: 10px;
+  background-color: #cccac9; /* Color de fondo */
+  border: 3.5px solid #222020; /* Bordes */
+  padding: 15px;
+  border-radius: 15px;
   width: 80%; /* Ajusta el ancho según tus necesidades */
   max-width: 1250px; /* Limita el ancho máximo para pantallas grandes */
-  margin: 20px auto; /* Centramos el cuadro con márgenes automáticos */
-
+  margin: 40px auto; /* Centramos el cuadro */
+  box-shadow: 0px 27px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  transform: translateX(-100%); /* Empieza fuera de la pantalla a la izquierda */
+  animation: slideInFromSides 1s ease-out forwards;
+  animation-delay: 0.4s; /* Delay para un efecto más dinámico */
+  transition: transform 0.6s ease, box-shadow 0.3s ease;
 }
+
+@keyframes slideInFromSides {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%); /* Empieza fuera de la pantalla a la izquierda */
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.feedback-item:nth-child(even) {
+  transform: translateX(100%); /* Para los cuadros pares, empiezan fuera de la pantalla a la derecha */
+  animation: slideInFromSidesRight 1s ease-out forwards;
+}
+
+@keyframes slideInFromSidesRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100%); /* Empieza fuera de la pantalla a la derecha */
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+
+.feedback-item:hover {
+  transform: translateY(-10px); /* Elevar el cuadro al pasar el mouse */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada al pasar el mouse */
+}
+
 .title-section {
   display: flex;
   align-items: center;
@@ -250,12 +324,32 @@ margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
   cursor: pointer;
   margin-left: 20px;
   min-height: 10vh;
+  transition: transform 0.3s ease; /* Transición para el botón */
+}
+
+.export-buttons button:hover {
+  transform: scale(1.1); /* Aumenta el tamaño de los botones de exportación al pasar el mouse */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95); /* Comienza ligeramente más pequeño */
+  }
+  to {
+    opacity: 1;
+    transform: scale(1); /* Llega a su tamaño normal */
+  }
 }
 
 .export-buttons img {
   width: 50px;
   height: 50px;
+  opacity: 0; /* Empieza invisible */
+  animation: fadeIn 0.6s ease-out forwards;
+  animation-delay: 0.4s; /* Diferente delay para un efecto más dinámico */
 }
+
 
 .user-details {
   flex-grow: 1; /* Allow user details to take up available space */
@@ -284,14 +378,21 @@ margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
   display: flex;           /* Usamos flexbox para alinear */
   flex-direction: column;  /* Colocamos los elementos en columna */
   align-items: center;     /* Centramos horizontalmente */
+  
 }
-
 
 .add-comment button {
   /* ... tus estilos existentes ... */
-  background-color: #343a40; /* Color gris oscuro (puedes ajustar el valor hexadecimal si lo deseas) */
+  background-color: #6e6767; /* Color gris oscuro (puedes ajustar el valor hexadecimal si lo deseas) */
   color: white; 
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Transición para el color de fondo */
 }
+
+.add-comment button:hover {
+  background-color: #495057; /* Cambia a un tono más oscuro al pasar el mouse */
+  transform: scale(1.05); /* Aumenta ligeramente el tamaño del botón */
+}
+
 
 .add-comment label {
   display: block;
@@ -310,5 +411,35 @@ margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
   border-radius: 4px;
   resize: vertical;
   margin-bottom: 10px;
+}
+
+body {
+  font-family: 'Roboto', sans-serif; /* Fuente limpia y moderna */
+  color: #333; /* Texto oscuro para mejor legibilidad */
+}
+
+h3 {
+  font-family: 'Playfair Display', serif; /* Título elegante */
+  font-weight: bold;
+  color: #1f1a1a;
+  text-align: center;
+}
+
+p {
+  font-family: 'Open Sans', sans-serif; /* Fuente más ligera para los párrafos */
+  color: #080606;
+}
+.comentario {
+  background-color: #ca9da1;
+  padding: 3px;
+  margin-top: 10px;
+  border-radius: 6px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comentario:hover {
+  transform: translateX(15px);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 </style>
