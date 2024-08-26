@@ -38,7 +38,7 @@
         <div class="comment-header">
           <strong class="admin-name">{{ comentario.autor }}</strong> 
         </div>
-        <p>{{ comentario.contenido }}</p>
+        <p>{{comentario.contenido }}</p>
       </div>
 
       <div class="add-comment">
@@ -92,7 +92,7 @@ export default {
     const enviarComentario = async (feedbackId, usuarioId) => {
   try {
     // Validación para evitar comentarios vacíos
-    if (nuevoComentario.value[feedbackId].trim() === '') {
+    if (!nuevoComentario.value[feedbackId] || nuevoComentario.value[feedbackId].trim() === '') {
       alert('Por favor, ingresa un comentario antes de enviar.'); 
       return; // Detener la función si el comentario está vacío
     }
@@ -173,11 +173,11 @@ export default {
 
 <style scoped>
 
+
 .user-icon {
   width: 200px; /* Ajusta el tamaño según tus necesidades */
   height: auto;
   margin-right: 10px; /* Espacio entre la imagen y el nombre */
-  margin-left: 10px;
 }
 
 
@@ -199,16 +199,18 @@ opacity: 0;
   display: flex; /* Utilizamos flexbox para alinear las imágenes */
   justify-content: center; /* Centra las imágenes horizontalmente */
   margin-bottom: 20px; /* Espacio debajo del contenedor de imágenes */
+  
 }
 
+
 .imagen1{
-width: 200px;
-height: auto; /* Mantiene la proporción original */
+width: 2000px;
+height: 2000px; /* Mantiene la proporción original */
 margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
 }
 
 .imagen2{
-width: 0px;
+width: 2000px;
 height: auto; /* Mantiene la proporción original */
 margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
 }
@@ -343,8 +345,8 @@ margin: 0 10px; /* Elimina cualquier margen alrededor de las imágenes */
 }
 
 .export-buttons img {
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: auto;
   opacity: 0; /* Empieza invisible */
   animation: fadeIn 0.6s ease-out forwards;
   animation-delay: 0.4s; /* Diferente delay para un efecto más dinámico */
@@ -442,4 +444,6 @@ p {
   transform: translateX(15px);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+
 </style>
