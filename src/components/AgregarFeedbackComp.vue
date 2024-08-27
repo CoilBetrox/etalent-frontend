@@ -64,6 +64,9 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  text-align: center;
+}
 .agregar-feedback-modal {
   position: fixed;
   top: 0;

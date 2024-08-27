@@ -15,7 +15,7 @@
                 <input :type="showPassword ? 'text' : 'password'" id="password" v-model="password" class="form-control" required placeholder="Ingrese su contraseña">
                 <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'" @click="togglePasswordVisibility" class="toggle-password"></i>
               </div>
-              <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+              <button type="submit" class="btn btn-primary w-100 btn-iniciar-sesion">Iniciar Sesión</button>
             </form>
             <div class="text-center mt-3">
               <router-link to="/register" class="btn btn-link">Registrarse</router-link>
@@ -82,6 +82,8 @@ export default {
 <style scoped>
 .card {
   padding: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 .position-relative {
   position: relative;
@@ -92,5 +94,11 @@ export default {
   right: 10px;
   transform: translateY(-50%);
   cursor: pointer;
+}
+
+.btn-iniciar-sesion{
+  background-color: #e62e2e;
+  color: white;
+  border: none;
 }
 </style>

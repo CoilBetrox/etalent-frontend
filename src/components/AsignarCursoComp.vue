@@ -12,8 +12,8 @@
                             {{ curso.nombreCursoUsuario }}
                         </option>
                     </select>
-                    <p>{{ selectedCursoId }}</p>
-                    <p>{{ usuario.idUsuario }}</p>
+                    <!--<p>{{ selectedCursoId }}</p> -->
+                    <!--<p>{{ usuario.idUsuario }}</p> -->
                 </div>
 
                 <button type="submit">Asignar Curso</button>
@@ -88,7 +88,7 @@ export default {
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
 }
 
 .modal-content {
@@ -123,6 +123,8 @@ button {
     border-radius: 4px;
     cursor: pointer;
     width: 100%;
+    margin-bottom: 10px; /* Añade este margen para separar los botones */
+
 }
 
 button:hover {

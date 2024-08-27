@@ -1,26 +1,6 @@
 <template>
   <div class="filters-container">
-    <div class="filter-item">
-      <label for="search">Búsqueda:</label>
-      <input type="text" id="search" v-model="searchQuery" placeholder="SAP">
-    </div>
-    <div class="filter-item">
-      <label for="area">Área:</label>
-      <select id="area" v-model="selectedArea">
-        <option value="">Todas</option>
-        <option v-for="area in areas" :key="area" :value="area">{{ area }}</option>
-      </select>
-    </div>
-    <div class="filter-item">
-      <label for="category">Categoría:</label>
-      <select id="category" v-model="selectedCategory">
-        <option value="">Todas</option>
-        <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
-      </select>
-    </div>
     <div class="filter-buttons">
-      <button @click="applyFilters">Buscar</button>
-      <button @click="clearFilters">Eliminar filtros</button>
       <button @click="showInfo = true">Información</button>
       <button @click="showModal = true">Agregar nuevo</button>
       <button @click="exportToExcel">Exportar a Excel</button>
@@ -34,17 +14,11 @@
 <script>
 import AgregarNuevoComp from '@/components/AgregarNuevoComp.vue';
 import InfoCategoriaComp from '@/components/InfoCategoriaComp.vue';
+
 export default {
   data() {
     return {
-      searchQuery: '',
-      selectedArea: '',
-      selectedCategory: '',
-      startDate: '',
-      endDate: '',
-      areas: ['Ventas', 'Marketing', 'Desarrollo', 'Recursos Humanos'],
-      categories: ['Enigma', 'Esencial', 'Eminente', 'Dilema', 'Prometedor', 'Experto', 'Riesgo', 'Destacado', 'Sobresaliente'],
-      showModal: false, //controla la visibilidad del modal
+      showModal: false,
       showInfo: false,
     };
   },
@@ -53,25 +27,10 @@ export default {
     InfoCategoriaComp
   },
   methods: {
-    applyFilters() {
-      this.$emit('filter', {
-        searchQuery: this.searchQuery,
-        area: this.selectedArea,
-        category: this.selectedCategory,
-      });
-    },
-    clearFilters() {
-      this.searchQuery = '';
-      this.selectedArea = '';
-      this.selectedCategory = '';
-      this.applyFilters();
-    },
     exportToExcel() {
-      console.log('Exportar a Excel');
       this.$emit('export-excel');
     },
     exportToPDF() {
-      console.log('Exportar a PDF');
       this.$emit('export-pdf');
     }
   }
@@ -79,69 +38,52 @@ export default {
 </script>
 
 <style scoped>
+
 .filters-container {
   display: flex;
-  width: 100%; 
-  gap: 1rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.filter-item {
-  flex: 1; /* O flex: 0 1 auto; */
-  /* margin-bottom: 1rem; */ /* Eliminar esta línea */
-}
-
-.filter-item label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-}
-
-.filter-item input,
-.filter-item select {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
+  flex-direction: column;
+  padding: 0.5em;
+  background-color: #F1F1F2;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  align-items: center;
 }
 
 .filter-buttons {
-  /* flex-wrap: wrap; */ /* Agregar solo si los botones no caben */
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   gap: 1rem;
-  margin-top: 10px;
 }
 
 .filter-buttons button {
-  padding: 0.5rem 1rem;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #e62e2e;
+  color: white;
   border: none;
   border-radius: 4px;
+  font-size: 1rem;
   cursor: pointer;
-  background-color: #343a40; /* Gris oscuro */
-  color: white;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .filter-buttons button:hover {
-  opacity: 0.8;
+  background-color: #c1272d;
+  transform: scale(1.05);
 }
 
-/* Estilos específicos para los botones */
-.filter-buttons .btn-primary {
-  background-color: #007bff;
-  color: white;
-}
+/* Estilos responsivos */
+@media (min-width: 768px) {
+  .filter-buttons {
+    flex-direction: row;
+    gap: 1rem;
+  }
 
-.filter-buttons .btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.filter-buttons .btn-success {
-  background-color: #28a745;
-  color: white;
+  .filter-buttons button {
+    width: auto; /* Permitir que los botones tomen el ancho necesario en pantallas grandes */
+    margin-top: 0;
+  }
 }
 </style>

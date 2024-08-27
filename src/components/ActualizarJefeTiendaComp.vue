@@ -5,17 +5,20 @@
         <p>Cambia de jefe de tienda a partir del ID, es encesario que el Jefe de Tienda entrante tenga una cuenta vacía recién creada</p>
         <form @submit.prevent="cambiaJefeTienda">
           <div class="form-group">
-            <label for="idAntiguo">ID Antiguo (Saliente)</label>
+            <label for="idAntiguo"> <strong>ID Antiguo (Saliente) </strong></label>
             <input id="idAntiguo" v-model="jefesTienda.idJefeSaliente" placeholder="ID del Jefe de Tienda saliente" required>
           </div>
           
           <div class="form-group">
-            <label for="idNuevo">ID Nuevo (Entrante)</label>
+            <label for="idNuevo"> <strong> ID Nuevo (Entrante) </strong></label>
             <input id="idNuevo" v-model="jefesTienda.idJefeEntrante" placeholder="ID del Jefe de Tienda entrante" required>
           </div>
 
+          <div class="button-group">
           <button type="submit">Aceptar</button>
           <button type="button" @click="$emit('close')">Cancelar</button>
+          </div>
+
         </form>
       </div>
     </div>
@@ -50,6 +53,9 @@
   </script>
   
   <style scoped>
+  h2 {
+    text-align: center;
+  }
   .modal {
     position: fixed;
     top: 0;
@@ -59,7 +65,7 @@
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
   }
   
   .modal-content {
@@ -98,4 +104,14 @@
   button:hover {
     background-color: #555;
   }
+
+  .button-group {
+  display: flex;
+  justify-content: space-between; /* Espacio entre los botones */
+}
+
+.button-group button {
+  width: 48%; /* Hace que los botones se alineen y se mantengan juntos, ajustando el ancho */
+}
+
   </style>
