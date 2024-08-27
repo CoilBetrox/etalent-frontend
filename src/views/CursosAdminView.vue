@@ -2,20 +2,22 @@
   <div class="cursos-admin-view">
     <main>
 
-      <button @click="mostrarModalAgregarCurso" class="btn btn-primary mb-3">
-        Agregar Curso
-      </button>
+      <div class="btn-agrega-content">
+        <button @click="mostrarModalAgregarCurso" class="btn btn-primary mb-3 btn-cursos">
+          Agregar Curso
+        </button>
+      </div>
       <div class="cursos-admin-content">
         <div class="cursos-list">
           <h1>Cursos</h1>
           <div v-for="curso in cursos" :key="curso.idCursoUsuario" class="curso-item">
             <div class="curso-info">
-              <h3>{{ curso.nombreCursoUsuario }}</h3>
+              <h3> {{ curso.nombreCursoUsuario }}</h3>
               <p>{{ curso.descripcionCurso }}</p>
-              <p>Fecha Inicio: {{ curso.fechaInicio }}</p>
-              <p>Fecha Fin: {{ curso.fechaFin }}</p>
-              <p>Avance Curso: {{ curso.avanceCurso }} %</p>
-              <p>Estado Curso: {{ curso.estadoCurso }}</p>
+              <p><strong>Fecha Inicio:</strong> {{ formatDate(curso.fechaInicio) }}</p>
+              <p><strong>Fecha Fin:</strong> {{ formatDate(curso.fechaFin) }}</p>
+              <p><strong>Avance Curso:</strong> {{ curso.avanceCurso }} %</p>
+              <p><strong>Estado Curso:</strong> {{ curso.estadoCurso }}</p>
             </div>
             <div class="curso-actions">
               <button @click="seleccionarCurso(curso)">Seleccionar</button>
@@ -38,15 +40,15 @@
           </div>
         </div>
 
-        <div class="cursos-integrantes">
-          <h1 v-if="cursoSeleccionado">Integrantes del Curso: {{ cursoSeleccionado.nombre }}</h1>
+        <div class="cursos-integrantes" ref="cursosIntegrantes">
+          <h1 v-if="cursoSeleccionado">Integrantes del Curso: <h3>{{ cursoSeleccionado.nombre }}</h3></h1>
           <h1 v-else>Integrantes del Curso</h1>
 
           <div v-if="usuarios && usuarios.length > 0">
             <div v-for="usuario in usuarios" :key="usuario.idUsuario" class="curso-item">
               <div class="curso-info">
-                <p>{{ usuario.nombreUsuario }}</p>
-                <p>{{ usuario.sapUsuario }}</p>
+                <p><strong>Nombre:</strong> {{ usuario.nombreUsuario }}</p>
+                <p><strong>Sap:</strong> {{ usuario.sapUsuario }}</p>
                 <p>{{ usuario.correoUsuario }}</p>
                 <p>{{ usuario.cargoUsuario }}</p>
                 <p>{{ usuario.zonaUsuario }}</p>
@@ -108,6 +110,9 @@ export default {
           id: cursoData.idCursoUsuario,
           nombre: cursoData.nombreCursoUsuario
         };
+        this.$nextTick(() => {
+          this.$refs.cursosIntegrantes.scrollIntoView({ behavior: 'smooth' });
+        });
       } catch (error) {
         console.error('Error al seleccionar curso:', error);
         this.usuarios = [];
@@ -137,6 +142,15 @@ export default {
       } catch (error) {
         console.error('Error al actualizar curso:', error);
       }
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleDateString('en-GB', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replace(',', '');
     }
   },
   mounted() {
@@ -151,16 +165,18 @@ export default {
 }
 
 .curso-item {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-bottom: 10px;
+  border: 4px solid #525151;
+  padding: 1rem 3rem;
+  border-radius: 10px;
+  margin: 1rem 1rem;
   display: flex;
   align-items: center;
 }
 
 .cursos-admin-content {
   display: flex;
-  width: 50%;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .curso-info {
@@ -171,6 +187,54 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 5px;
+}
+
+.cursos-list {
+  flex: 1;
+}
+
+.cursos-integrantes {
+  flex: 1;
+  background-color: #f0f0f0;
+}
+
+button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.btn-cursos {
+  display: block;
+  padding: 10px;
+  background-color: #e62e2e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-cursos:hover {
+  background-color: #c1272d;
+  transform: scale(1.05);
+}
+
+.btn-agrega-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+@media(max-width: 768px) {
+  .cursos-admin-content {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 </style>

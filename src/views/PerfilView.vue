@@ -1,7 +1,7 @@
 <template>
   <div class="page-background">
     <div class="mi-cuenta-container">
-      <img src="@/assets/logo eta-rm.png" alt="Imagen izquierda" class="imagen-lateral izquierda ">
+      
       <div class="mi-cuenta">
         <h2>Mi Cuenta</h2>
         <div class="perfil-container">
@@ -35,7 +35,7 @@
               <input v-model="perfil.empresaAdmin" type="text" disabled>
             </div>
             <div class="campo">
-              <label>Tienda</label>
+              <label>Zona</label>
               <input v-model="perfil.zonaAdmin" type="text" disabled>
             </div>
           </div>
@@ -45,7 +45,7 @@
           {{ mensaje }}
         </div>
       </div>
-      <img src="@/assets/logo eta-rm.png" alt="Imagen derecha" class="imagen-lateral derecha">
+      
     </div>
   </div>
 </template>
@@ -154,7 +154,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 95vh;
+  
   padding-top: 0px;
   background-color: #F1F1F2;
   /* Fondo negro */
@@ -213,7 +213,7 @@ export default {
 .mi-cuenta {
   font-family: 'Roboto', sans-serif;
   max-width: 800px;
-  width: 100%;
+  width: 70%;
   padding: 20px;
   border: 3px solid #000000;
   /* Borde más grueso */
@@ -222,7 +222,8 @@ export default {
   /* Fondo blanco para el recuadro */
   color: #ffffff;
   /* Color del texto dentro del cuadro */
-
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 h2 {
@@ -359,9 +360,6 @@ input {
     /* Ajustar grosor del borde */
     background-color: #4b4646;
     font-size: 0.9em;
-    /* Ajustar tamaño de fuente */
-    margin-top: 5rem;
-    /* Añadir margen superior para bajar el cuadro */
   }
 
   .perfil-container {

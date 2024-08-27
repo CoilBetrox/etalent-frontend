@@ -14,8 +14,10 @@
             <input id="idNuevo" v-model="jefesTienda.idJefeEntrante" placeholder="ID del Jefe de Tienda entrante" required>
           </div>
 
-          <button type="submit">Aceptar</button>
-          <button type="button" @click="$emit('close')">Cancelar</button>
+          <div class="button-agregar-content">
+            <button type="submit">Aceptar</button>
+            <button type="button" @click="$emit('close')">Cancelar</button>
+          </div>
         </form>
       </div>
     </div>
@@ -93,6 +95,12 @@
     border-radius: 4px;
     cursor: pointer;
     width: 100%;
+  }
+
+  .button-agregar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
   
   button:hover {

@@ -22,9 +22,10 @@
             <label for="fechaFin">Fecha Fin</label>
             <input id="fechaFin" v-model="curso.fechaFin" placeholder="YYYY-MM-DD" required>
           </div>
-
-          <button type="submit">Agregar Nuevo</button>
-          <button type="button" @click="$emit('close')">Cancelar</button>
+          <div class="button-container">
+            <button type="submit">Agregar Nuevo</button>
+            <button type="button" @click="$emit('close')">Cancelar</button>
+          </div>
         </form>
       </div>
     </div>
@@ -47,7 +48,15 @@
       };
     },
     methods: {
+      validarFecha(fecha) {
+        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        return regex.test(fecha);
+      },
       async addCurso() {
+        if (!this.validarFecha(this.curso.fechaInicio) || !this.validarFecha(this.curso.fechaFin)) {
+          alert('Por favor, ingrese las fechas en el formato YYYY-MM-DD.');
+          return;
+        }
         try {
           const response = await AdminService.agregarCurso({
             nombreCursoUsuario: this.curso.nombreCursoUsuario,
@@ -58,6 +67,7 @@
             estadoCurso: 'Activo'
           });
           console.log('Curso agregado:', response);
+          alert('Curso Agregado Correctamente.');
           this.$emit('close');
         } catch (error) {
           console.error('Error al agregar curso:', error);
@@ -115,5 +125,17 @@
   
   button:hover {
     background-color: #555;
+  }
+
+  h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
   }
   </style>

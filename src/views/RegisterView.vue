@@ -20,7 +20,7 @@
                 </div>
                 <div class="mb-3 position-relative">
                   <label for="contraAdmin" class="form-label">Contraseña</label>
-                  <input :type="showPassword ? 'text' : 'password'" id="contraAdmin" v-model="contraAdmin" class="form-control" required placeholder="Ingrese una contraseña segura">
+                  <input :type="showPassword ? 'text' : 'password'" id="contraAdmin" v-model="contraAdmin" class="form-control" required placeholder="Ingrese una contraseña segura" @input="validatePasswordInput">
                   <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'" @click="togglePasswordVisibility" class="toggle-password"></i>
                 </div>
                 <div class="mb-3">
@@ -127,6 +127,16 @@
       },
       togglePasswordVisibility() {
         this.showPassword = !this.showPassword;
+      },
+      validatePasswordInput(event) {
+        // Define el conjunto de caracteres válidos para la contraseña
+        const validChars = /^[A-Za-z0-9+/=]*$/;
+
+        // Filtra la entrada para que solo incluya caracteres válidos
+        if (!validChars.test(event.target.value)) {
+          event.target.value = event.target.value.replace(/[^A-Za-z0-9+/=]/g, '');
+          this.contraAdmin = event.target.value;
+        }
       },
       updateTiendas() {
         // Actualizar las tiendas según la provincia seleccionada

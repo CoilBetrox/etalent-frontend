@@ -8,13 +8,13 @@
           <div v-for="admin in admins" :key="admin.idAdmin" class="miembro-card">
 
             <div class="miembro-info">
-              <p>{{ admin.idAdmin }}</p>
-              <p>{{ admin.nombreAdmin }}</p>
-              <p>{{ admin.sapAdmin }}</p>
-              <p>{{ admin.correoAdmin }}</p>
-              <p>{{ admin.cargoAdmin }}</p>
-              <p>{{ admin.zonaAdmin }}</p>
-              <p>{{ admin.empresaAdmin }}</p>
+              <p><strong>Id: </strong>{{ admin.idAdmin }}</p>
+              <p><strong>Nombre: </strong>{{ admin.nombreAdmin }}</p>
+              <p><strong>SAP: </strong>{{ admin.sapAdmin }}</p>
+              <p><strong>Correo: </strong>{{ admin.correoAdmin }}</p>
+              <p><strong>Cargo: </strong>{{ admin.cargoAdmin }}</p>
+              <p><strong>Zona: </strong>{{ admin.zonaAdmin }}</p>
+              <p><Strong>Empresa: </Strong>{{ admin.empresaAdmin }}</p>
 
             </div>
             <div class="miembro-actions">
@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <div class="personal-tienda" v-if="usuarios.length > 0">
+        <div class="personal-tienda"  ref="personalTienda">
           <h2>Personal Tienda</h2>
           <div v-for="usuario in usuarios" :key="usuario.idUsuario" class="miembro-card">
 
@@ -64,13 +64,15 @@
           </div>
         </div>
 
-        <div class="cursos-usuario" v-if="usuarioSeleccionado">
+        <div class="cursos-usuario"  ref="cursosUsuario">
           <h2>Cursos</h2>
           <div v-if="usuarioSeleccionado">
-            <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
-            <button @click="asignarCurso(usuarioSeleccionado)">Asignar Curso</button>
-            <ul>
-              <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
+            <div class="header-cursos-usuario">
+              <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
+              <button @click="asignarCurso(usuarioSeleccionado)">Asignar Curso</button>
+            </div>
+            <ul class="usuario-cursos-container">
+              <li class="usuario-curso" v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
                 <p>{{ curso.nombreCursoUsuario }}</p>
                 <p>{{ formatDate(curso.fechaInicio) }}</p>
                 <p>{{ curso.avanceCurso }} %</p>
@@ -180,6 +182,9 @@ export default {
             ...usuario,
             nuevaCategoria: usuario.rolUsuario.nombreRolUsuario
           };
+        });
+        this.$nextTick(() => {
+          this.$refs.personalTienda.scrollIntoView({ behavior: 'smooth' });
         });
       } catch (error) {
         console.error('Error al cargar los usuarios:', error);
@@ -362,6 +367,9 @@ export default {
           ...miembro,
           cursos: response.data
         };
+        this.$nextTick(() => {
+          this.$refs.cursosUsuario.scrollIntoView({ behavior: 'smooth' });
+        });
       } catch (error) {
         console.error('Error al obtener los cursos:', error);
       }
@@ -433,6 +441,7 @@ nav a.active {
 
 .directorio-content {
   display: flex;
+  justify-content: space-between;
 }
 
 .miembros-list {
@@ -446,9 +455,10 @@ nav a.active {
 }
 
 .miembro-card {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-bottom: 10px;
+  border: 4px solid #525151;
+  border-radius: 10px;
+  padding: 1rem 3rem;
+  margin: 1rem 1rem;
   display: flex;
   align-items: center;
 }
@@ -487,4 +497,63 @@ footer {
   text-align: center;
   font-size: 0.8rem;
 }
+
+h2 {
+  display: flex;
+  justify-content: center;
+}
+
+.jefes-tienda {
+  flex: 1;
+}
+
+.personal-tienda {
+  display: block;
+  flex: 1;
+  background-color: #f0f0f0
+
+}
+
+.usuario-cursos-container {
+  border: 4px solid #525151;
+  padding-top: 1rem;
+  border-radius: 10px;
+  padding: 1rem 3rem;
+  margin: 1rem 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.usuario-curso {
+  border-bottom: 1px solid #525151;
+  margin-bottom: 1rem;
+}
+
+.cursos-usuario {
+  flex: 1;
+  border-bottom: 1px solid #525151;
+}
+
+.header-cursos-usuario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 1rem;
+  align-items: center;
+}
+
+@media(max-width: 768px) {
+  .directorio-content {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .cursos-usuario {
+    display: block;
+  }
+}
+
 </style>

@@ -151,16 +151,20 @@ export default {
 
 .feedback-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  gap: 1rem;
 }
 
 .feedback-item {
-  border: 1px solid #ddd;
+  border: 4px solid #525151;
   padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 5px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 1250px;
+  margin: 20px auto;
 }
 
 .user-info {
@@ -188,19 +192,34 @@ export default {
 
 .comentario {
   padding-left: 20px;
-  border-left: 2px solid #eee;
+  border-left: 2px solid #525151;
   margin-bottom: 10px;
 }
 
 input {
-  width: calc(100% - 120px);
+  width: 100%;
   padding: 10px;
   margin-top: 10px;
   margin-right: 10px;
 }
 
 button {
-  padding: 10px 20px;
+  display: block;
+  width: 60%;
+  padding: 10px;
+  background-color: #e62e2e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
   cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
+button:hover {
+  background-color: #c1272d;
+  transform: scale(1.05);
+}
+
 </style>

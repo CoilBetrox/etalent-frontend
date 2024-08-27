@@ -3,8 +3,9 @@
     <div class="filter-buttons">
       <button @click="showInfo = true">Información</button>
       <button @click="showModal = true">Agregar nuevo</button>
-      <button @click="exportToExcel">Exportar a Excel</button>
-      <button @click="exportToPDF">Exportar a PDF</button>
+      
+      <img class="img-download" src='@/assets/excel-icon-bln.png' alt="download excel" @click="exportToExcel">
+      <img class="img-download" src='@/assets/pdf-icon-bln.png' alt="download pdf" @click="exportToPDF">
     </div>
     <AgregarNuevoComp v-if="showModal" @close="showModal = false"/>
     <InfoCategoriaComp v-if="showInfo" @close="showInfo = false"/>
@@ -72,6 +73,17 @@ export default {
   background-color: #c1272d;
   transform: scale(1.05);
 }
+
+.img-download {
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+}
+
+.img-download:hover {
+  transform: scale(1.05);
+}
+
 
 /* Estilos responsivos */
 @media (min-width: 768px) {

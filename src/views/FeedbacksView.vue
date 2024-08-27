@@ -199,7 +199,7 @@ button:hover {
 .user-info {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .user-info div {

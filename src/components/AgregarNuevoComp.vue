@@ -187,8 +187,10 @@
             </select>
           </div>
 
-          <button type="submit">Agregar Nuevo</button>
-          <button type="button" @click="$emit('close')">Cancelar</button>
+          <div class="btn-content">
+            <button type="submit">Agregar Nuevo</button>
+            <button type="button" @click="$emit('close')">Cancelar</button>
+          </div>
         </form>
       </div>
     </div>
@@ -293,5 +295,10 @@
   
   button:hover {
     background-color: #555;
+  }
+
+  .btn-content {
+    display: grid;
+    gap: 1rem;
   }
   </style>
