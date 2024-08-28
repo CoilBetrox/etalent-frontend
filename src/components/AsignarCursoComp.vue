@@ -12,12 +12,11 @@
                             {{ curso.nombreCursoUsuario }}
                         </option>
                     </select>
-                    <p>{{ selectedCursoId }}</p>
-                    <p>{{ usuario.idUsuario }}</p>
                 </div>
-
-                <button type="submit">Asignar Curso</button>
-                <button type="button" @click="$emit('close')">Cancelar</button>
+                <div class="btn-asigna-content">
+                    <button type="submit">Asignar Curso</button>
+                    <button type="button" @click="$emit('close')">Cancelar</button>
+                </div>
             </form>
         </div>
     </div>
@@ -100,6 +99,12 @@ export default {
 
 .form-group {
     margin-bottom: 15px;
+}
+
+.btn-asigna-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 label {

@@ -393,7 +393,7 @@ export default {
     cerrarActualizarJefeTienda() {
       this.mostrarAcualizarJefeTienda = false;
     },
-    asignarCurso(usuario) {
+    async asignarCurso(usuario) {
       this.usuarioSeleccionado = usuario;
       this.showAsignarCursoModal = true;
     },
@@ -474,7 +474,7 @@ nav a.active {
 }
 
 .miembro-info {
-  flex: 2;
+  flex: 1;
 }
 
 .miembro-actions {

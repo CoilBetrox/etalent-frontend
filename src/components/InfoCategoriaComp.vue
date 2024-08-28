@@ -80,6 +80,10 @@ button:hover {
   transform: scale(1.05);
 }
 
+h2 {
+  font-size: 1.6rem;
+}
+
 /* Estilos para pantallas mayores a 768px */
 @media (min-width: 768px) {
   .modal-content {

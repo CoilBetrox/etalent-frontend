@@ -49,12 +49,7 @@
               <div class="curso-info">
                 <p><strong>Nombre:</strong> {{ usuario.nombreUsuario }}</p>
                 <p><strong>Sap:</strong> {{ usuario.sapUsuario }}</p>
-                <p>{{ usuario.correoUsuario }}</p>
-                <p>{{ usuario.cargoUsuario }}</p>
-                <p>{{ usuario.zonaUsuario }}</p>
-                <p>{{ usuario.empresaUsuario }}</p>
-                <p>{{ usuario.tiendaUsuario }}</p>
-                <p>{{ usuario.jornadaUsuario }}</p>
+                <button @click="quitarUsuario(usuario.idUsuario)">Quitar</button>
               </div>
             </div>
           </div>
@@ -84,6 +79,23 @@ export default {
     };
   },
   methods: {
+    async quitarUsuario(usuarioId) {
+      if (!this.cursoSeleccionado) {
+        console.error('No hay curso seleccionado');
+        return;
+      }
+      if (confirm('¿Está seguro de eliminar este usuario?')) {
+        try {
+          await AdminService.quitarUsuarioDeCurso(this.cursoSeleccionado.id, usuarioId);
+          // Actualizar la lista de usuarios después de quitar uno
+          alert('Se ha elimiado correctamente');
+          this.usuarios = this.usuarios.filter(u => u.idUsuario !== usuarioId);
+          console.log('Usuario quitado con éxito');
+        } catch (error) {
+          console.error('Error al eliminar miembro:', error);
+        }
+      }
+    },
     mostrarModalAgregarCurso() {
       this.showCursosModal = true;
     },

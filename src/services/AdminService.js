@@ -113,6 +113,10 @@ const addUsersBulk = async (users) => {
     return await addUsersBulkAxios(users);
 };
 
+const quitarUsuarioDeCurso = async (idCursoUsuario, idUsuario) => {
+    return await quitarUsuarioDeCursoAxios(idCursoUsuario, idUsuario)
+};
+
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -422,6 +426,15 @@ const addUsersBulkAxios = async (usuarios) => {
     }
 };
 
+const quitarUsuarioDeCursoAxios = async (idCursoUsuario, idUsuario) => {
+    try {
+        const response = await api.delete(`/cursosUsuario/del/${idCursoUsuario}/${idUsuario}`);
+        return response.data;
+    } catch (error) {
+        console.log('Error en quitarUsuarioDeCursoAxios', error);
+        throw error;
+    }
+};
 
 export default {
     registerAdmin, 
@@ -451,5 +464,6 @@ export default {
     asignarCursoToUsuario,
     mostrarCursosSimple,
     getComentariosPorFeedback,
-    addUsersBulk
+    addUsersBulk,
+    quitarUsuarioDeCurso
 }

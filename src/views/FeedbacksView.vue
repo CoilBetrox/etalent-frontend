@@ -12,12 +12,13 @@
       <div v-for="feedback in feedbacks" :key="feedback.idFeedback" class="feedback-item">
         <div class="user-info">
           <div>
-            <h3>{{ feedback.nombreUsuario }}</h3>
+            <p class="feedback-date">{{ formatDate(feedback.fechaCreacionFeedback) }}</p>
+            <h3><strong>Para:</strong> {{ feedback.nombreUsuario }}</h3>
             <p>{{ feedback.info }}</p>
-            <p>{{ feedback.nombreAdmin }}</p>
+            <p><strong>De:</strong> {{ feedback.nombreAdmin }}</p>
           </div>
         </div>
-        <p class="feedback-date">{{ formatDate(feedback.fechaCreacionFeedback) }}</p>
+        <p>Comentarios:</p>
         <p class="feedback-content">{{ feedback.descripcionFeedback }}</p>
         <div v-for="comentario in feedback.comentarios" :key="comentario.id" class="comentario">
           <h4>{{ comentario.autor }}</h4>
@@ -57,7 +58,7 @@ export default {
           const comentarios = await AdminService.getComentariosPorFeedback(feedback.idFeedback);
           return {
             ...feedback,
-            info: `${feedback.sapUsuario} | ${feedback.tipoFeedback} | ${feedback.rolUsuario}`,
+            info: `SAP: ${feedback.sapUsuario} | Tipo: ${feedback.tipoFeedback} | Categoría: ${feedback.rolUsuario}`,
             comentarios: comentarios
           };
         }));

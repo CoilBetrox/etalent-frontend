@@ -13,7 +13,9 @@
         <div class="feedback-type">
           <select v-model="feedbackType">
             <option value="" disabled selected hidden>Seleccione un tipo</option>
-            <option value="KPIs">KPIs</option>
+            <option value="KPIs">Resultados Cuantitativos</option>
+            <option value="KPIs">Progreso hacia Metas</option>
+            <option value="KPIs">Eficacia de Estrategias</option>
             <option value="Role Play">Role Play</option>
             <option value="One to One">One to One</option>
             <option value="Mentoring">Mentoring</option>
