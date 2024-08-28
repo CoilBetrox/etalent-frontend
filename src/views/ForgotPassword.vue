@@ -44,7 +44,7 @@ export default {
 
       try {
         console.log('Enviando solicitud de restablecimiento de contraseña...');
-        const response = await axios.post('http://localhost:8081/api/admins/auth/forgot-password', null, {
+        const response = await axios.post(`${process.env.VUE_APP_API_URL}/api/admins/auth/forgot-password`, null, {
           params: { email: this.email }
         });
         console.log('Respuesta del servidor:', response.data);
