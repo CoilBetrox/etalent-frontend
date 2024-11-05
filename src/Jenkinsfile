@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         REPO_DIR = "${env.WORKSPACE}"
-        BUILD_DIR = "${REPO_DIR}/dist-etalent-frontend"
+        BUILD_DIR = "${REPO_DIR}/dist"
         NODEJS_HOME = "${tool 'NodeJS 16'}"
         PATH = "${env.NODEJS_HOME}/bin:${env.PATH}"
     }
@@ -18,6 +18,16 @@ pipeline {
             steps {
                 dir(REPO_DIR) {
                     sh 'npm run build'
+                }
+            }
+        }
+        stage('Debug') {
+            steps {
+                dir(REPO_DIR) {
+                    sh 'ls -la'
+                }
+                dir("${REPO_DIR}/dist") {
+                    sh 'ls -la'
                 }
             }
         }
