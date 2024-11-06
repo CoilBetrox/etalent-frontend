@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const api = axios.create({
     //baseURL: 'http://localhost:8081/api',
-    baseURL: `${process.env.VUE_APP_API_BASE_URL}`,
+    baseURL: `${process.env.VUE_APP_API_BASE_URL}/api`,
     timeout: 15000,
     headers: {
         'Content-Type': 'application/json'
