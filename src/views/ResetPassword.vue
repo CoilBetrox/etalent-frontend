@@ -60,7 +60,7 @@ export default {
 
       try {
         console.log('Enviando solicitud de restablecimiento de contraseña...');
-        const response = await axios.post('http://localhost:8081/api/admins/auth/reset-password', null, {
+        const response = await axios.post('https://etalent.rdtroyaram.site/api/admins/auth/reset-password', null, {
           params: { 
             token: this.token,
             newPassword: this.password

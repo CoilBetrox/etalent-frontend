@@ -40,7 +40,7 @@ export default {
     
       try {
         console.log('Enviando solicitud de verificación...');
-        const response = await axios.post('http://localhost:8081/api/admins/auth/verify-email', null, {
+        const response = await axios.post('https://etalent.rdtroyaram.site/api/admins/auth/verify-email', null, {
           params: { token }
         });
         console.log('Respuesta del servidor:', response.data);
