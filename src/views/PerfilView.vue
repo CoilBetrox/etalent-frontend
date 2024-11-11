@@ -1,50 +1,53 @@
 <template>
-    <div class="page-background">
-  <div class="mi-cuenta-container">
-   <img src="@/assets/logo eta-rm.png" alt="Imagen izquierda" class="imagen-lateral izquierda ">  
-    <div class="mi-cuenta">
-      <h2>Mi Cuenta</h2>
-      <div class="perfil-container">
-        <div class="datos-perfil">
-          <div class="campo">
-            <label>Nombre</label>
-            <input v-model="perfil.nombreAdmin" @input="validateNombre" :class="{ 'input-error': errores.nombre }" type="text">
-            <p v-if="errores.nombre" class="error-msg">El campo Nombre es obligatorio.</p>
-          </div>
-          <div class="campo">
-            <label>SAP</label>
-            <input v-model="perfil.sapAdmin" @input="validateSap" :class="{ 'input-error': errores.sap }" type="text">
-            <p v-if="errores.sap" class="error-msg">El campo SAP es obligatorio.</p>
-          </div>
+  <div class="page-background">
+    <div class="mi-cuenta-container">
+      
+      <div class="mi-cuenta">
+        <h2>Mi Cuenta</h2>
+        <div class="perfil-container">
+          <div class="datos-perfil">
+            <div class="campo">
+              <label>Nombre</label>
+              <input v-model="perfil.nombreAdmin" @input="validateNombre" :class="{ 'input-error': errores.nombre }"
+                type="text">
+              <p v-if="errores.nombre" class="error-msg">El campo Nombre es obligatorio.</p>
+            </div>
+            <div class="campo">
+              <label>SAP</label>
+              <input v-model="perfil.sapAdmin" @input="validateSap" :class="{ 'input-error': errores.sap }" type="text">
+              <p v-if="errores.sap" class="error-msg">El campo SAP es obligatorio.</p>
+            </div>
 
-          <div class="campo">
-            <label>Correo</label>
-            <input v-model="perfil.correoAdmin" @input="validateCorreo" :class="{ 'input-error': errores.correo }" type="email" disabled>
-            <p v-if="errores.correo" class="error-msg">El campo Correo es obligatorio y debe ser un correo electrónico válido.</p>
-          </div>
+            <div class="campo">
+              <label>Correo</label>
+              <input v-model="perfil.correoAdmin" @input="validateCorreo" :class="{ 'input-error': errores.correo }"
+                type="email" disabled>
+              <p v-if="errores.correo" class="error-msg">El campo Correo es obligatorio y debe ser un correo electrónico
+                válido.</p>
+            </div>
 
-          <div class="campo">
-            <label>Provincia</label>
-            <input v-model="perfil.provinciaAdmin" type="text" disabled>
-          </div>
-          <div class="campo">
-            <label>Empresa</label>
-            <input v-model="perfil.empresaAdmin" type="text" disabled>
-          </div>
-          <div class="campo">
-            <label>Tienda</label>
-            <input v-model="perfil.zonaAdmin" type="text" disabled>
+            <div class="campo">
+              <label>Provincia</label>
+              <input v-model="perfil.provinciaAdmin" type="text" disabled>
+            </div>
+            <div class="campo">
+              <label>Empresa</label>
+              <input v-model="perfil.empresaAdmin" type="text" disabled>
+            </div>
+            <div class="campo">
+              <label>Zona</label>
+              <input v-model="perfil.zonaAdmin" type="text" disabled>
+            </div>
           </div>
         </div>
+        <button @click="actualizarInformacion" class="actualizar-btn">Actualizar Información</button>
+        <div v-if="mensaje" :class="['mensaje', { 'exito': !error, 'error': error }]">
+          {{ mensaje }}
+        </div>
       </div>
-      <button @click="actualizarInformacion" class="actualizar-btn">Actualizar Información</button>
-      <div v-if="mensaje" :class="['mensaje', { 'exito': !error, 'error': error }]">
-        {{ mensaje }}
-      </div>
+      
     </div>
-    <img src="@/assets/logo eta-rm.png" alt="Imagen derecha" class="imagen-lateral derecha">
   </div>
-    </div>
 </template>
 
 <script>
@@ -94,7 +97,7 @@ export default {
         this.errores.sap = true;
         return;
       }
-     
+
       try {
         await AdminService.updateAdminProfilePartial({
           nombreAdmin: this.perfil.nombreAdmin,
@@ -108,7 +111,7 @@ export default {
         console.error('Error al actualizar el perfil:', error);
       }
     },
-    
+
     validateNombre(event) {
       const value = event.target.value;
       // Remove numbers and trim to 25 characters
@@ -147,17 +150,17 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-
-
 .mi-cuenta-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 95vh;
+  
   padding-top: 0px;
-  background-color: #F1F1F2; /* Fondo negro */
+  background-color: #F1F1F2;
+  /* Fondo negro */
 
 }
+
 .imagen-lateral {
   position: absolute;
   top: 50%;
@@ -167,7 +170,8 @@ export default {
 .imagen-lateral.izquierda {
   left: 150px;
   animation: slideInLeft 1s ease-in-out;
-  animation-fill-mode: forwards; /* Cambiar 'none' a 'forwards' */
+  animation-fill-mode: forwards;
+  /* Cambiar 'none' a 'forwards' */
 
 
 }
@@ -175,7 +179,8 @@ export default {
 .imagen-lateral.derecha {
   right: 150px;
   animation: slideInRight 1s ease-in-out;
-  animation-fill-mode: forwards; /* Cambiar 'none' a 'forwards' */
+  animation-fill-mode: forwards;
+  /* Cambiar 'none' a 'forwards' */
 
 }
 
@@ -184,8 +189,10 @@ export default {
     transform: translate(-150px, 0);
     opacity: 1;
   }
+
   to {
-    transform: translate(0, -20px); /* Subir la imagen 20px hacia arriba */
+    transform: translate(0, -20px);
+    /* Subir la imagen 20px hacia arriba */
     opacity: 1;
   }
 }
@@ -195,26 +202,29 @@ export default {
     transform: translate(150px, 0);
     opacity: 1;
   }
+
   to {
-    transform: translate(0, -20px); /* Subir la imagen 20px hacia arriba */
+    transform: translate(0, -20px);
+    /* Subir la imagen 20px hacia arriba */
     opacity: 1;
   }
 }
 
-
 .mi-cuenta {
   font-family: 'Roboto', sans-serif;
   max-width: 800px;
-  width: 100%;
+  width: 70%;
   padding: 20px;
-  border: 3px solid #000000; /* Borde más grueso */
+  border: 3px solid #000000;
+  /* Borde más grueso */
   border-radius: 20px;
-  background-color: #4b4646; /* Fondo blanco para el recuadro */
-  color: #ffffff; /* Color del texto dentro del cuadro */
-
+  background-color: #4b4646;
+  /* Fondo blanco para el recuadro */
+  color: #ffffff;
+  /* Color del texto dentro del cuadro */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
-
-
 
 h2 {
   text-align: center;
@@ -274,9 +284,12 @@ input {
 }
 
 .actualizar-btn:hover {
-  background-color: #c1272d; /* Un rojo más oscuro */
-  transform: scale(1.05); /* Aumenta ligeramente el tamaño del botón */
+  background-color: #c1272d;
+  /* Un rojo más oscuro */
+  transform: scale(1.05);
+  /* Aumenta ligeramente el tamaño del botón */
 }
+
 .mensaje {
   margin-top: 20px;
   padding: 10px;
@@ -304,6 +317,7 @@ input {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -315,35 +329,37 @@ input {
     flex-direction: column;
     align-items: center;
     padding: 1rem;
-    
+
   }
 
   .imagen-lateral {
     position: relative;
-    width: 60%; /* Reduce el tamaño de la imagen */
+    width: 60%;
+    /* Reduce el tamaño de la imagen */
     margin-bottom: 1rem;
   }
 
   .imagen-lateral.izquierda {
     left: auto;
     right: auto;
-    display: none; /* Oculta la imagen de la izquierda en pantallas pequeñas */
+    display: none;
+    /* Oculta la imagen de la izquierda en pantallas pequeñas */
   }
 
   .imagen-lateral.derecha {
     left: auto;
     right: auto;
-    
+
   }
 
   .mi-cuenta {
     width: 100%;
     padding: 1rem;
     border-radius: 10px;
-    border: 2px solid #000000; /* Ajustar grosor del borde */
+    border: 2px solid #000000;
+    /* Ajustar grosor del borde */
     background-color: #4b4646;
-    font-size: 0.9em; /* Ajustar tamaño de fuente */
-    margin-top: 5rem; /* Añadir margen superior para bajar el cuadro */
+    font-size: 0.9em;
   }
 
   .perfil-container {
@@ -371,11 +387,8 @@ input {
 /* Media query para pantallas medianas (768px a 1024px) */
 @media (min-width: 768px) and (max-width: 1300px) {
   .imagen-lateral {
-    display: none; /* Oculta las imágenes en pantallas medianas */
+    display: none;
+    /* Oculta las imágenes en pantallas medianas */
   }
 }
-
-
-
-
 </style>

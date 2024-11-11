@@ -12,8 +12,15 @@
         <label>Feedback</label>
         <div class="feedback-type">
           <select v-model="feedbackType">
-            <option value="Tipo1">Tipo1</option>
-            <option value="Tipo2">Tipo2</option>
+            <option value="" disabled selected hidden>Seleccione un tipo</option>
+            <option value="KPIs">Resultados Cuantitativos</option>
+            <option value="KPIs">Progreso hacia Metas</option>
+            <option value="KPIs">Eficacia de Estrategias</option>
+            <option value="Role Play">Role Play</option>
+            <option value="One to One">One to One</option>
+            <option value="Mentoring">Mentoring</option>
+            <option value="Compromiso Plazo">Compromiso Plazo</option>
+            <option value="Asignación Capacitación">Asignación Capacitación</option>
           </select>
           <textarea v-model="feedbackText" placeholder="Ingrese el feedback aquí"></textarea>
         </div>
@@ -37,7 +44,7 @@ export default {
     return {
       fechaFeedback: new Date().toISOString().substr(0, 10),
       feedbackText: '',
-      feedbackType: 'Tipo1',
+      feedbackType: '',
     }
   },
   methods: {

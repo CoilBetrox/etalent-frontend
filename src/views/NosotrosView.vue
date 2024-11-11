@@ -11,7 +11,7 @@
         <img src="@/assets/imagen2 vmv.png" alt="Imagen derecha" class="imagen1 izquierda">
         <div class="text-box">
           <h3 class="text-box-title">MISIÓN</h3>
-          <p class="paragraph">
+          <p class="">
             Satisfacer las necesidades de nuestros clientes de retail de moda ofreciendo productos de calidad con una excelente relación costo beneficio y una experiencia inmcopatible. </p>
              <br>
           <div class="image-box">
@@ -23,7 +23,7 @@
         <img src="@/assets/imagen3 vmv.png" alt="Imagen derecha" class="imagen2 derecha">
         <div class="text-box">
           <h3 class="text-box-title">VISIÓN</h3>
-          <p class="paragraph">
+          <p class="">
             Construir la mejor cadena de retail de moda, siendo un medio de expresión de nuestros clientes inspirándolos a vivir y sentirse bien.</p>
           <br>
           <div class="image-box">
@@ -35,7 +35,7 @@
         <img src="@/assets/imagen4 vmv.png" alt="Imagen derecha" class="imagen1 izquierda">
         <div class="text-box0">
           <h3 class="text-box-title">VALORES</h3>
-          <p class="paragraph">
+          <p class="">
             Compromiso- Hacerlo Sencillo - Etica - Responsabilidad - Trabajo en Equipo - Actitud Emprendedora. </p>
              <br>
           <div class="image-box">

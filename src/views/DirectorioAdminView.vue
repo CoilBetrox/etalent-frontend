@@ -1,5 +1,4 @@
 <template>
-  <div class="page-background">
   <div class="directorio">
     <FilterComp @filter="buscar" @export-excel="exportToExcel" @export-pdf="exportToPDF" />
     <main>
@@ -9,13 +8,13 @@
           <div v-for="admin in admins" :key="admin.idAdmin" class="miembro-card">
 
             <div class="miembro-info">
-              <p> <strong>ID:</strong> {{ admin.idAdmin }}</p>
-              <p> <strong>Nombre:</strong> {{ admin.nombreAdmin }}</p>
-              <p> <strong> SAP:</strong>{{ admin.sapAdmin }}</p>
-              <p> <strong>Correo:</strong> {{ admin.correoAdmin }}</p>
-              <p> <strong>Cargo:</strong> {{ admin.cargoAdmin }}</p>
-              <p> <strong>Zona:</strong> {{ admin.zonaAdmin }}</p>
-              <p> <strong>Empresa:</strong> {{ admin.empresaAdmin }}</p>
+              <p><strong>Id: </strong>{{ admin.idAdmin }}</p>
+              <p><strong>Nombre: </strong>{{ admin.nombreAdmin }}</p>
+              <p><strong>SAP: </strong>{{ admin.sapAdmin }}</p>
+              <p><strong>Correo: </strong>{{ admin.correoAdmin }}</p>
+              <p><strong>Cargo: </strong>{{ admin.cargoAdmin }}</p>
+              <p><strong>Zona: </strong>{{ admin.zonaAdmin }}</p>
+              <p><Strong>Empresa: </Strong>{{ admin.empresaAdmin }}</p>
 
             </div>
             <div class="miembro-actions">
@@ -28,22 +27,22 @@
           </div>
         </div>
 
-        <div class="personal-tienda" v-if="usuarios.length > 0">
+        <div class="personal-tienda"  ref="personalTienda">
           <h2>Personal Tienda</h2>
-          <div v-for="usuario in usuarios" :key="usuario.idUsuario" class="miembro-card2">
+          <div v-for="usuario in usuarios" :key="usuario.idUsuario" class="miembro-card">
 
             <div class="miembro-info">
-              <p> <strong>Nombre:</strong>{{ usuario.nombreUsuario }}</p>
-              <p><strong>SAP:</strong>{{ usuario.sapUsuario }}</p>
-              <p><strong>Correo:</strong>{{ usuario.correoUsuario }}</p>
-              <p><strong>Cargo:</strong>{{ usuario.cargoUsuario }}</p>
-              <p><strong>Zona:</strong>{{ usuario.zonaUsuario }}</p>
-              <p><strong>Empresa:</strong>{{ usuario.empresaUsuario }}</p>
-              <p><strong>Tienda:</strong>{{ usuario.tiendaUsuario }}</p>
-              <p><strong>Jornada:</strong>{{ usuario.jornadaUsuario }}</p>
-              <p><strong>Rol:</strong>{{ usuario.rolUsuario.nombreRolUsuario }}</p>
+              <p>{{ usuario.nombreUsuario }}</p>
+              <p>{{ usuario.sapUsuario }}</p>
+              <p>{{ usuario.correoUsuario }}</p>
+              <p>{{ usuario.cargoUsuario }}</p>
+              <p>{{ usuario.zonaUsuario }}</p>
+              <p>{{ usuario.empresaUsuario }}</p>
+              <p>{{ usuario.tiendaUsuario }}</p>
+              <p>{{ usuario.jornadaUsuario }}</p>
+              <p>{{ usuario.rolUsuario.nombreRolUsuario }}</p>
             </div>
-            <div class="miembro-actions1">
+            <div class="miembro-actions">
               <select v-model="usuario.nuevaCategoria">
                 <option value="Enigma">Enigma</option>
                 <option value="Esencial">Esencial</option>
@@ -58,36 +57,34 @@
               <button @click="actualizarMiembro(usuario)">Actualizar</button>
               <button @click="darFeedback(usuario)">Feedback</button>
               <button @click="mostrarCursos(usuario)">Cursos</button>
-              
+              <!-- 
+              <button @click="eliminarMiembro(usuario)">Eliminar</button>
+              -->
             </div>
           </div>
         </div>
 
-        <div class="cursos-usuario" v-if="usuarioSeleccionado">
-          <div class="titulo-curso">
+        <div class="cursos-usuario"  ref="cursosUsuario">
           <h2>Cursos</h2>
-          </div>
-          <div class="miembro-card3">
           <div v-if="usuarioSeleccionado">
-            <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
-            <div class="btn-AsignarCurso">
-            <button @click="asignarCurso(usuarioSeleccionado)">Asignar Curso</button>
+            <div class="header-cursos-usuario">
+              <h3>{{ usuarioSeleccionado.nombreUsuario }}</h3>
+              <button @click="asignarCurso(usuarioSeleccionado)">Asignar Curso</button>
             </div>
-            <ul >
-              <li v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
-                <p> <strong>Nombre del Curso: </strong>{{ curso.nombreCursoUsuario }}</p>
-                <p><strong>Fecha Inicio del Curso: </strong>{{ formatDate(curso.fechaInicio) }}</p>
-                <p> <strong>Avance del Curso: </strong>{{ curso.avanceCurso }} %</p>
-                <p><strong>Estado del Curso: </strong>{{ curso.estadoCurso }}</p>
+            <ul class="usuario-cursos-container">
+              <li class="usuario-curso" v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
+                <p>{{ curso.nombreCursoUsuario }}</p>
+                <p>{{ formatDate(curso.fechaInicio) }}</p>
+                <p>{{ curso.avanceCurso }} %</p>
+                <p>{{ curso.estadoCurso }}</p>
               </li>
             </ul>
           </div>
-          
           <div v-else>
             <p>Seleccione un usuario para ver los cursos asignados.</p>
           </div>
         </div>
-        </div>
+
       </div>
     </main>
     <AgregarNuevoComp v-if="mostrarFormularioNuevo" @close="cerrarFormularioNuevo" @empleado-agregado="cargarAdmins" />
@@ -98,7 +95,6 @@
     <AsignarCursoComp v-if="showAsignarCursoModal" :usuario="usuarioSeleccionado" @close="cerrarModalAsignarCurso"
       @curso-asignado="handleCursoAsignado" />
     <p v-if="mensajeExito" class="success-message">{{ mensajeExito }}</p>
-  </div>
   </div>
 </template>
 
@@ -187,12 +183,15 @@ export default {
             nuevaCategoria: usuario.rolUsuario.nombreRolUsuario
           };
         });
+        this.$nextTick(() => {
+          this.$refs.personalTienda.scrollIntoView({ behavior: 'smooth' });
+        });
       } catch (error) {
         console.error('Error al cargar los usuarios:', error);
       }
     },
     buscar() {
-      // Implementar lógica de búsqueda con los filtros
+      
     },
     eliminarFiltros() {
       this.filters.nombre = '';
@@ -368,6 +367,9 @@ export default {
           ...miembro,
           cursos: response.data
         };
+        this.$nextTick(() => {
+          this.$refs.cursosUsuario.scrollIntoView({ behavior: 'smooth' });
+        });
       } catch (error) {
         console.error('Error al obtener los cursos:', error);
       }
@@ -391,7 +393,7 @@ export default {
     cerrarActualizarJefeTienda() {
       this.mostrarAcualizarJefeTienda = false;
     },
-    asignarCurso(usuario) {
+    async asignarCurso(usuario) {
       this.usuarioSeleccionado = usuario;
       this.showAsignarCursoModal = true;
     },
@@ -408,38 +410,6 @@ export default {
 </script>
 
 <style scoped>
-
-h2 {
-  font-family: 'Arial', sans-serif; /* Cambia la fuente según tus preferencias */
-  font-weight: bold;
-  color: #1f1a1a;
-  text-align: center;
-}
-.titulo-curso{
-  margin-right: -45px;
-}
-
-/* Añadir una animación simple */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.page-background{
-  background-color: #F1F1F2; /* Color de fondo claro para toda la página */
-  min-height: 100vh; /* Asegura que el contenedor abarque toda la altura de la ventana */
-  animation: fadeIn 1s ease-in-out;
-
-}
-
-
-
-.jefes-tienda{
-  margin-left: 195px; /* Desplazar el contenedor hacia la derecha */
-  margin-right: 60px; /* Desplazar el contenedor hacia la derecha */
-  
-}
-
 .directorio {
   font-family: Arial, sans-serif;
 }
@@ -471,6 +441,7 @@ nav a.active {
 
 .directorio-content {
   display: flex;
+  justify-content: space-between;
 }
 
 .miembros-list {
@@ -485,53 +456,12 @@ nav a.active {
 
 .miembro-card {
   border: 4px solid #525151;
-  border-radius: 15px; /* Bordes redondeados */
-  padding: 7px; /* Mayor padding para un diseño más espacioso */
-  margin-bottom: 15px; /* Espacio inferior entre tarjetas */
+  border-radius: 10px;
+  padding: 1rem 3rem;
+  margin: 1rem 1rem;
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para un efecto de profundidad */
-  background-color: #cccac9; /* Fondo blanco para las tarjetas */
-
-  font-family: 'Arial', sans-serif; /* Cambia la fuente según tus preferencias */
-  font-size: 1rem; /* Tamaño del texto */
-  color: #111010; /* Color del texto */
 }
-
-.miembro-card2 {
-  border: 4px solid #525151;
-  border-radius: 15px; /* Bordes redondeados */
-  padding: 7px; /* Mayor padding para un diseño más espacioso */
-  margin-bottom: 15px; /* Espacio inferior entre tarjetas */
-  display: flex;
-  align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para un efecto de profundidad */
-  background-color: #ca9da1; /* Fondo blanco para las tarjetas */
-
-  font-family: 'Arial', sans-serif; /* Cambia la fuente según tus preferencias */
-  font-size: 1rem; /* Tamaño del texto */
-  color: #111010; /* Color del texto */
-}
-
-.miembro-card3 {
-  border: 4px solid #525151;
-  border-radius: 15px; /* Bordes redondeados */
-  padding: 7px; /* Mayor padding para un diseño más espacioso */
-  display: flex;
-  align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para un efecto de profundidad */
-  background-color: #cccac9; /* Fondo blanco para las tarjetas */
-  margin-left: 60px;
-  margin-top: 45px;
-  text-align: center;
-
-  font-family: 'Arial', sans-serif; /* Cambia la fuente según tus preferencias */
-  font-size: 1rem; /* Tamaño del texto */
-  color: #111010; /* Color del texto */
-
-  
-}
-
 
 .miembro-foto {
   width: 64px;
@@ -544,64 +474,23 @@ nav a.active {
 }
 
 .miembro-info {
-  flex: 2;
-  margin-right: 50px; /* Espacio entre la información y las acciones */
-
+  flex: 1;
 }
 
 .miembro-actions {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-}
-
-.miembro-actions1{
-display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.miembro-actions1 select {
-  background-color: #333; /* Fondo más claro */
-  color: #ebe4e4; /* Color del texto */
-  padding: 10px; /* Espaciado interno */
-  border: 2px solid #333; /* Borde con color */
-  border-radius: 5px; /* Bordes redondeados */
-  font-size: 16px; /* Tamaño de la fuente */
-  width: 100%; /* Ancho completo del contenedor */
-  box-shadow: 0px 4px 6px rgba(177, 39, 39, 0.1); /* Sombra para darle profundidad */
-  transition: all 0.3s ease; /* Animación en la transición */
-}
-
-.miembro-actions1 select:focus {
-  border-color: #007BFF; /* Color del borde al estar en foco */
-  outline: none; /* Eliminar el borde predeterminado del foco */
-  box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.5); /* Sombra más intensa al enfocar */
+  gap: 5px;
 }
 
 button {
   background-color: #333;
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 4px; /* Bordes redondeados en los botones */
+  padding: 5px 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-button:hover {
-  background-color: #dd1717; /* Color de fondo al pasar el cursor */
-  transform: scale(1.05); /* Aumentar el tamaño del botón */
-
-}
-
-.btn-AsignarCurso{
-  padding-top: 10px;  /* Espacio arriba del texto */
-    padding-bottom: 10px;  /* Espacio abajo del texto */
-    padding-left: 15px;  /* Espacio a la izquierda del texto */
-    padding-right: 15px;  /* Espacio a la derecha del texto */
-}
 footer {
   background-color: #f1f1f1;
   padding: 1rem;
@@ -609,37 +498,62 @@ footer {
   font-size: 0.8rem;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%);
+h2 {
+  display: flex;
+  justify-content: center;
+}
+
+.jefes-tienda {
+  flex: 1;
+}
+
+.personal-tienda {
+  display: block;
+  flex: 1;
+  background-color: #f0f0f0
+
+}
+
+.usuario-cursos-container {
+  border: 4px solid #525151;
+  padding-top: 1rem;
+  border-radius: 10px;
+  padding: 1rem 3rem;
+  margin: 1rem 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.usuario-curso {
+  border-bottom: 1px solid #525151;
+  margin-bottom: 1rem;
+}
+
+.cursos-usuario {
+  flex: 1;
+  border-bottom: 1px solid #525151;
+}
+
+.header-cursos-usuario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 1rem;
+  align-items: center;
+}
+
+@media(max-width: 768px) {
+  .directorio-content {
+    display: flex;
+    flex-direction: column;
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+}
+
+@media screen and (min-width: 768px) {
+  .cursos-usuario {
+    display: block;
   }
 }
-
-.slide-in {
-  animation: slideIn 0.6s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.fade-in {
-  animation: fadeIn 1s ease-out;
-}
-
-.fade-on-hover:hover {
-  animation: fadeIn 0.5s ease-out;
-}
-
 
 </style>
