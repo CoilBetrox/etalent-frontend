@@ -24,15 +24,15 @@
             </div>
             <div class="miembro-actions">
               <select v-model="miembro.nuevaCategoria">
+                <option value="Super Estrella">Super Estrella</option>
+                <option value="Alto Potencial">Alto Potencial</option>
+                <option value="Estrella Area">Estrella Area</option>
                 <option value="Enigma">Enigma</option>
-                <option value="Esencial">Esencial</option>
-                <option value="Eminente">Eminente</option>
+                <option value="Exelente Desempeño">Exelente Desempeño</option>
+                <option value="Empleado Clave">Empleado Clave</option>
+                <option value="Buen Desempeño">Buen Desempeño</option>
                 <option value="Dilema">Dilema</option>
-                <option value="Prometedor">Prometedor</option>
-                <option value="Experto">Experto</option>
-                <option value="Riesgo">Riesgo</option>
-                <option value="Destacado">Destacado</option>
-                <option value="Sobresaliente">Sobresaliente</option>
+                <option value="Considerar Puesto">Considerar Puesto</option>
               </select>
               <button @click="actualizarMiembro(miembro)">Actualizar</button>
               <button @click="darFeedback(miembro)">Feedback</button>
@@ -274,16 +274,16 @@ export default {
     async actualizarMiembro(miembro) {
       try {
         const categoriaToIdRol = {
-          'Enigma': 1,
-          'Esencial': 2,
-          'Eminente': 3,
-          'Dilema': 4,
-          'Prometedor': 5,
-          'Experto': 6,
-          'Riesgo': 7,
-          'Destacado': 8,
-          'Sobresaliente': 9
-        }
+          'Super Estrella': 1,
+          'Alto Potencial': 2,
+          'Estrella Area': 3,
+          'Enigma': 4,
+          'Exelente Desempeño': 5,
+          'Empleado Clave': 6,
+          'Buen Desempeño': 7,
+          'Dilema': 8,
+          'Considerar Puesto': 9
+        };
 
         const updatedUsuarioDto = {
           rolUsuario: {

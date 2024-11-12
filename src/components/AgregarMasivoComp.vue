@@ -56,8 +56,8 @@ export default {
                     jornadaUsuario: row.jornadaUsuario,
                     estadoUsuario: 'Activo',
                     rolUsuario: {
-                        id_rol_usuario: 5,
-                        nombre_rol_usuairo: 'Prometedor'
+                        id_rol_usuario: 6,
+                        nombre_rol_usuairo: 'Empleado Clave'
                     }
                 }));
                 try {

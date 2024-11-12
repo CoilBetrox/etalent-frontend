@@ -2,7 +2,7 @@
     <div class="modal" @click.self="$emit('close')">
       <div class="modal-content">
         <h2>Actualizar Jefe de Tienda</h2>
-        <p>Cambia de jefe de tienda a partir del ID, es encesario que el Jefe de Tienda entrante tenga una cuenta vacía recién creada</p>
+        <p>Cambia de jefe de tienda a partir del ID, mueve el personal entre los dos jefes</p>
         <form @submit.prevent="cambiaJefeTienda">
           <div class="form-group">
             <label for="idAntiguo"> <strong>ID Antiguo (Saliente) </strong></label>

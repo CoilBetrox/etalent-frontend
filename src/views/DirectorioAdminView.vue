@@ -14,7 +14,7 @@
               <p><strong>Correo: </strong>{{ admin.correoAdmin }}</p>
               <p><strong>Cargo: </strong>{{ admin.cargoAdmin }}</p>
               <p><strong>Zona: </strong>{{ admin.zonaAdmin }}</p>
-              <p><Strong>Empresa: </Strong>{{ admin.empresaAdmin }}</p>
+              <p><strong>Empresa: </strong>{{ admin.empresaAdmin }}</p>
 
             </div>
             <div class="miembro-actions">
@@ -44,15 +44,15 @@
             </div>
             <div class="miembro-actions">
               <select v-model="usuario.nuevaCategoria">
+                <option value="Super Estrella">Super Estrella</option>
+                <option value="Alto Potencial">Alto Potencial</option>
+                <option value="Estrella Area">Estrella Area</option>
                 <option value="Enigma">Enigma</option>
-                <option value="Esencial">Esencial</option>
-                <option value="Eminente">Eminente</option>
+                <option value="Exelente Desempeño">Exelente Desempeño</option>
+                <option value="Empleado Clave">Empleado Clave</option>
+                <option value="Buen Desempeño">Buen Desempeño</option>
                 <option value="Dilema">Dilema</option>
-                <option value="Prometedor">Prometedor</option>
-                <option value="Experto">Experto</option>
-                <option value="Riesgo">Riesgo</option>
-                <option value="Destacado">Destacado</option>
-                <option value="Sobresaliente">Sobresaliente</option>
+                <option value="Considerar Puesto">Considerar Puesto</option>
               </select>
               <button @click="actualizarMiembro(usuario)">Actualizar</button>
               <button @click="darFeedback(usuario)">Feedback</button>
@@ -312,21 +312,22 @@ export default {
     async actualizarMiembro(usuario) {
       try {
         const categoriaToIdRol = {
-          'Enigma': 1,
-          'Esencial': 2,
-          'Eminente': 3,
-          'Dilema': 4,
-          'Prometedor': 5,
-          'Experto': 6,
-          'Riesgo': 7,
-          'Destacado': 8,
-          'Sobresaliente': 9
+          'Super Estrella': 1,
+          'Alto Potencial': 2,
+          'Estrella Area': 3,
+          'Enigma': 4,
+          'Exelente Desempeño': 5,
+          'Empleado Clave': 6,
+          'Buen Desempeño': 7,
+          'Dilema': 8,
+          'Considerar Puesto': 9
         };
 
         const updatedUsuarioDto = {
           rolUsuario: {
             idRolUsuario: categoriaToIdRol[usuario.nuevaCategoria]
-          }
+          },
+          idUsuario: usuario.idUsuario
         };
         console.log(updatedUsuarioDto.rolUsuario);
 
@@ -336,6 +337,9 @@ export default {
         }
 
         console.log('Actualizando usuario con:', updatedUsuarioDto);
+
+        const response = await AdminService.updateUsuarioRol(usuario.idUsuario, updatedUsuarioDto);
+        console.log('Respuestponse: ', response);
 
         //Actualiza estado local del usuario
         const index = this.usuarios.findIndex(m => m.idUsuario === usuario.idUsuario);

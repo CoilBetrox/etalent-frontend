@@ -75,6 +75,7 @@ export default {
     return {
       cursos: [],
       usuarios: [], // Aquí se almacenan los cursos obtenidos desde el backend
+      cursoSeleccionado: null,
       showCursosModal: false,
     };
   },
