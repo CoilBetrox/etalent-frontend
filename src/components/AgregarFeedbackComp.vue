@@ -13,10 +13,11 @@
         <div class="feedback-type">
           <select v-model="feedbackType">
             <option value="" disabled selected hidden>Seleccione un tipo</option>
-            <option value="KPIs">Resultados Cuantitativos</option>
-            <option value="KPIs">Progreso hacia Metas</option>
-            <option value="KPIs">Eficacia de Estrategias</option>
-            <option value="Role Play">Role Play</option>
+            <option value="Ticket Promedio">Ticket Promedio</option>
+            <option value="Venta de Adicionales">Venta de Adicionales</option>
+            <option value="Venta Cruzada">Venta Cruzada</option>
+            <option value="Ventas por Hora">Ventas por Hora</option>
+            <option value="Feedback Positivo">Feedback Positivo</option>
             <option value="One to One">One to One</option>
             <option value="Mentoring">Mentoring</option>
             <option value="Compromiso Plazo">Compromiso Plazo</option>
