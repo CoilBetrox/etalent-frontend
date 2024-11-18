@@ -20,7 +20,7 @@
             <option value="Feedback Positivo">Feedback Positivo</option>
             <option value="One to One">One to One</option>
             <option value="Mentoring">Mentoring</option>
-            <option value="Compromiso Plazo">Compromiso Plazo</option>
+            <option value="Compromiso de Conducta">Compromiso de Conducta</option>
             <option value="Asignación Capacitación">Asignación Capacitación</option>
           </select>
           <textarea v-model="feedbackText" placeholder="Ingrese el feedback aquí"></textarea>
