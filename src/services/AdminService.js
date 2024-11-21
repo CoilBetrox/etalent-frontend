@@ -113,6 +113,13 @@ const addUsersBulk = async (users) => {
     return await addUsersBulkAxios(users);
 };
 
+const addJefesBulk = async (users) => {
+    return await addJefesBulkAxios(users);
+};
+
+const updateEstadoAdmin = async (adminId, updatedAdminDto) => {
+    return await updateEstadoAdminAxios(adminId ,updatedAdminDto);
+};
 
 //Consumo API
 const loginAdminAxios = async(body) => {
@@ -422,6 +429,25 @@ const addUsersBulkAxios = async (usuarios) => {
     }
 };
 
+const addJefesBulkAxios = async (usuarios) => {
+    try {
+        const response = await api.post('/admins/bulk-jefes', usuarios);
+        return response.data;
+    } catch (error) {
+        console.log('Error en addJefesBulkAxios', error);
+        throw error;
+    }
+};
+
+const updateEstadoAdminAxios = async (adminId, updatedAdminDto) => {
+    try {
+        const response = await api.put(`/admins/profile-update-status/${adminId}`, updatedAdminDto);
+        return response.data;
+    } catch (error) {
+        console.log('Error en updateEstadoAdminAxios', error);
+        throw error;
+    }
+};
 
 export default {
     registerAdmin, 
@@ -451,5 +477,7 @@ export default {
     asignarCursoToUsuario,
     mostrarCursosSimple,
     getComentariosPorFeedback,
-    addUsersBulk
+    addUsersBulk,
+    updateEstadoAdmin,
+    addJefesBulk
 }

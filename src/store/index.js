@@ -24,8 +24,10 @@ export default createStore({
   },
   actions: {
     login({ commit }, { accessToken, userRole, expiresIn = 3600 }) {
+      const roleToSave = Array.isArray(userRole) ? userRole[0] : userRole;
       localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('userRole', JSON.stringify(userRole));
+      //localStorage.setItem('userRole', JSON.stringify(userRole));
+      localStorage.setItem('userRole', JSON.stringify(roleToSave));
       commit('SET_LOGGED_IN', true);
       commit('SET_USER_ROLE', userRole);
       setTokenExpiration(expiresIn);
@@ -43,7 +45,10 @@ export default createStore({
       const token = localStorage.getItem('accessToken');
       if (token) {
         commit('SET_LOGGED_IN', true);
-        commit('SET_USER_ROLE', JSON.parse(localStorage.getItem('userRole')) || '');
+        //commit('SET_USER_ROLE', JSON.parse(localStorage.getItem('userRole')) || '');
+        const storedRole = JSON.parse(localStorage.getItem('userRole'));
+        const roleToSet = Array.isArray(storedRole) ? storedRole[0] : storedRole;
+        commit('SET_USER_ROLE', roleToSet);
         checkTokenExpiration();
       } else {
         dispatch('logout');

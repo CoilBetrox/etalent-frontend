@@ -2,7 +2,7 @@
   <div class="filters-container">
     <div class="filter-buttons">
       <button @click="showInfo = true">Información</button>
-      <button @click="showModal = true">Agregar nuevo</button>
+      <button v-if="isAdminTienda" @click="showModal = true">Agregar nuevo</button>
       <button @click="exportToExcel">Exportar a Excel</button>
       <button @click="exportToPDF">Exportar a PDF</button>
     </div>
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import AgregarNuevoComp from '@/components/AgregarNuevoComp.vue';
 import InfoCategoriaComp from '@/components/InfoCategoriaComp.vue';
 
@@ -25,6 +26,15 @@ export default {
   components: {
     AgregarNuevoComp,
     InfoCategoriaComp
+  },
+  computed: {
+    ...mapGetters(['userRole']),
+    isAdminTienda() {
+      const role = Array.isArray(this.userRole) ? this.userRole[0] : this.userRole;
+      console.log("--userRole procesado: ", role);
+      return role === 'AdminTienda';
+    },
+    
   },
   methods: {
     exportToExcel() {

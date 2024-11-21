@@ -27,13 +27,35 @@
             </div>
 
             <div class="campo">
-              <label>Provincia</label>
-              <input v-model="perfil.provinciaAdmin" type="text" disabled>
+              <label for="provinciaAdmin" class="form-label">Provincia</label>
+              <select id="provinciaAdmin" v-model="perfil.provinciaAdmin" @change="updateTiendas" class="form-select">
+                <option value="" disabled>Seleccione una provincia</option>
+                <option value="Azuay">Azuay</option>
+                <option value="Chimborazo">Chimborazo</option>
+                <option value="Cotopaxi">Cotopaxi</option>
+                <option value="Esmeraldas">Esmeraldas</option>
+                <option value="Guayas">Guayas</option>
+                <option value="Imbabura">Imbabura</option>
+                <option value="Loja">Loja</option>
+                <option value="Los Ríos">Los Ríos</option>
+                <option value="Machala">Machala</option>
+                <option value="Manabí">Manabí</option>
+                <option value="Pichincha">Pichincha</option>
+                <option value="Tungurahua">Tungurahua</option>
+                <!-- Añadir más provincias según sea necesario -->
+              </select>
             </div>
+
             <div class="campo">
-              <label>Empresa</label>
-              <input v-model="perfil.empresaAdmin" type="text" disabled>
+              <label for="empresaAdmin" class="form-label">Empresa</label>
+              <select id="empresaAdmin" v-model="perfil.empresaAdmin" class="form-select">
+                <option value="" disabled>Seleccione una empresa</option>
+                <option value="Comercial Etatex C. A.">Comercial Etatex C. A.</option>
+                <option value="Tiendec S. A">Tiendec S. A</option>
+                <!-- Añadir más empresas según sea necesario -->
+              </select>
             </div>
+
             <div class="campo">
               <label>Zona</label>
               <input v-model="perfil.zonaAdmin" type="text" disabled>
@@ -102,6 +124,8 @@ export default {
         await AdminService.updateAdminProfilePartial({
           nombreAdmin: this.perfil.nombreAdmin,
           sapAdmin: this.perfil.sapAdmin,
+          provinciaAdmin: this.perfil.provinciaAdmin,
+          empresaAdmin: this.perfil.empresaAdmin
         });
         this.mensaje = 'Información actualizada correctamente';
         this.error = false;

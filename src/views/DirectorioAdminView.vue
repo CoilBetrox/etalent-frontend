@@ -2,6 +2,9 @@
   <div class="directorio">
     <FilterComp @filter="buscar" @export-excel="exportToExcel" @export-pdf="exportToPDF" />
     <main>
+      <div class="btn-agregar-container">
+        <button class="btn-agregar-masivo" @click="abrirAgregarMasivoJefe">Agregar Masivo</button> 
+      </div>
       <div class="directorio-content">
         <div class="jefes-tienda">
           <h2>Jefes Tienda</h2>
@@ -15,15 +18,20 @@
               <p><strong>Cargo: </strong>{{ admin.cargoAdmin }}</p>
               <p><strong>Zona: </strong>{{ admin.zonaAdmin }}</p>
               <p><strong>Empresa: </strong>{{ admin.empresaAdmin }}</p>
+              <p><strong>Estado: </strong>{{ admin.estadoAdmin }}</p>
 
             </div>
             <div class="miembro-actions">
               <button @click="seleccionarAdmin(admin)">Seleccionar</button>
               <button @click="actualizarAdmin(admin)">Actualizar Jefe</button>
-              <!-- 
-              <button @click="eliminarAdmin(admin)">Eliminar</button>
-              -->
+              <select v-model="admin.newEstadoAdmin" @change="actualizarEstadoJefeTienda(admin)">
+                <option value="" disabled>Estado</option>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+              <!--<button @click="abrirAgregarMasivo">Agregar Personal</button>-->
             </div>
+
           </div>
         </div>
 
@@ -95,6 +103,8 @@
     <AsignarCursoComp v-if="showAsignarCursoModal" :usuario="usuarioSeleccionado" @close="cerrarModalAsignarCurso"
       @curso-asignado="handleCursoAsignado" />
     <p v-if="mensajeExito" class="success-message">{{ mensajeExito }}</p>
+    <AgregarJefeMasivoComp v-if="mostrarFormularioMasivoJefe" @close="cerrarFormularioMasivoJefe" @usuarios-agregados="cargarMiembros" />
+    <AgregarMasivoComp v-if="mostrarFormularioMasivo" @close="cerrarFormularioMasivo" @usuarios-agregados="cargarMiembros" />
   </div>
 </template>
 
@@ -108,6 +118,8 @@ import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import FilterComp from '@/components/FilterComp.vue';
+import AgregarJefeMasivoComp from '@/components/AgregarJefeMasivoComp.vue';
+import AgregarMasivoComp from '@/components/AgregarMasivoComp.vue';
 
 export default {
   name: 'DirectorioAdminView',
@@ -116,7 +128,9 @@ export default {
     AgregarFeedbackComp,
     ActualizarJefeTiendaComp,
     AsignarCursoComp,
-    FilterComp
+    FilterComp,
+    AgregarJefeMasivoComp,
+    AgregarMasivoComp
   },
   data() {
     return {
@@ -132,6 +146,9 @@ export default {
       mostrarAcualizarJefeTienda: false,
       mensajeExito: '',
       showAsignarCursoModal: false,
+      adminSeleccionado: null,
+      mostrarFormularioMasivoJefe: false,
+      mostrarFormularioMasivo: false,
     };
   },
   mounted() {
@@ -152,6 +169,7 @@ export default {
         this.mensajeExito = '';
       }, 3000);
     },
+
     async cargarAdmins() {
       try {
         const response = await AdminService.getAdminsByRol();
@@ -164,6 +182,8 @@ export default {
               cursos: cursos.data
             };
           }));
+          console.log('-----------',response);
+          
           return {
             ...admin,
             usuarios: usuariosConCursos
@@ -353,6 +373,63 @@ export default {
         console.error('Error al actualizar usuario:', error);
       }
     },
+    async abrirAgregarMasivo(){
+      console.log('abrirAgregarMasivo llamado');
+      this.mostrarFormularioMasivo = true;
+    },
+    cerrarFormularioMasivo() {
+      this.mostrarFormularioMasivo = false;
+    },
+    async abrirAgregarMasivoJefe(){
+      console.log('abrirAgregarMasivo llamado');
+      this.mostrarFormularioMasivoJefe = true;
+    },
+    cerrarFormularioMasivoJefe() {
+      this.mostrarFormularioMasivoJefe = false;
+    },
+    async seleccionarAdminNew(admin) {
+      this.adminSeleccionado = this.adminSeleccionado === admin ? null : admin;
+    },
+    async actualizarEstadoJefeTienda(admin) {
+      try {
+        this.adminSeleccionado = admin;
+
+        const updatedEstado = admin.newEstadoAdmin;
+        console.log("updatedEstado:",updatedEstado);
+        
+
+        if (!updatedEstado) {
+          console.error('Por favor selecciona un estado válido');
+          return;
+        }
+        
+        const response = await AdminService.updateEstadoAdmin(admin.idAdmin, { 
+          estadoAdmin: updatedEstado 
+        });
+        console.log('---Response actualizarEstadoJefeTienda',response);
+        
+
+        if (response) {
+          const adminIndex = this.admins.findIndex(a => a.idAdmin === admin.idAdmin);
+          if (adminIndex !== -1) {
+            this.admins[adminIndex].estadoAdmin = updatedEstado;
+            this.admins[adminIndex].newEstadoAdmin = null;
+            this.admins = [...this.admins];
+          }
+          alert('Estado Actualizado Correctamente.');
+          
+        } else {
+          console.error('Error en la actualización:', response);
+        } 
+        
+      } catch (error) {
+        console.error('Error al actualizar el estado:', error);
+        alert('Error al actualizar el estado. Por favor, inténtelo de nuevo.');
+
+      } finally {
+        this.adminSeleccionado = null;
+      }
+    },
     async eliminarMiembro(miembro) {
       if (confirm('¿Está seguro de eliminar este usuario?')) {
         try {
@@ -493,6 +570,13 @@ button {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+}
+
+.btn-agregar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
 }
 
 footer {
