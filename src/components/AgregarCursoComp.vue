@@ -59,12 +59,12 @@ export default {
       }
       try {
         const response = await AdminService.agregarCurso({
-          nombreCursoUsuario: this.curso.nombreCursoUsuario,
-          descripcionCurso: this.curso.descripcionCurso,
+          nombreCurso: this.curso.nombreCursoUsuario,
+          descripcion: this.curso.descripcionCurso,
           fechaInicio: this.curso.fechaInicio,
           fechaFin: this.curso.fechaFin,
-          avanceCurso: 0,
-          estadoCurso: 'Activo'
+          //avanceCurso: 0,
+          //estadoCurso: 'Activo'
         });
         console.log('Curso agregado:', response);
         alert('Curso Agregado Correctamente.');

@@ -4,12 +4,12 @@
             <h2>Asignar Curso</h2>
             <form @submit.prevent="asignarCurso">
                 <div class="form-group">
-                    <label for="nombreUsuario">Nombre usuario: {{ usuario.nombreUsuario }}</label>
+                    <label for="nombreUsuario">Se asignará a: {{ usuario.nombreUsuario }}</label>
                 </div>
                 <div class="form-group">
                     <select v-model="selectedCursoId">
-                        <option v-for="curso in cursosDisponibles" :key="curso.idCursoUsuario" :value="curso.idCursoUsuario">
-                            {{ curso.nombreCursoUsuario }}
+                        <option v-for="curso in cursosDisponibles" :key="curso.idCurso" :value="curso.idCurso">
+                            {{ curso.nombreCurso }}
                         </option>
                     </select>
                     <!--<p>{{ selectedCursoId }}</p> -->

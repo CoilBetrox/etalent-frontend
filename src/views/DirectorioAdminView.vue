@@ -40,6 +40,7 @@
           <div v-for="usuario in usuarios" :key="usuario.idUsuario" class="miembro-card">
 
             <div class="miembro-info">
+              
               <p>{{ usuario.nombreUsuario }}</p>
               <p>{{ usuario.sapUsuario }}</p>
               <p>{{ usuario.correoUsuario }}</p>
@@ -81,10 +82,29 @@
             </div>
             <ul class="usuario-cursos-container">
               <li class="usuario-curso" v-for="curso in usuarioSeleccionado.cursos" :key="curso.idCursoUsuario">
-                <p>{{ curso.nombreCursoUsuario }}</p>
-                <p>{{ formatDate(curso.fechaInicio) }}</p>
-                <p>{{ curso.avanceCurso }} %</p>
-                <p>{{ curso.estadoCurso }}</p>
+                
+                <p><strong>Nombre: </strong>{{ curso.nombreCursoUsuario }}</p>
+                <p><strong>Inicio: </strong>{{ formatDate(curso.fechaInicio) }}</p>
+                <p><strong>Fin: </strong>{{ formatDate(curso.fechaFin) }}</p>
+                <p><strong>Progreso: </strong>{{ curso.avanceCurso }} %</p>
+                <p><strong>Estado: </strong>{{ curso.estadoCurso }}</p>
+                <div class="curso-actions">
+                  <select v-model="curso.avanceCurso">
+                    <option value="0">0</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="40">40</option>
+                    <option value="60">60</option>
+                    <option value="80">80</option>
+                    <option value="100">100</option>
+                  </select>
+                  <select v-model="curso.estadoCurso">
+                    <option value="Activo">Activo</option>
+                    <option value="Detenido">Detenido</option>
+                    <option value="Completo">Completo</option>
+                  </select>
+                  <button @click="actualizaCurso(curso)" :disabled="!usuarioSeleccionado">Actualizar</button>
+                </div>
               </li>
             </ul>
           </div>
@@ -169,7 +189,23 @@ export default {
         this.mensajeExito = '';
       }, 3000);
     },
-
+    async actualizaCurso(curso){
+      if (!this.usuarioSeleccionado) {
+        console.error('No hay usuario seleccionado');
+        return;
+      }
+      try {
+        const updatedCursoUsuarioDto = {
+          avanceCurso: curso.avanceCurso,
+          estadoCurso: curso.estadoCurso
+        };
+        await AdminService.updateCursoUsuario(curso.idCursoUsuario, updatedCursoUsuarioDto);
+        console.log('Cuso acualizado con éxito');
+        alert('Progreso y Estado actualizado correctamente.')
+      } catch (error) {
+        console.error('Error al actualizar curso:', error);
+      }
+    },
     async cargarAdmins() {
       try {
         const response = await AdminService.getAdminsByRol();
@@ -605,6 +641,7 @@ h2 {
 .usuario-cursos-container {
   border: 4px solid #525151;
   padding-top: 1rem;
+  padding-bottom: 1rem;
   border-radius: 10px;
   padding: 1rem 3rem;
   margin: 1rem 1rem;
@@ -615,12 +652,19 @@ h2 {
 
 .usuario-curso {
   border-bottom: 1px solid #525151;
+  padding-bottom: 1rem;
   margin-bottom: 1rem;
 }
 
 .cursos-usuario {
   flex: 1;
   border-bottom: 1px solid #525151;
+}
+
+.curso-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .header-cursos-usuario {

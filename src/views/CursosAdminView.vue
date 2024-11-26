@@ -10,32 +10,20 @@
       <div class="cursos-admin-content">
         <div class="cursos-list">
           <h1>Cursos</h1>
-          <div v-for="curso in cursos" :key="curso.idCursoUsuario" class="curso-item">
+          <div v-for="curso in cursos" :key="curso.idCurso" class="curso-item">
             <div class="curso-info">
-              <h3> {{ curso.nombreCursoUsuario }}</h3>
-              <p>{{ curso.descripcionCurso }}</p>
+              <h3> {{ curso.nombreCurso }}</h3>
+              <p>{{ curso.descripcion }}</p>
               <p><strong>Fecha Inicio:</strong> {{ formatDate(curso.fechaInicio) }}</p>
               <p><strong>Fecha Fin:</strong> {{ formatDate(curso.fechaFin) }}</p>
-              <p><strong>Avance Curso:</strong> {{ curso.avanceCurso }} %</p>
+              <!--<p><strong>Avance Curso:</strong> {{ curso.avanceCurso }} %</p>
               <p><strong>Estado Curso:</strong> {{ curso.estadoCurso }}</p>
+              -->
             </div>
+            
             <div class="curso-actions">
               <button @click="seleccionarCurso(curso)">Seleccionar</button>
-              <select v-model="curso.nuevoAvance">
-                <option value="0">0</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="40">40</option>
-                <option value="60">60</option>
-                <option value="80">80</option>
-                <option value="100">100</option>
-              </select>
-              <select v-model="curso.nuevoEstado">
-                <option value="Activo">Activo</option>
-                <option value="Detenido">Detenido</option>
-                <option value="Completo">Completo</option>
-              </select>
-              <button @click="actualizaCurso(curso)">Actualizar</button>
+            
             </div>
           </div>
         </div>
@@ -49,7 +37,7 @@
               <div class="curso-info">
                 <p><strong>Nombre:</strong> {{ usuario.nombreUsuario }}</p>
                 <p><strong>Sap:</strong> {{ usuario.sapUsuario }}</p>
-                <button @click="quitarUsuario(usuario.idUsuario)">Quitar</button>
+                <!--<button @click="quitarUsuario(usuario.idUsuario)">Quitar</button>-->
               </div>
             </div>
           </div>
@@ -108,24 +96,28 @@ export default {
           nuevoAvance: curso.avanceCurso,
           nuevoEstado: curso.estadoCurso
         }));
-        console.log(response);
+        //console.log(response);
+
       } catch (error) {
         console.error('Error al cargar cursos:', error);
       }
     },
     async seleccionarCurso(curso) {
       try {
-        const response = await AdminService.mostrarIntegrantesCurso(curso.idCursoUsuario);
+        const response = await AdminService.mostrarIntegrantesCurso(curso.idCurso);
         const cursoData = response.data || response;
-        console.log(cursoData)
+        console.log("response---:",response);
+        console.log("cursoData: ",cursoData);
+        
         this.usuarios = cursoData.usuarios;
         this.cursoSeleccionado = {
-          id: cursoData.idCursoUsuario,
-          nombre: cursoData.nombreCursoUsuario
+          id: cursoData.idCurso,
+          nombre: cursoData.nombreCurso
         };
         this.$nextTick(() => {
           this.$refs.cursosIntegrantes.scrollIntoView({ behavior: 'smooth' });
         });
+        
       } catch (error) {
         console.error('Error al seleccionar curso:', error);
         this.usuarios = [];
