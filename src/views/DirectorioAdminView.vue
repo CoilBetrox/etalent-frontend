@@ -256,7 +256,7 @@ export default {
     exportToExcel() {
       const adminsData = this.admins.map(admin => {
         const usuariosData = admin.usuarios.map(usuario => {
-          const cursosData = usuario.cursos ? usuario.cursos.map(curso => `${curso.nombreCursoUsuario} (${curso.estadoCurso})`).join(', ') : 'Sin cursos';
+          const cursosData = usuario.cursos ? usuario.cursos.map(curso => `(${curso.nombreCursoUsuario} ${curso.avanceCurso} ${curso.estadoCurso})`).join(', ') : 'Sin cursos';
 
           return {
             Usuario: usuario.nombreUsuario,
@@ -290,7 +290,21 @@ export default {
         XLSX.utils.book_append_sheet(wb, ws, admin.Admin);
       });
 
-      XLSX.writeFile(wb, 'directorio_admins.xlsx');
+      const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }).replaceAll('/', '-');
+
+      const formattedTime = currentDate.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replaceAll(':', '-');
+
+      const fileName = `Etalent_Informe_General_${formattedDate}-${formattedTime}.xlsx`;
+
+      XLSX.writeFile(wb, fileName);
     },
     exportToPDF() {
       const doc = new jsPDF();
@@ -340,7 +354,21 @@ export default {
         }
       });
 
-      doc.save('directorio_admins.pdf');
+      const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }).replaceAll('/', '-');
+
+      const formattedTime = currentDate.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replaceAll(':', '-');
+
+      const fileName = `Etalent_Informe_General_${formattedDate}-${formattedTime}.pdf`;
+
+      doc.save(fileName);
     },
     darFeedback(miembro) {
       this.miembroSeleccionado = miembro;

@@ -15,12 +15,12 @@
         
         <div class="form-group">
           <label for="fechaInicio">Fecha Inicio</label>
-          <input id="fechaInicio" v-model="curso.fechaInicio" placeholder="YYYY-MM-DD" required>
+          <input id="fechaInicio" v-model="curso.fechaInicio" type="date" placeholder="YYYY-MM-DD" required>
         </div>
 
         <div class="form-group">
           <label for="fechaFin">Fecha Fin</label>
-          <input id="fechaFin" v-model="curso.fechaFin" placeholder="YYYY-MM-DD" required>
+          <input id="fechaFin" v-model="curso.fechaFin" type="date" placeholder="YYYY-MM-DD" required>
         </div>
         <div class="button-container">
           <button type="submit">Agregar Nuevo</button>

@@ -25,6 +25,7 @@
               <router-link to="/nosotros" class="nav-link" active-class="active">Nosotros</router-link>
             </template>
             <template v-else-if="userRole.includes('AdminDO')">
+              <router-link to="/" class="nav-link" active-class="active">Inicio</router-link>
               <router-link to="/feedbacksAdmin" class="nav-link" active-class="active">Feedbacks General</router-link>
               <router-link to="/directorioAdmin" class="nav-link" active-class="active">Directorio General</router-link>
               <router-link to="/cursosAdmin" class="nav-link" active-class="active">Cursos General</router-link>
@@ -98,5 +99,13 @@ export default {
 <style>
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.nav-link.active {
+  color: #fff;
+  font-weight: bold;
+  border: 1px solid transparent;
+  border-color: #f8f9fa;
+  border-radius: 4px;
 }
 </style>
