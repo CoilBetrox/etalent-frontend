@@ -57,7 +57,7 @@
                 <option value="Alto Potencial">Alto Potencial</option>
                 <option value="Estrella Area">Estrella Area</option>
                 <option value="Enigma">Enigma</option>
-                <option value="Exelente Desempeño">Exelente Desempeño</option>
+                <option value="Excelente Desempeño">Excelente Desempeño</option>
                 <option value="Empleado Clave">Empleado Clave</option>
                 <option value="Buen Desempeño">Buen Desempeño</option>
                 <option value="Dilema">Dilema</option>
