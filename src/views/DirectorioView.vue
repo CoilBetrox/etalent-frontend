@@ -278,7 +278,7 @@ export default {
           'Alto Potencial': 2,
           'Estrella Area': 3,
           'Enigma': 4,
-          'Exelente Desempeño': 5,
+          'Excelente Desempeño': 5,
           'Empleado Clave': 6,
           'Buen Desempeño': 7,
           'Dilema': 8,

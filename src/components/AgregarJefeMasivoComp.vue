@@ -59,6 +59,7 @@ export default {
                 try {
                     const response = await AdminService.addJefesBulk(usuariosDtos);
                     console.log('Jefes de tienda agregados:', response);
+                    alert('Jefes de tienda agregados Correctamente.');
                     this.$emit('close');
                 } catch (error) {
                     console.error('Error al agregar jefes de tienda:', error);
